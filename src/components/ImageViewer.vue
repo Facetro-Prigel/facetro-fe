@@ -1,7 +1,7 @@
 <template>
     <div class="overflow-hidden rounded-xl m-2 relative drop-shadow-md max-w-[400px] transition-all duration-300 hover:scale-110"
         ref="imageView">
-        <video v-if="image && image.search('.mp4') > 4" autoplay playsinline loop ref="img"></video>
+        <video v-if="image && image.search('.mp4') > 4" autoplay playsinline loop ref="img" type="video/mp4"></video>
         <img v-if="image && image.search('.mp4') < 2" class="w-full" :alt="type" ref="img">
         <div class="absolute border-4 top-0 rounded-2xl block animate-pulse translate-all duration-300 bg-gradient-to-br  from-white/40 via-white/30 to-white/60" ref="boundingBox"
             :class="{ 'border-green-500': isSuccess, 'border-red-500': !isSuccess }"> </div>

@@ -67,8 +67,14 @@ effect(() => {
         if (serverStatus.value.status == 0) {
             data.value.serverPhoto = viedoPath + "no_internet.mp4"
         }
-        if ((serverStatus.value.status == 400) || (serverStatus.value.status == 404)) {
+        if (serverStatus.value.status == 400) {
             data.value.serverPhoto = viedoPath + "no_face.mp4"
+        }
+        if(serverStatus.value.status == 404){
+            data.value.serverPhoto = viedoPath + "no_record.mp4"
+        }
+        if(serverStatus.value.status == 403){
+            data.value.serverPhoto = viedoPath + "can_not_presence.mp4"
         }
         if (serverStatus.value.code == 'pending') {
             data.value.serverPhoto = viedoPath + "search_person.mp4"
