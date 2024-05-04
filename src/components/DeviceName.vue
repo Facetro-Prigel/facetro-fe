@@ -16,6 +16,7 @@
 import { ref, onMounted } from 'vue';
 import VueCookies from 'vue-cookies';
 import axios from 'axios';
+import config from '@/stores/config'
 const deviceName = ref()
 const wifiConection = ref({status:'',let:''})
 onMounted(
@@ -24,7 +25,7 @@ onMounted(
         wifiConection.value.status =false
         const checkConnection = () => {
             let stat = new Date().getTime()
-            axios.get("http://ip-api.com/json").then(() => {
+            axios.get(config).then(() => {
                 wifiConection.value.status = true
                 let end = new Date().getTime()
                 wifiConection.value.let = end-stat+"ms"

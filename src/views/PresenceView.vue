@@ -9,6 +9,7 @@ import { ref, onMounted, effect } from 'vue'
 import axios from 'axios';
 import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
+import BASE_URL from '@/stores/config'
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)
 const camera = ref(null)
@@ -19,7 +20,6 @@ const getImageFrame = (data) => {
   ImageFrame.value = data
 }
 var cookies
-var closeModal
 const countDiff = (deltaTime) => {
   var seconds = Math.floor(deltaTime / 1000);
   var minutes = Math.floor(seconds / 60);
@@ -31,11 +31,26 @@ const countDiff = (deltaTime) => {
 const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    timeStyle: 'medium',
+    timeStyle: 'long',
     dateStyle: 'medium'
   })
 }
+var is_finish = false
+const closeModal = () =>{
+  if(is_finish){
+    var closeModals = setTimeout(() => {
+        modal.value.modalStatus = false
+      }, 5000)
+    modal.value.closeModalObj = closeModals
+  }else{
+    setTimeout(()=>{
+      closeModal()
+    }, 2000)
+  }
+  
+}
 const sendImage = () => {
+  is_finish = false
   modal.value.data = {};
   modal.value.serverStatus.code = "pending"
   setTimeout(() => {
@@ -53,7 +68,8 @@ const sendImage = () => {
         "Authorization": `Bearer ${cookies}`
       }
     }
-    axios.post('http://localhost:3039/log', data, config_u).then((response) => {
+     
+    axios.post(BASE_URL+'log', data, config_u).then((response) => {
       let tmpData = response.data.result
       let startTime = new Date(tmpData.startTime)
       let endTime = new Date(tmpData.startTime)
@@ -73,31 +89,33 @@ const sendImage = () => {
           modal.value.infoData.Durasi = countDiff(timeDifferenceInMillis)
         }
       } catch (e) { }
-      modal.value.data.serverPhoto = "http://localhost:3039/" + tmpData.serverData.image
+      modal.value.data.serverPhoto = BASE_URL + tmpData.serverData.image
       modal.value.data.serverBbox = tmpData.serverData.bbox
       modal.value.data.clientBbox = tmpData.clientData.bbox
-      modal.value.data.clientPhoto =  "http://localhost:3039/" + tmpData.clientData.image
+      modal.value.data.clientPhoto =  BASE_URL + tmpData.clientData.image
       modal.value.serverStatus = {
         'code': tmpData.isMatch ? "success" : "fail",
         'msg': tmpData.isMatch ? "Wajah Anda Cocok" : "Wajah Tidak Cocok"
       };
+      idInput.value.data = ''
+      is_finish = true
     }).catch((error) => {
+      is_finish = true
       let errorMessage = '';
       if (error.response) {
         errorMessage = error.response.status + ': ' + error.response.data.msg
+        if (error.response.data.reson){
+            show403(error.response.data.msg)
+        }
       } else if (error.request) {
         errorMessage = error.request.status + ': ' + error.request.statusText + error.message
         console.error(error.request)
       } else {
         errorMessage = error.message
       }
-
       modal.value.serverStatus = { 'code': "fail", 'msg': errorMessage, "status": error.response ? error.response.status ?? error.request.status : 0};
     });
-    closeModal = setTimeout(() => {
-      modal.value.modalStatus = false
-    }, 10000)
-    modal.value.closeModalObj = closeModal
+    closeModal()
   }, 200)
 }
 onMounted(
@@ -114,6 +132,9 @@ effect(() => {
       saveBtn.value.disabled = false
     } else {
       saveBtn.value.disabled = true
+    }
+    if(idInput.value.data.indexOf('*') > 0 ){
+      sendImage()
     }
     idInput.value.data = idInput.value.data.replace(/[^A-F0-9]/g, '')
   }

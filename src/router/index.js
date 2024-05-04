@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/presence',
       name: 'presence',
-      component: () => PresenceViewVue
+      component: PresenceViewVue
     },
     {
       path: '/device_register',

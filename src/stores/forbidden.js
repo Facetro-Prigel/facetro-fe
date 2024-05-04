@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 
-
 export const useForbiddenStore = defineStore('forbidden', () => {
   const router = useRouter();
   const forbidden = ref({

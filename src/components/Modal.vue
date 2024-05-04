@@ -49,6 +49,11 @@
 <script setup>
 import ImageViewer from './ImageViewer.vue';
 import { ref, effect, toRaw } from 'vue'
+import no_internet_vid from '@/assets/videos/no_internet.mp4'
+import no_record_vid from '@/assets/videos/no_record.mp4'
+import search_person_vid from '@/assets/videos/search_person.mp4'
+import no_face from '@/assets/videos/no_face.mp4'
+import can_not_presence_vid from '@/assets/videos/can_not_presence.mp4'
 const data = ref({});
 const serverStatus = ref({});
 
@@ -63,21 +68,20 @@ const closeModal = () => {
 effect(() => {
 
     if (!data.clientPhoto || !data.serverPhoto) {
-        const viedoPath = "/src/assets/videos/"
         if (serverStatus.value.status == 0) {
-            data.value.serverPhoto = viedoPath + "no_internet.mp4"
+            data.value.serverPhoto = no_internet_vid
         }
         if (serverStatus.value.status == 400) {
-            data.value.serverPhoto = viedoPath + "no_face.mp4"
+            data.value.serverPhoto = no_face
         }
         if(serverStatus.value.status == 404){
-            data.value.serverPhoto = viedoPath + "no_record.mp4"
+            data.value.serverPhoto = no_record_vid
         }
         if(serverStatus.value.status == 403){
-            data.value.serverPhoto = viedoPath + "can_not_presence.mp4"
+            data.value.serverPhoto = can_not_presence_vid
         }
         if (serverStatus.value.code == 'pending') {
-            data.value.serverPhoto = viedoPath + "search_person.mp4"
+            data.value.serverPhoto = search_person_vid
         }
     }
     if (infoData) {
