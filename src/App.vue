@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 
-<template class="">
+<template class="min-h-screen bg-primary">
   <header>
   </header>
   <RouterView />

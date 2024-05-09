@@ -3,6 +3,12 @@ import PresenceViewVue from '@/views/PresenceView.vue'
 import RegisterDeviceViewVue from '@/views/RegisterDeviceView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import ForbiddenView from '@/views/ForbiddenView.vue'
+import ViewLand from "@/views/LandingPage/ViewLand"
+import AddLand from "@/views/LandingPage/AddLand"
+import EditLand from "@/views/LandingPage/EditLand"
+import DeleteLand from "@/views/LandingPage/DeleteLand"
+import DashBoard from "@/layouts/DashBoard.vue"
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,7 +32,38 @@ const router = createRouter({
       path: '/forbidden', 
       name: '403', 
       component: ForbiddenView 
-    }
+    },
+    {
+      path: '/', 
+      name: 'Dashboard', 
+      component: DashBoard,
+      children: [
+        {
+          path: 'landing', 
+          name: 'ViewLand', 
+          component: ViewLand,
+          children: [
+            {
+              path: 'add/:id', 
+              name: 'Add LandingPage', 
+              component: AddLand,
+            },
+            {
+              path: 'edit/:id', 
+              name: 'Edit LandingPage', 
+              component: EditLand,
+            },
+            {
+              path: 'delete/:id', 
+              name: 'Delete LandingPage', 
+              component: DeleteLand,
+            }
+          ]
+        },
+        //tambahin disini aja bal 
+
+      ] 
+    },
     // {
     //   path: '/about',
     //   name: 'about',
