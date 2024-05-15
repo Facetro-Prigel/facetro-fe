@@ -1,12 +1,10 @@
 <template>
   <div>
     <!-- Navbar -->
-    <div class="navbar bg-base-100 bg-indigo-600">
-      <div class="flex-none">
-        <button @click="toggleSidebar" class="btn btn-square btn-ghost">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
-      </div>
+    <div :class="{ 'ml-64': sidebarOpen }" class="navbar bg-base-100 bg-indigo-600 relative z-10 transition-all duration-300 ease-in-out">
+      <button @click="toggleSidebar" class="btn btn-square btn-ghost">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
       <div class="flex-1 ml-5">
         <img src="/src/assets/logo/PortaX_Horizontal.png" width="150px" height="150px">
       </div>
@@ -25,67 +23,47 @@
     </div>
 
     <!-- Sidebar -->
-    <div :class="{ 'sidebar': true, 'open': isOpen }">
-      <ul>
-        <li><router-link to="/">Beranda</router-link></li>
-        <li><router-link to="/about">Tentang</router-link></li>
+    <div :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
+      class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-20">
+      <div class="p-4 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold">Sidebar</h1>
+        </div>
+        <div>
+          <button @click="closeSidebar" class="text-white focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M14.293 5.293a1 1 0 0 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 1.414-1.414L10 8.586l4.293-4.293z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Isi Sidebar -->
+      <ul class="mt-4">
+        <li><router-link to="/" class="block py-2">Beranda</router-link></li>
+        <li><router-link to="/about" class="block py-2">Tentang</router-link></li>
+        <!-- Tambahkan menu lainnya di sini -->
       </ul>
     </div>
+
+    <!-- Backdrop untuk menutup sidebar -->
+    <div @click="closeSidebar" :class="{ 'block': sidebarOpen, 'hidden': !sidebarOpen }"
+      class="fixed inset-0 bg-black opacity-25 transition-opacity pointer-events-auto z-10"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref } from 'vue';
 
-const isOpen = ref(false);
+const sidebarOpen = ref(false);
 
 const toggleSidebar = () => {
-  isOpen.value = !isOpen.value;
-  console.log("Toggle Sidebar:", isOpen.value); // Tambahkan ini untuk melihat nilai isOpen
-}
+  sidebarOpen.value = !sidebarOpen.value;
+};
 
-// Fungsi untuk menutup sidebar ketika klik diluar sidebar
-const closeSidebarOnClickOutside = (event) => {
-  // Periksa apakah elemen yang diklik adalah sidebar atau elemen dalam sidebar
-  if (isOpen.value && !event.target.closest('.sidebar')) {
-    isOpen.value = false; // Tutup sidebar jika klik diluar sidebar dan sidebar terbuka
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', closeSidebarOnClickOutside);
-});
-
-onUnmounted(() => {
-  document.removeEventListener('click', closeSidebarOnClickOutside);
-});
+const closeSidebar = () => {
+  sidebarOpen.value = false;
+};
 </script>
 
 <style scoped>
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -200px;
-  width: 200px;
-  height: 100%;
-  background-color: #fff;
-  transition: left 0.3s;
-}
-.sidebar.open {
-  left: 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  padding: 10px;
-}
-a {
-  text-decoration: none;
-  color: #333;
-}
-a:hover {
-  color: #555;
-}
 </style>
