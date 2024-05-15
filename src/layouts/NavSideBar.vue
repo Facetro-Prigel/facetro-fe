@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <div :class="{ 'ml-64': sidebarOpen }" class="navbar bg-base-100 bg-indigo-600 relative z-10 transition-all duration-300 ease-in-out">
+    <div class="navbar bg-base-100 bg-indigo-600 relative z-10 transition-all duration-300 ease-in-out">
       <button @click="toggleSidebar" class="btn btn-square btn-ghost">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
@@ -25,10 +25,10 @@
 
     <!-- Sidebar -->
     <div :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
-      class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-20">
-      <div class="p-4 flex justify-between items-center">
-        <div>
-          <h1 class="text-2xl font-bold">Sidebar</h1>
+      class="fixed left-0 h-full w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-20">
+      <div class="p-4 flex justify-between items-center text-center hover">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold">DASHBOARD</h1>
         </div>
         <div>
           <button @click="closeSidebar" class="text-white focus:outline-none">
@@ -39,23 +39,38 @@
         </div>
       </div>
       <!-- Isi Sidebar -->
-      <ul class="mt-4">
-        <li><router-link to="/" class="block py-2">Beranda</router-link></li>
-        <li><router-link to="/about" class="block py-2">Tentang</router-link></li>
-        <!-- Tambahkan menu lainnya di sini -->
+      <ul class="mt-4 text-center text-xl">
+        <li><router-link to="/" class="block py-2 hover:bg-slate-500">Beranda</router-link></li>
+        <li><router-link to="/attendance" class="block py-2 hover:bg-slate-500">Attendance</router-link></li>
+        <li><router-link to="/register" class="block py-2 hover:bg-slate-500">Register</router-link></li>
+        <li><router-link to="/device" class="block py-2 hover:bg-slate-500">Device</router-link></li>
       </ul>
     </div>
 
-    <!-- Backdrop untuk menutup sidebar -->
+    <!-- Backdrop Sidebar -->
     <div @click="closeSidebar" :class="{ 'block': sidebarOpen, 'hidden': !sidebarOpen }"
       class="fixed inset-0 bg-black opacity-25 transition-opacity pointer-events-auto z-10"></div>
+      <div :class="{'ml-60':sidebarOpen}" class="transition-all duration-300 overflow-y-hidden">
+          <router-view />
+      </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import VueCookies from 'vue-cookies'
 
-const sidebarOpen = ref(false);
+const sidebarOpen = ref(false)
+const router = useRouter()
+
+onMounted(() => {
+  setTimeout(() => {
+  if(!VueCookies.get('token')){
+      router.push({ name:"login" })
+    }
+  }, 700);
+})
 
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value;
@@ -65,6 +80,3 @@ const closeSidebar = () => {
   sidebarOpen.value = false;
 };
 </script>
-
-<style scoped>
-</style>

@@ -8,12 +8,12 @@ import DashBoard from '@/layouts/DashBoard.vue'
 import AttendanceView from '@/views/AttendanceView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DeviceView from '@/views/DeviceView.vue'
+import NavSideBar from '@/layouts/NavSideBar.vue'
 // import ViewLand from "@/views/LandingPage/ViewLand"
 // import AddLand from "@/views/LandingPage/AddLand"
 // import EditLand from "@/views/LandingPage/EditLand"
 // import DeleteLand from "@/views/LandingPage/DeleteLand"
 // import DashBoard from "@/layouts/DashBoard.vue"
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,90 +21,100 @@ const router = createRouter({
     {
       path: '/',
       name: 'dashboard',
-      component: DashBoard,
-      children:[
+      component: NavSideBar,
+      children: [
         {
-          path: 'device', 
-          name: 'device', 
+          path: 'device',
+          name: 'device',
           component: DeviceView
+        },
+        {
+          path: 'attendance',
+          name: 'attendance',
+          component: AttendanceView
+        },
+        {
+          path: 'register',
+          name: 'register',
+          component: RegisterView
         },
       ]
     },
     {
-      path: '/presence',
-      name: 'presence',
-      component: PresenceViewVue
-    },
-    {
-      path: '/device_register',
-      name: 'device',
-      component: RegisterDeviceViewVue
-    },
-    {
-      path: '/:pathMatch(.*)*', 
-      name: 'NotFound', 
-      component: NotFoundView 
-    },
-    {
-      path: '/forbidden', 
-      name: '403', 
-      component: ForbiddenView 
-    },
-    {
-      path: '/login', 
-      name: 'login', 
+      path: '/login',
+      name: 'login',
       component: ViewLogin
-    },
-    {
-      path: '/attendance', 
-      name: 'attendance', 
-      component: AttendanceView
-    },
-    {
-      path: '/register', 
-      name: 'register', 
-      component: RegisterView
     }
     // {
-    //   path: '/device', 
-    //   name: 'device', 
+    //   path: '/presence',
+    //   name: 'presence',
+    //   component: PresenceViewVue
+    // },
+    // {
+    //   path: '/device_register',
+    //   name: 'device',
+    //   component: RegisterDeviceViewVue
+    // },
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: 'NotFound',
+    //   component: NotFoundView
+    // },
+    // {
+    //   path: '/forbidden',
+    //   name: '403',
+    //   component: ForbiddenView
+    // },
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: ViewLogin
+    // },
+    // {
+    //   path: '/attendance',
+    //   name: 'attendance',
+    //   component: AttendanceView
+    // },
+    // {
+    //   path: '/register',
+    //   name: 'register',
+    //   component: RegisterView
+    // },
+    // {
+    //   path: '/device',
+    //   name: 'device',
     //   component: DeviceView
     // }
     // {
-    //   path: '/device', 
-    //   name: 'device', 
-    //   component: DeviceView
-    // }
-    // {
-    //   path: '/', 
-    //   name: 'Dashboard', 
+    //   path: '/',
+    //   name: 'Dashboard',
     //   component: DashBoard,
     //   children: [
     //     {
-    //       path: 'landing', 
-    //       name: 'ViewLand', 
+    //       path: 'landing',
+    //       name: 'ViewLand',
     //       component: ViewLand,
     //       children: [
     //         {
-    //           path: 'add/:id', 
-    //           name: 'Add LandingPage', 
+    //           path: 'add/:id',
+    //           name: 'Add LandingPage',
     //           component: AddLand,
     //         },
     //         {
-    //           path: 'edit/:id', 
-    //           name: 'Edit LandingPage', 
+    //           path: 'edit/:id',
+    //           name: 'Edit LandingPage',
     //           component: EditLand,
     //         },
     //         {
-    //           path: 'delete/:id', 
-    //           name: 'Delete LandingPage', 
+    //           path: 'delete/:id',
+    //           name: 'Delete LandingPage',
     //           component: DeleteLand,
     //         }
     //       ]
     //     },
-        //tambahin disini aja bal 
+    //tambahin disini aja bal
 
-    //   ] 
+    //   ]
     // },
     // {
     //   path: '/about',

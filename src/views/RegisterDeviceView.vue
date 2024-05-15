@@ -7,7 +7,7 @@
                 <img  ref="image" src="@/assets/verivication_symbol.png" class="w-[250px]" alt="Computer Verification">
                 <div class="bg-white w-fit rounded-lg drop-shadow-lg flex flex-row overflow-hidden border border-black">
                     <label for="token" class="m-2">Token:</label>
-                    <input type="text" name="token" v-model="data.token" class="rounded-l-lg text-xl px-2 py-1 bg-blue-200">
+                    <input type="text" name="token" v-model="data.token" class="rounded-l-lg text-xl px-2 py-1 bg-blue-200" v-on:keyup.enter="validateToken">
                 </div>
                 <button ref="sendBtn" disabled="true" @click="validateToken"  class="mt-2 p-3 rounded-lg  transition duration-300 bg-blue-600  text-white hover:bg-blue-800 disabled:bg-gray-600"><i class="fa fa-paper-plane mr-2"></i>Kirim</button>
             
