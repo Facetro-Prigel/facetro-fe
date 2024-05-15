@@ -6,6 +6,8 @@ import ForbiddenView from '@/views/ForbiddenView.vue'
 import ViewLogin from '@/views/Login/ViewLogin.vue'
 import DashBoard from '@/layouts/DashBoard.vue'
 import AttendanceView from '@/views/AttendanceView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import DeviceView from '@/views/DeviceView.vue'
 // import ViewLand from "@/views/LandingPage/ViewLand"
 // import AddLand from "@/views/LandingPage/AddLand"
 // import EditLand from "@/views/LandingPage/EditLand"
@@ -19,7 +21,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'dashboard',
-      component: DashBoard
+      component: DashBoard,
+      children:[
+        {
+          path: 'device', 
+          name: 'device', 
+          component: DeviceView
+        },
+      ]
     },
     {
       path: '/presence',
@@ -50,7 +59,22 @@ const router = createRouter({
       path: '/attendance', 
       name: 'attendance', 
       component: AttendanceView
+    },
+    {
+      path: '/register', 
+      name: 'register', 
+      component: RegisterView
     }
+    // {
+    //   path: '/device', 
+    //   name: 'device', 
+    //   component: DeviceView
+    // }
+    // {
+    //   path: '/device', 
+    //   name: 'device', 
+    //   component: DeviceView
+    // }
     // {
     //   path: '/', 
     //   name: 'Dashboard', 

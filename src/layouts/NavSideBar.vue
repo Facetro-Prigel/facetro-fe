@@ -18,6 +18,7 @@
           <li><a class="justify-between">Profile</a></li>
           <li><a>Settings</a></li>
           <li><a>Logout</a></li>
+          <input type="checkbox" class="toggle toggle-info" checked />
         </ul>
       </div>
     </div>
