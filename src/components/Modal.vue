@@ -67,7 +67,7 @@ const closeModal = () => {
 }
 effect(() => {
 
-    if (!data.clientPhoto || !data.serverPhoto) {
+    if (!data.value.clientPhoto || !data.value.serverPhoto) {
         if (serverStatus.value.status == 0) {
             data.value.serverPhoto = no_internet_vid
         }
@@ -84,7 +84,7 @@ effect(() => {
             data.value.serverPhoto = search_person_vid
         }
     }
-    if (infoData) {
+    if (infoData.value) {
         infoData.value = toRaw(infoData.value)
     }
 })

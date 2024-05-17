@@ -44,27 +44,27 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: ViewLogin
+    },
+    {
+      path: '/presence',
+      name: 'presence',
+      component: PresenceViewVue
+    },
+    {
+      path: '/device_register',
+      name: 'device register',
+      component: RegisterDeviceViewVue
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFoundView
+    },
+    {
+      path: '/forbidden',
+      name: '403',
+      component: ForbiddenView
     }
-    // {
-    //   path: '/presence',
-    //   name: 'presence',
-    //   component: PresenceViewVue
-    // },
-    // {
-    //   path: '/device_register',
-    //   name: 'device',
-    //   component: RegisterDeviceViewVue
-    // },
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: 'NotFound',
-    //   component: NotFoundView
-    // },
-    // {
-    //   path: '/forbidden',
-    //   name: '403',
-    //   component: ForbiddenView
-    // },
     // {
     //   path: '/login',
     //   name: 'login',

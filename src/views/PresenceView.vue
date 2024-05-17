@@ -57,7 +57,7 @@ const sendImage = () => {
     camera.value.emitImage()
     modal.value.modalStatus = true
     modal.value.data.clientPhoto = ImageFrame.value
-    idInput.data = '';
+    idInput.value.data = '';
     let data = {
       "image": ImageFrame.value,
       "identity": idInput.value.data

@@ -21,7 +21,7 @@ export default{
       day: null
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // prevent memory leak
     clearInterval(this.interval)
   },
