@@ -17,7 +17,7 @@
             /><i class="far fa-user"></i>
             <input
             v-on:keyup.enter="tombollogin"
-              type="text"
+              type="password"
               placeholder="Password"
               class="input w-full max-w-xs mb-5 mr-3 bg-slate-200"
               v-model="datalogin.password"

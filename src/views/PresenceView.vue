@@ -10,6 +10,7 @@ import axios from 'axios';
 import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
 import BASE_URL from '@/stores/config'
+
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)
 const camera = ref(null)
@@ -57,7 +58,6 @@ const sendImage = () => {
     camera.value.emitImage()
     modal.value.modalStatus = true
     modal.value.data.clientPhoto = ImageFrame.value
-    idInput.value.data = '';
     let data = {
       "image": ImageFrame.value,
       "identity": idInput.value.data
@@ -163,7 +163,7 @@ effect(() => {
         </div>
       </div>
       <div class="mt-5 bg-gray-300 p-4 rounded-lg drop-shadow-lg flex flex-row ">
-        <img src="@/assets/logo/PortaX.png" alt="PortaX Logo"
+        <img src="@/assets/logo/facetro_black.png" alt="facetro_black Logo"
           class="h-[40px] mx-3 transition-all duration-300 hover:scale-110">
         <img src="@/assets/logo/REMOSTO.png" alt="REMOSTO Logo"
           class="h-[40px] mx-3 transition-all duration-300 hover:scale-110">

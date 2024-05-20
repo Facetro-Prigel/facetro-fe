@@ -9,6 +9,7 @@ import AttendanceView from '@/views/AttendanceView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DeviceView from '@/views/DeviceView.vue'
 import NavSideBar from '@/layouts/NavSideBar.vue'
+import RealtimeLogView from '@/views/RealtimeLogView.vue'
 // import ViewLand from "@/views/LandingPage/ViewLand"
 // import AddLand from "@/views/LandingPage/AddLand"
 // import EditLand from "@/views/LandingPage/EditLand"
@@ -54,6 +55,12 @@ const router = createRouter({
       path: '/device_register',
       name: 'device register',
       component: RegisterDeviceViewVue
+    },
+
+    {
+      path: '/realtime_log',
+      name: 'realtime log',
+      component: RealtimeLogView
     },
     {
       path: '/:pathMatch(.*)*',

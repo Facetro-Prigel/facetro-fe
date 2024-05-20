@@ -34,6 +34,7 @@ let config_u = {
         "Content-Type": "application/json",
       }
     }
+    
 const validateToken = () =>{
     sendBtn.value.disabled = false
     image.value.src=loadingImg
