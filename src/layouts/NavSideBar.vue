@@ -22,31 +22,7 @@
         </ul>
       </div>
     </div>
-
-    <!-- Sidebar -->
-    <div :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
-      class="fixed left-0 h-full w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-20">
-      <div class="p-4 flex justify-between items-center text-center hover">
-        <div class="text-center">
-          <h1 class="text-3xl font-bold">DASHBOARD</h1>
-        </div>
-        <div>
-          <button @click="closeSidebar" class="text-white focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M14.293 5.293a1 1 0 0 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 1.414-1.414L10 8.586l4.293-4.293z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <!-- Isi Sidebar -->
-      <ul class="mt-4 text-center text-xl">
-        <li><router-link to="/" class="block py-2 hover:bg-slate-500">Beranda</router-link></li>
-        <li><router-link to="/attendance" class="block py-2 hover:bg-slate-500">Attendance</router-link></li>
-        <li><router-link to="/register" class="block py-2 hover:bg-slate-500">Register</router-link></li>
-        <li><router-link to="/device" class="block py-2 hover:bg-slate-500">Device</router-link></li>
-      </ul>
-    </div>
-
+    <Sidebar/>
     <!-- Backdrop Sidebar -->
     <div @click="closeSidebar" :class="{ 'block': sidebarOpen, 'hidden': !sidebarOpen }"
       class="fixed inset-0 bg-black opacity-25 transition-opacity pointer-events-auto z-10"></div>
@@ -60,6 +36,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
+import Sidebar from '@/components/Sidebar.vue';
 
 const sidebarOpen = ref(false)
 const router = useRouter()

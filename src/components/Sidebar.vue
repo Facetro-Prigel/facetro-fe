@@ -6,7 +6,7 @@
             </div>
             <img src="/src/assets/Icon.png" v-show="!dataOpenSidebar" class="p-1 w-[64px]" alt="Icon" />
         </div>
-        <div class="flex justify-end p-5 cursor-pointer hover:bg-primary-400" @click="clickHambuger">
+        <div class="flex justify-end p-5 cursor-pointer hover:bg-primary-400" @click="dataOpenSidebar= !dataOpenSidebar">
           <i class="pi pi-bars" style="color: white"></i>
         </div>
         <div>
@@ -47,8 +47,7 @@
 <script>
 export default {
   props: {
-    dataOpenSidebar: Boolean,
-    clickHambuger: Function
+    dataOpenSidebar: Boolean
   },
     methods:{
         toggle(event) {
