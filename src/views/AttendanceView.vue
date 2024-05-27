@@ -1,5 +1,13 @@
 <template>
-    <div class="overflow-x-auto">
+
+    <div class="mt-20 ml-20">
+        <h1 class="text-5xl font-bold">Attendance</h1>
+        <ol class="breadcrumb mb-4 mt-4">
+            <li class="breadcrumb-item active text-lg mb-10">Log Presensi</li>
+        </ol>
+    </div>
+
+    <div class="overflow-x-auto ml-20 mr-20">
       <select @change="sortData" class="flex justify-between items-center mb-4">
         <option value="name_asc">Nama A-Z</option>
         <option value="name_desc">Nama Z-A</option>
@@ -9,11 +17,12 @@
   
       <table class="table mx-auto" id="data-table">
         <thead>
-          <tr>
+          <tr class="text-lg">
             <th>No</th>
             <th>Nama</th>
             <th>Waktu</th>
             <th>Aksi</th>
+            <th>Ruangan</th>
           </tr>
         </thead>
         <tbody>
@@ -22,18 +31,21 @@
             <td>Cy Ganderton</td>
             <td>07:49</td>
             <td>Masuk</td>
+            <td>Digital Center - 1A</td>
           </tr>
           <tr class="hover">
             <td>2</td>
             <td>Hart Hagerty</td>
             <td>07:54</td>
             <td>Masuk</td>
+            <td>Digital Center - 1A</td>
           </tr>
           <tr class="hover">
             <td>3</td>
             <td>Brice Swyre</td>
             <td>08.01</td>
             <td>Masuk</td>
+            <td>Digital Center - 1A</td>
           </tr>
         </tbody>
       </table>

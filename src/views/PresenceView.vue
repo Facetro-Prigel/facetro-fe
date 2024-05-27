@@ -10,6 +10,7 @@ import axios from 'axios';
 import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
 import BASE_URL from '@/stores/config'
+
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)
 const camera = ref(null)
@@ -57,7 +58,6 @@ const sendImage = () => {
     camera.value.emitImage()
     modal.value.modalStatus = true
     modal.value.data.clientPhoto = ImageFrame.value
-    idInput.data = '';
     let data = {
       "image": ImageFrame.value,
       "identity": idInput.value.data
@@ -156,14 +156,14 @@ effect(() => {
           <Time/>
           <label for="identitas" class="text-2xl mt-2"><i class="fa fa-address-card"></i> <i
               class="fa-brands fa-nfc-symbol"></i> Indentitas (NIM/NIP)</label>
-          <input type="text" v-model="idInput.data" class="w-full mt-2 text-2xl rounded-md border border-black px-3">
+          <input v-on:keyup.enter="sendImage" type="text" v-model="idInput.data" class="w-full mt-2 text-2xl rounded-md border border-black px-3">
           <button @click="sendImage" disabled="true" ref="saveBtn"
             class="bg-blue-700 transition duration-300 text-white py-2 mt-2 px-3 rounded-lg disabled:bg-gray-500  hover:bg-blue-900 hover:drop-shadow-lg ">
             <i class="fa fa-save mr-2"></i>Simpan</button>
         </div>
       </div>
       <div class="mt-5 bg-gray-300 p-4 rounded-lg drop-shadow-lg flex flex-row ">
-        <img src="@/assets/logo/PortaX.png" alt="PortaX Logo"
+        <img src="@/assets/logo/facetro_black.png" alt="facetro_black Logo"
           class="h-[40px] mx-3 transition-all duration-300 hover:scale-110">
         <img src="@/assets/logo/REMOSTO.png" alt="REMOSTO Logo"
           class="h-[40px] mx-3 transition-all duration-300 hover:scale-110">

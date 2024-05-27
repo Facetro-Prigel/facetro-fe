@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-20 mt-20">
+  <div class="container-fluid px-20 mt-10">
     <h1 class="mt-4 text-5xl font-bold">Daftar</h1>
     <ol class="breadcrumb mb-4 mt-4">
       <li class="breadcrumb-item active text-lg mb-10">Pendaftaran Akses</li>
