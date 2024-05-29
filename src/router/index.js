@@ -15,45 +15,47 @@ import Dashboard from '../views/Dashboard.vue'
 import Room from '../views/Room.vue'
 import Camera from '../views/Camera.vue'
 import Attendance from '../views/Attendance.vue'
-import NavSideBar from '../layouts/NavSideBar.vue' // Assuming you have this component
+import Master from '@/layouts/Master.vue' // Assuming you have this component
+import RealtimeLogView from '@/views/RealtimeLogView.vue'
 
 const routes = [
   {
     path: '/',
-    component: NavSideBar,
+    component: Master,
+    redirect: '/dashboard',
     children: [
       {
-        path: '',
+        path: '/dashboard',
         name: 'dashboard',
         component: Dashboard
       },
       {
-        path: 'room',
+        path: '/room',
         name: 'room',
         component: Room
       },
       {
-        path: 'camera',
+        path: '/camera',
         name: 'camera',
         component: Camera
       },
       {
-        path: 'attendance',
+        path: '/attendance',
         name: 'attendance',
         component: Attendance
       },
       {
-        path: 'device',
+        path: '/device',
         name: 'device',
         component: DeviceView
       },
       {
-        path: 'attendance_view',
+        path: '/attendance_view',
         name: 'attendance_view',
         component: AttendanceView
       },
       {
-        path: 'register',
+        path: '/register',
         name: 'register',
         component: RegisterView
       }
@@ -97,7 +99,7 @@ const routes = [
   {
     path: '/realtime_log',
     name: 'realtime_log',
-    component: () => import('@/views/RealtimeLogView.vue') // Assuming dynamic import
+    component: RealtimeLogView
   },
   {
     path: '/:pathMatch(.*)*',

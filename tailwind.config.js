@@ -4,6 +4,22 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      colors: {
+        primary: {
+          100: '#E4D8FD',
+          200: '#C2A7FB',
+          300: '#A076F9',
+          400: '#7E45F7',
+          500: '#5C14F5'
+        },
+        secondary: {
+          100: '#FFF9E5',
+          200: '#FFEEB2',
+          300: '#FFE382',
+          400: '#FFD74D',
+          500: '#FFCC1A'
+        }
+      },
       backgroundImage: {
         'primary': "url(/src/assets/bg.png)",
       },
@@ -36,7 +52,6 @@ module.exports = {
     fontFamily:{
       'digital': ['DS-Digital', 'sans-serif']
     }
-  },
-  plugins: [daisyui],
+  }
 }
 
