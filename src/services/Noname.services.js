@@ -22,7 +22,10 @@ export const login = async (data) => {
     const res = await axios
       .post(
         `https://103.23.100.110/user/login`,
-        { email: data.email, password: data.password },
+        { 
+          email: data.email, 
+          password: data.password 
+        },
         {
           headers: {
             'Content-Type': 'application/json'

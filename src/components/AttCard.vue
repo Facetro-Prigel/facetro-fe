@@ -8,10 +8,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-10">
           <div v-for="(card, index) in cards" :key="index" class="relative bg-transparent border border-opacity-50 border-white rounded-2xl shadow-2xl flex justify-center items-center flex-grow transition ease-in-out duration-500 px-4">
             <div class="flex flex-col items-center text-center pb-6">
-              <img v-if="card.image" :src="card.image" alt="User Image" class="object-cover h-[240px] w-full rounded-xl my-8">
+              <img v-if="card.image" :src="BASE_URL+card.image" alt="User Image" class="object-cover h-[240px] w-full rounded-xl my-8">
               <h3 class="text-lg font-semibold mt-2">{{ card.name }}</h3>
               <p class="text-sm text-gray-500"> {{ card.nim }}</p>
-              <p class="text-sm mt-4 bg-primary-500 text-white px-4 py-2 rounded">In Time: {{ card.inTime }}</p>
+              <p class="text-sm text-red-400"> {{ card.device }}</p>
+              <p class="text-sm mt-4 bg-primary-500 text-white px-4 py-2 rounded">In Time: {{ convertToLocale(new Date(card.inTime)) }}</p>
             </div>
           </div>
         </div>
@@ -19,23 +20,21 @@
     </div>
   </template>
   
-  <script>
-  export default {
-    props: {
-      cards: {
-        type: Array,
-        required: true
-      }
-    },
-    data() {
-      return {
-        isActive: false,
-      };
-    },
-    mounted() {
-      this.isActive = true;
-    },
-  };
+  <script setup>
+  import BASE_URL from '@/stores/config'
+  import { ref, onMounted } from 'vue'
+  const props = defineProps({ 'cards': Array });
+  const isActive = ref(false)
+  const convertToLocale = (time) => {
+  return time.toLocaleString('id-ID', {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    timeStyle: 'long',
+    dateStyle: 'medium'
+  })
+}
+onMounted(()=>{
+  isActive.value = true
+})
   </script>
   
   <style scoped>

@@ -4,7 +4,7 @@
       <canvas id="world"></canvas>
     </div>
     <div class="flex hero h-screen items-center justify-center">
-      <div class="hero-content text-center bg-indigo-600 shadow-lg bg-opacity-50 rounded-3xl p-5">
+      <div class="hero-content text-center bg-indigo-600 z-10 shadow-lg bg-opacity-50 rounded-3xl p-5">
         <div class="max-w-md">
           <h1 class="text-5xl font-bold text-white">Login</h1>
           <p class="py-6 text-white">Selamat Datang!</p>
@@ -45,9 +45,9 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const datalogin = ref({ email: '', password: '' })
-const tombollogin = () => {
+const tombollogin = async () => {
   console.log(datalogin.value)
-  let hasil = login(datalogin.value)
+  let hasil = await login(datalogin.value)
   if (hasil) {
     router.push({ name: 'dashboard' })
     alert('Login Berhasil!')

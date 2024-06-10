@@ -14,12 +14,13 @@ import Tooltip from 'primevue/tooltip';
 import Chip from 'primevue/chip';
 
 const app = createApp(App)
-
+const pinia = createPinia()
 app.component('Avatar', Avatar)
 app.component('Chip', Chip)
 app.component('Menu', Menu)
 app.directive('tooltip', Tooltip)
 app.use(router)
 app.use(PrimeVue)
+app.use(pinia)
 
 app.mount('#app')

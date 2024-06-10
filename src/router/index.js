@@ -6,17 +6,18 @@ import ForbiddenView from '@/views/ForbiddenView.vue'
 import ViewLogin from '@/views/Login/ViewLogin.vue'
 import AttendanceView from '@/views/AttendanceView.vue'
 import RegisterView from '@/views/RegisterView.vue'
-import DeviceView from '@/views/DeviceView.vue'
+import DeviceView from '../views/DeviceView.vue'
 import HomeView from '../views/HomeView.vue'
 import ServiceView from '../views/ServicesView.vue'
 import AboutView from '../views/AboutView.vue'
 import ContactView from '../views/ContactView.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Room from '../views/Room.vue'
-import Camera from '../views/Camera.vue'
+import Camera from '../views/CameraView.vue'
 import Attendance from '../views/Attendance.vue'
-import Master from '@/layouts/Master.vue' // Assuming you have this component
+import Master from '@/layouts/Master.vue'
 import RealtimeLogView from '@/views/RealtimeLogView.vue'
+import UserView from '../views/UserView.vue'
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
         path: '/register',
         name: 'register',
         component: RegisterView
+      },
+      {
+        path: '/user',
+        name: 'user',
+        component:UserView
       }
     ]
   },

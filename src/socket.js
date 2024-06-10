@@ -8,6 +8,7 @@ export const state = reactive({
 
 // "undefined" means the URL will be computed from the `window.location` object
 const URL = "https://103.23.100.110";
+// const URL = "http://localhost:3000";
 
 export const socket = io(URL);
 
