@@ -5,6 +5,7 @@ import NotFoundView from '@/views/NotFoundView.vue'
 import ForbiddenView from '@/views/ForbiddenView.vue'
 import ViewLogin from '@/views/Login/ViewLogin.vue'
 import AttendanceView from '@/views/AttendanceView.vue'
+import GroupView from '../views/GroupView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DeviceView from '../views/DeviceView.vue'
 import HomeView from '../views/HomeView.vue'
@@ -46,6 +47,11 @@ const routes = [
         component: Attendance
       },
       {
+        path: '/group',
+        name: 'group',
+        component: GroupView
+      },
+      {
         path: '/device',
         name: 'device',
         component: DeviceView
@@ -63,7 +69,7 @@ const routes = [
       {
         path: '/user',
         name: 'user',
-        component:UserView
+        component: UserView
       }
     ]
   },

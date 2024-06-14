@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      canvasWidth: 1500,
+      canvasWidth: 1200,
       canvasHeight: 720
     };
   },

@@ -2,7 +2,6 @@
 import TitleComponent from '@/components/TitleComponent.vue';
 import Camera from '@/components/LiveCameraComponent.vue';
 import DeviceName from '@/components/DeviceName.vue'
-import Header from '@/components/Header.vue';
 import Modal from '@/components/Modal.vue';
 import Time from '@/components/Time.vue';
 import { ref, onMounted, effect } from 'vue'

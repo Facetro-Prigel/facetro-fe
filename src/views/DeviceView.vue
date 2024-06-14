@@ -1,119 +1,155 @@
 <template>
-  <div class="card p-4">
-      <DataTable :value="rooms" tableStyle="min-width: 50rem">
-          <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                  <div class="relative">
-                      <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                      <input type="text" placeholder="Search..." class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
-                  </div>
-                  <button class="bg-primary-500 text-white px-4 py-2 rounded-md">+ Add Room</button>
-              </div>
+    <div class="card p-4">
+      <DataTable
+        :value="device"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        tableStyle="min-width: 50rem"
+      >
+        <template #header>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div class="relative">
+              <i
+                class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                placeholder="Search..."
+                class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10"
+              />
+            </div>
+            <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
+              + Add Device
+            </button>
+          </div>
+        </template>
+        <Column field="name" header="Room" sortable>
+          <template #header="slotProps">
+            <span class="text-black">{{ slotProps.header }}</span>
           </template>
-          <Column field="room" header="Room">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <span class="text-black">{{ slotProps.data.room }}</span>
-              </template>
-          </Column>
-          <Column header="Image">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <img :src="slotProps.data.customImagePath" :alt="slotProps.data.image" class="w-[6rem] shadow-md rounded" />
-              </template>
-          </Column>
-          <Column field="location" header="Location">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <span class="text-black">{{ slotProps.data.location }}</span>
-              </template>
-          </Column>
-          <Column field="token" header="Token">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <span class="text-black">{{ slotProps.data.token }}</span>
-              </template>
-          </Column>
-          <Column field="expired" header="Expired">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <span class="text-black">{{ slotProps.data.expired }}</span>
-              </template>
-          </Column>
-          <Column field="role" header="Role">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <span class="text-black">{{ slotProps.data.role }}</span>
-              </template>
-          </Column>
-          <Column header="Action">
-              <template #header="slotProps">
-                  <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                  <button class="text-blue-500 hover:text-blue-700 p-1">
-                      <i class="pi pi-pencil"></i>
-                  </button>
-                  <button class="text-red-500 hover:text-red-700 p-1">
-                      <i class="pi pi-trash"></i>
-                  </button>
-              </template>
-          </Column>
+          <template #body="slotProps">
+            <span class="text-black">{{ slotProps.data.name }}</span>
+          </template>
+        </Column>
+        <Column field="locations" header="Location">
+          <template #header="slotProps">
+            <span class="text-black">{{ slotProps.header }}</span>
+          </template>
+          <template #body="slotProps">
+            <span class="text-black">{{ slotProps.data.locations }}</span>
+          </template>
+        </Column>
+        <Column field="token" header="Token" sortable>
+          <template #header="slotProps">
+            <span class="text-black">{{ slotProps.header }}</span>
+          </template>
+          <template #body="slotProps">
+            <span class="text-black">{{ slotProps.data.token }}</span>
+          </template>
+        </Column>
+        <Column header="Action">
+          <template #header="slotProps">
+            <span class="text-black">{{ slotProps.header }}</span>
+          </template>
+          <template #body="slotProps">
+            <button
+              @click="openEditUserDialog(slotProps.data)"
+              class="text-blue-500 hover:text-blue-700 p-1"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button
+              @click="confirmDeleteUser(slotProps.data.uuid)"
+              class="text-red-500 hover:text-red-700 p-1"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </template>
+        </Column>
       </DataTable>
-      <div class="flex justify-center mt-4">
-          <button class="pagination-button bg-gray-200 text-gray-700 px-4 py-2 rounded-l-md">Previous</button>
-          <button class="pagination-button bg-gray-200 text-gray-700 px-4 py-2">1</button>
-          <button class="pagination-button bg-gray-200 text-gray-700 px-4 py-2">2</button>
-          <button class="pagination-button bg-gray-200 text-gray-700 px-4 py-2">3</button>
-          <button class="pagination-button bg-gray-200 text-gray-700 px-4 py-2 rounded-r-md">Next</button>
+  
+      <div
+        v-if="isConfirmDialogVisible"
+        class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded shadow-md">
+          <h2 class="text-lg font-semibold mb-4">Konfirmasi</h2>
+          <p>Apakah Anda yakin ingin menghapus pengguna ini?</p>
+          <div class="flex justify-end mt-4">
+            <button
+              @click="handleDeleteUser(confirmingUserId)"
+              class="bg-red-500 text-white px-4 py-2 rounded mr-2"
+            >
+              Ya
+            </button>
+            <button
+              @click="isConfirmDialogVisible = false"
+              class="bg-gray-300 text-black px-4 py-2 rounded"
+            >
+              Tidak
+            </button>
+          </div>
+        </div>
       </div>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-
-// Static dummy data
-const rooms = ref([
-  { room: 'Ruang Digital Center 1A', image: 'image1.jpg', location: 'Gedung FMIPA', token: 'abc123', expired: '2024-06-10', role: 'Student' },
-  { room: 'Ruang Dosen FE', image: 'image2.jpg', location: 'Gedung FT', token: 'def456', expired: '2024-06-11', role: 'Lecturer' },
-  { room: 'Tata Usaha E11', image: 'image3.jpg', location: 'Gedung FT', token: 'ghi789', expired: '2024-06-12', role: 'Lecturer' },
-  { room: 'Ruang Skripsi E6', image: 'image4.jpg', location: 'Gedung FT', token: 'jkl012', expired: '2024-06-13', role: 'Student' }
-]);
-
-// Update the custom image path
-rooms.value = rooms.value.map(room => ({
-  ...room,
-  customImagePath: `your/custom/path/${room.image}`
-}));
-</script>
-
-<style scoped>
-.pagination-button:focus,
-.pagination-button:active,
-.pagination-button.selected {
-  background-color: #624de3; 
-  color: white;
-}
-.pagination-button {
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-.pagination-button:not(.selected):hover {
-  background-color: #E2E8F0; 
-}
-</style>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from 'vue'
+  import DataTable from 'primevue/datatable'
+  import Column from 'primevue/column'
+  import BASE_URL from '@/stores/config'
+  import { fetchDevice, createDevice, updateDevice, deleteDevice } from '@/services/Device.services'
+  
+  const device = ref([])
+  const isConfirmDialogVisible = ref(false)
+  const confirmingUserId = ref(null)
+  
+  const getDevice = async () => {
+    try {
+      const response = await fetchDevice()
+      device.value = response
+    } catch (error) {
+      console.error('Error fetching device:', error)
+    }
+  }
+  
+  const handleDeleteUser = async (id) => {
+    try {
+      await deleteUser(id)
+      getUsers()
+      isConfirmDialogVisible.value = false
+    } catch (error) {
+      console.error('Error deleting user:', error)
+    }
+  }
+  
+  const confirmDeleteUser = (id) => {
+    confirmingUserId.value = id
+    isConfirmDialogVisible.value = true
+  }
+  
+  onMounted(() => {
+    getDevice()
+  })
+  </script>
+  
+  <style scoped>
+  .pagination-button:focus,
+  .pagination-button:active,
+  .pagination-button.selected {
+    background-color: #624de3;
+    color: white;
+  }
+  .pagination-button {
+    cursor: pointer;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .pagination-button:not(.selected):hover {
+    background-color: #e2e8f0;
+  }
+  </style>
+  
