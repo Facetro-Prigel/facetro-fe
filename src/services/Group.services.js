@@ -20,14 +20,17 @@ export const fetchGroup = async () => {
 
 export const createGroup = async (group) => {
   try {
+    console.log('Sending data to server:', group);
     const res = await axios.post(API_URL, group, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    console.log('Server response:', res.data);
     return res.data;
   } catch (error) {
+    console.error('Error creating group:', error.message);
     return error.message;
   }
 };

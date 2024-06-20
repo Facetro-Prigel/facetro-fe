@@ -45,7 +45,7 @@
           <div
             class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white"
           >
-            <router-link to="/product" class="items-center px-2 flex space-x-2"
+            <router-link to="/permission" class="items-center px-2 flex space-x-2"
               ><span class="pi pi-key" v-tooltip.right="'Permission'"></span>
               <span v-show="dataOpenSidebar">Permission</span></router-link
             >

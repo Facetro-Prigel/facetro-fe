@@ -12,9 +12,17 @@ import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Tooltip from 'primevue/tooltip';
 import Chip from 'primevue/chip';
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
 
 const app = createApp(App)
 const pinia = createPinia()
+app.component('DataTable', DataTable)
+app.component('Column', Column)
+app.component('TabView', TabView)
+app.component('TabPanel', TabPanel)
 app.component('Avatar', Avatar)
 app.component('Chip', Chip)
 app.component('Menu', Menu)

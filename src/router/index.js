@@ -19,6 +19,7 @@ import Attendance from '../views/Attendance.vue'
 import Master from '@/layouts/Master.vue'
 import RealtimeLogView from '@/views/RealtimeLogView.vue'
 import UserView from '../views/UserView.vue'
+import PermissionView from '../views/PermissionView.vue'
 
 const routes = [
   {
@@ -70,6 +71,11 @@ const routes = [
         path: '/user',
         name: 'user',
         component: UserView
+      },
+      {
+        path: '/permission',
+        name: 'permission',
+        component: PermissionView
       }
     ]
   },
