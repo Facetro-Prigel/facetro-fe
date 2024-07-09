@@ -139,7 +139,7 @@ const isAddGroupDialogVisible = ref(false)
 const isEditGroupDialogVisible = ref(false)
 const form = ref({
   name: '',
-  locations: '',
+  location: '',
   device: {
     name: ''
   }
@@ -172,7 +172,7 @@ const confirmDeleteGroup = (id) => {
 
 const openAddGroupDialog = () => {
   isAddGroupDialogVisible.value = true
-  form.value = { name: '', locations: '', device: { name: '' } }
+  form.value = { name: '', location: '', device: { name: '' } }
 }
 
 const openEditGroupDialog = (data) => {

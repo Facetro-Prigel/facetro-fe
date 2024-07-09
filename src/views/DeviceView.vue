@@ -119,7 +119,7 @@
           <div class="mb-4">
             <label for="device-locations" class="block mb-2">Location</label>
             <input
-              v-model="newDevice.locations"
+              v-model="newDevice.location"
               type="text"
               id="device-locations"
               placeholder="Location"
@@ -168,8 +168,9 @@ const isAddOrEditDeviceDialogVisible = ref(false)
 const isAddingDevice = ref(false)
 const confirmingDeviceId = ref(null)
 const newDevice = ref({
+  id: null,
   name: '',
-  locations: '',
+  location: '',
   token: ''
 })
 
@@ -204,7 +205,7 @@ const openAddOrEditDeviceDialog = (data) => {
     isAddingDevice.value = false
   } else {
     // Add mode
-    newDevice.value = { name: '', locations: '', token: '' }
+    newDevice.value = { id: null, name: '', location: '', token: '' }
     isAddingDevice.value = true
   }
   isAddOrEditDeviceDialogVisible.value = true
@@ -219,7 +220,7 @@ const handleAddDevice = async () => {
     await createDevice(newDevice.value)
     getDevice()
     isAddOrEditDeviceDialogVisible.value = false
-    newDevice.value = { name: '', locations: '', token: '' }
+    newDevice.value = { id: null, name: '', location: '', token: '' }
   } catch (error) {
     console.error('Error adding device:', error)
   }

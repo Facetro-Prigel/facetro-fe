@@ -9,6 +9,7 @@ import axios from 'axios';
 import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
 import BASE_URL from '@/stores/config'
+import { socket } from '../socket';
 
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)
@@ -123,6 +124,9 @@ onMounted(
     if (!cookies) {
       show403("Device Not Registered")
     }
+    socket.on('reload-user-page', () => {
+    window.location.reload();
+  });
   }
 )
 effect(() => {

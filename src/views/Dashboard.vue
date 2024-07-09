@@ -76,21 +76,23 @@
   </keep-alive>
 </template>
 
-<script>
-import 'vue3-circle-progress/dist/circle-progress.css'
-import CircleProgress from 'vue3-circle-progress'
-import Chart from '../components/Chart.vue'
-import ProgressBar from '../components/ProgressBar.vue'
-import Clock from '../components/Clock.vue'
+<script setup>
+import 'vue3-circle-progress/dist/circle-progress.css';
+import CircleProgress from 'vue3-circle-progress';
+import Chart from '../components/Chart.vue';
+import ProgressBar from '../components/ProgressBar.vue';
+import Clock from '../components/Clock.vue';
 
-export default {
-  components: {
-    CircleProgress,
-    Chart,
-    ProgressBar,
-    Clock
+const scrollToContent = (id) => {
+  const element = document.getElementById(id);
+  if (element) {
+    const yOffset = -100; // Sesuaikan dengan offset vertikal yang diinginkan (misalnya -100 untuk menggeser ke atas sebesar 100px)
+    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
   }
-}
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Your scoped styles here */
+</style>
