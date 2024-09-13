@@ -42,8 +42,8 @@ const validateToken = () =>{
         image.value.src=ImgVeri
         sendBtn.value.disabled = true
         let tmpData = response.data
-        VueCookies.set('device_token', tmpData.token,"14d")  
-        VueCookies.set('device_name', tmpData.name,"14d")  
+        VueCookies.set('device_token', tmpData.token,"31d")  
+        VueCookies.set('device_name', tmpData.name,"31d")  
         router.push({name:"presence"})
     }).catch((error)=>{
         image.value.src=ImgVeri

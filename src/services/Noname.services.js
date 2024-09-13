@@ -1,5 +1,6 @@
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import BASE_URL from '@/stores/config';
 
 // using in .env make VITE_VUE_APP_BASE_URL
 
@@ -17,11 +18,10 @@ export const anotherfunction = async () => {
 }
 
 export const login = async (data) => {
-  console.log(data)
   try {
     const res = await axios
       .post(
-        `https://103.23.100.110/user/login`,
+        `${BASE_URL}user/login`,
         { 
           email: data.email, 
           password: data.password 
@@ -33,9 +33,8 @@ export const login = async (data) => {
         }
       )
       await VueCookies.set('token', res.data.token, '14d')
-      return true
+      return {status: true}
   } catch (error) {
-    alert(error.response.data.msg)
-    return false
+    return {status: false, msg: error.response.data.msg}
   }
 }
