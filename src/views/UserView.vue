@@ -30,7 +30,7 @@
             <!-- <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox ?? [0, 0, 0]"
               :image="BASE_URL + slotProps.data.avatar ?? '/src/assets/video/search_person.mp4'" /> -->
               <img
-                :src="`${BASE_URL + slotProps.data.avatar}`"
+                :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
                 class="w-full shadow-md rounded"
               />
@@ -116,6 +116,7 @@ import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroup } from '@/services/Group.services'
 import { fetchRole } from '@/services/Role.services'
 import { fetchPermission } from '@/services/Permission.services'
+import no_image_icon from '@/assets/no_images.png';
 
 const users = ref([])
 const isConfirmDialogVisible = ref(false)

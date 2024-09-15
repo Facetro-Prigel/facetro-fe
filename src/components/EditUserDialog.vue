@@ -230,7 +230,7 @@ watch(() => props.visible, async (newVal) => {
   const response = await fetchUser(props.uuid)
   if(response.status == 'success'){
       user.value =response.data
-      uplodedImage.value = BASE_URL+user.value.avatar
+      uplodedImage.value = user.value.avatar ? BASE_URL+user.value.avatar : no_image_icon
       await unnesImageHender()
   }
 })
