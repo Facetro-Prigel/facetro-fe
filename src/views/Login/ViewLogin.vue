@@ -8,7 +8,7 @@
 
               <div class="space-y-4 md:space-y-6" action="#">
                   <div class="flex justify-center items-center">
-                      <img src="@/assets/logo/UNNES.png" alt="Logo UNNES"
+                      <img ref="image" src="@/assets/logo/UNNES.png" alt="Logo UNNES"
                           title="Logo UNNES" width="120px">
                   </div>
                   <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
@@ -22,9 +22,12 @@
                   <div>
                       <label for="password"
                           class="block mb-2 text-sm font-medium text-white"><i class="fas fa-lock"></i> Password</label>
-                      <input type="password" name="password" ref="passwordField" placeholder="••••••••"
+                      <div class="flex justify-center items-center">
+                          <input type="password" name="password" ref="passwordField" placeholder="••••••••"
                           class="bg-gray-50 border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                           required="">
+                          <button class="fa fa-eye text-white p-2" @mousedown="passwordField.type ='text'" @mouseup="passwordField.type ='password'"></button>
+                      </div>
                   </div>
                   <div class="flex items-center justify-between">
                       <a href="#"
@@ -43,11 +46,13 @@
 
 <script setup>
 import { login } from '@/services/Noname.services.js'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Alert from '@/components/Alert.vue'
+import BASE_URL from '@/stores/config'
 const emailField = ref()
 const passwordField = ref()
+const image = ref()
 const router = useRouter()
 const alertData = ref({status:'', msg:''})
 const tombolLogin = async () => {
@@ -59,8 +64,11 @@ const tombolLogin = async () => {
     password: passwordField.value.value
   })
   if (hasil.status) {
-    router.push({ name: 'dashboard' })
-    alertData.value= {status:'success', msg:'Berhasil Login!'}
+      alertData.value= {status:'success', msg: hasil.msg}
+      image.value.src= BASE_URL + hasil.img
+      setTimeout(() => {
+        router.push('/dashboard')
+      }, 3000);
   }else{
     alertData.value= {status:'fail', msg:hasil.msg}
     emailField.value.disabled = false;

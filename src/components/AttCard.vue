@@ -8,7 +8,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-10">
           <div v-for="(card, index) in cards" :key="index" class="relative bg-transparent border border-opacity-50 border-white rounded-2xl shadow-2xl flex justify-center items-center flex-grow transition ease-in-out duration-500 px-4">
             <div class="flex flex-col items-center text-center pb-6">
-              <img v-if="card.image" :src="BASE_URL+card.image" alt="User Image" class="object-cover h-[240px] w-full rounded-xl my-8">
+              <ImageViewer v-if="card.image" type="Gambar Pembading" :is-success="true"
+                :bbox="card.bbox ?? [0, 0, 0]" :image="BASE_URL+card.image ?? '/src/assets/video/search_person.mp4'" />
               <h3 class="text-lg font-semibold mt-2">{{ card.name }}</h3>
               <p class="text-sm text-gray-500"> {{ card.nim }}</p>
               <p class="text-sm text-red-400"> {{ card.device }}</p>
@@ -21,6 +22,7 @@
   </template>
   
   <script setup>
+  import ImageViewer from '../components/ImageViewer.vue';
   import BASE_URL from '@/stores/config'
   import { ref, onMounted } from 'vue'
   const props = defineProps({ 'cards': Array });

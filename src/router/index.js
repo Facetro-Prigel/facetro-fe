@@ -20,12 +20,15 @@ import Master from '@/layouts/Master.vue'
 import RealtimeLogView from '@/views/RealtimeLogView.vue'
 import UserView from '../views/UserView.vue'
 import PermissionView from '../views/PermissionView.vue'
-
+import VueCookies from 'vue-cookies'
 const routes = [
   {
-    path: '/',
+    path:"/",
     component: Master,
-    redirect: '/home',
+    meta:{
+      auth:true
+    },
+    redirect: {name: 'home'},
     children: [
       {
         path: '/dashboard',
@@ -80,7 +83,7 @@ const routes = [
     ]
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: HomeView
   },
@@ -135,5 +138,26 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
+const authCheck = () =>{
+  return VueCookies.get('token') ? true : false;
+}
+router.beforeEach(
+  async (to, from ,next)=>{
+    if(to.meta.auth){
+      if(authCheck()){
+        return next()
+      }else{
+        return next({name:'login'})
+      }
+    }
+    if(to.name == 'login'){
+      if(!authCheck()){
+        return next()
+      }else{
+        return next({name:'dashboard'})
+      }
+    }
+    return next()
+  }
+)
 export default router

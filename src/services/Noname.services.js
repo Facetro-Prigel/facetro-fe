@@ -33,7 +33,9 @@ export const login = async (data) => {
         }
       )
       await VueCookies.set('token', res.data.token, '14d')
-      return {status: true}
+      delete res.data.token;
+      await VueCookies.set('user', res.data, '14d')
+      return {status: true, msg: `Selemat Datang ${res.data.name}`, img: res.data.avatar}
   } catch (error) {
     return {status: false, msg: error.response.data.msg}
   }

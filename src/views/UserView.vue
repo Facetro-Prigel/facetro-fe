@@ -5,11 +5,8 @@
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
             <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input
-              type="text"
-              placeholder="Search..."
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10"
-            />
+            <input type="text" placeholder="Search..."
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
             + Add User
@@ -29,11 +26,15 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <img
-            :src="`${BASE_URL + slotProps.data.avatar}`"
-            :alt="slotProps.data.name"
-            class="w-[6rem] shadow-md rounded"
-          />
+          <div class="flex max-w-[175px] min-w-[100px]">
+            <!-- <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox ?? [0, 0, 0]"
+              :image="BASE_URL + slotProps.data.avatar ?? '/src/assets/video/search_person.mp4'" /> -->
+              <img
+                :src="`${BASE_URL + slotProps.data.avatar}`"
+                :alt="slotProps.data.name"
+                class="w-full shadow-md rounded"
+              />
+          </div>
         </template>
       </Column>
       <Column field="identityNumber" header="Identity Number" sortable>
@@ -49,11 +50,8 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <div
-            v-for="item in slotProps.data.usergroup"
-            :key="item.id"
-            class="bg-blue-500 text-white p-1 mb-2 rounded-lg"
-          >
+          <div v-for="item in slotProps.data.usergroup" :key="item.id"
+            class="bg-blue-500 text-white p-1 mb-2 rounded-lg">
             {{ item.group.name }}
           </div>
         </template>
@@ -63,11 +61,7 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <div
-            v-for="item in slotProps.data.roleuser"
-            :key="item.id"
-            class="bg-sky-800 text-white p-1 mb-2 rounded-lg"
-          >
+          <div v-for="item in slotProps.data.roleuser" :key="item.id" class="bg-sky-800 text-white p-1 mb-2 rounded-lg">
             {{ item.role.name }}
           </div>
         </template>
@@ -77,12 +71,12 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <button @click="openEditUserDialog(slotProps.data)" class="text-blue-500 hover:text-blue-700 p-1">
-            <i class="pi pi-pencil"></i>
-          </button>
-          <button @click="confirmDeleteUser(slotProps.data.uuid)" class="text-red-500 hover:text-red-700 p-1">
-            <i class="pi pi-trash"></i>
-          </button>
+            <button @click="openEditUserDialog(slotProps.data.uuid)" class="text-blue-500 hover:text-blue-700 p-1">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button @click="confirmDeleteUser(slotProps.data.uuid)" class="text-red-500 hover:text-red-700 p-1">
+              <i class="pi pi-trash"></i>
+            </button>
         </template>
       </Column>
     </DataTable>
@@ -102,22 +96,12 @@
       </div>
     </div>
 
-    <AddUserDialog 
-      :visible="isAddUserDialogVisible" 
-      :groupOptions="groupOptions" 
-      :roleOptions="roleOptions" 
-      @update:visible="isAddUserDialogVisible = $event" 
-      @user-added="getUsers"
-    />
+    <AddUserDialog :visible="isAddUserDialogVisible" :groupOptions="groupOptions" :roleOptions="roleOptions"
+      :permissionOptions="permissionOptions" @update:visible="isAddUserDialogVisible = $event" @user-added="getUsers" />
 
-    <EditUserDialog 
-      :visible="isEditUserDialogVisible" 
-      :user="selectedUser" 
-      :groupOptions="groupOptions" 
-      :roleOptions="roleOptions" 
-      @update:visible="isEditUserDialogVisible = $event" 
-      @user-updated="getUsers"
-    />
+    <EditUserDialog :uuid="selectedUser" :visible="isEditUserDialogVisible" :groupOptions="groupOptions"
+      :roleOptions="roleOptions" :permissionOptions="permissionOptions"
+      @update:visible="isEditUserDialogVisible = $event" @user-updated="getUsers" />
   </div>
 </template>
 
@@ -129,6 +113,9 @@ import AddUserDialog from '../components/AddUserDialog.vue'
 import EditUserDialog from '../components/EditUserDialog.vue'
 import BASE_URL from '@/stores/config'
 import { fetchUsers, deleteUser } from '@/services/User.services'
+import { fetchGroup } from '@/services/Group.services'
+import { fetchRole } from '@/services/Role.services'
+import { fetchPermission } from '@/services/Permission.services'
 
 const users = ref([])
 const isConfirmDialogVisible = ref(false)
@@ -137,19 +124,10 @@ const isAddUserDialogVisible = ref(false)
 const isEditUserDialogVisible = ref(false)
 const selectedUser = ref(null)
 
-const groupOptions = [
-  { label: 'Group A', value: 'group_a' },
-  { label: 'Group B', value: 'group_b' },
-  { label: 'Group C', value: 'group_c' },
-  // Add more options as needed
-]
+const groupOptions = []
 
-const roleOptions = [
-  { label: 'Role X', value: 'role_x' },
-  { label: 'Role Y', value: 'role_y' },
-  { label: 'Role Z', value: 'role_z' },
-  // Add more options as needed
-]
+const roleOptions = []
+const permissionOptions = []
 
 const getUsers = async () => {
   try {
@@ -159,10 +137,47 @@ const getUsers = async () => {
     console.error('Error fetching users:', error)
   }
 }
+const getGroup = async () => {
+  try {
+    const response = await fetchGroup()
+    groupOptions.value = response.map(item => ({
+      uuid: item.uuid,
+      label: item.name
+    }));
+  } catch (error) {
+    console.error('Error fetching group:', error)
+  }
+}
+const getRole = async () => {
+  try {
+    const response = await fetchRole()
+    roleOptions.value = response.map(item => ({
+      uuid: item.uuid,
+      label: item.name
+    }));
+  } catch (error) {
+    console.error('Error fetching group:', error)
+  }
+}
+
+const getPemission = async () => {
+  try {
+    const response = await fetchPermission()
+    permissionOptions.value = response.map(item => ({
+      uuid: item.uuid,
+      label: item.name
+    }));
+  } catch (error) {
+    console.error('Error fetching group:', error)
+  }
+}
 
 const handleDeleteUser = async (id) => {
   try {
-    await deleteUser(id)
+    const res = await deleteUser(id)
+    if(res){
+      alert(res.msg)
+    }
     getUsers()
     isConfirmDialogVisible.value = false
   } catch (error) {
@@ -180,14 +195,16 @@ const openAddUserDialog = () => {
 }
 
 const openEditUserDialog = (user) => {
-  selectedUser.value = { ...user }
+  selectedUser.value = user
   isEditUserDialogVisible.value = true
 }
 
-onMounted(() => {
-  getUsers()
+onMounted(async () => {
+  await getUsers();
+  await getGroup();
+  await getRole();
+  await getPemission();
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

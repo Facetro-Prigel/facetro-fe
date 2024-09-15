@@ -4,8 +4,7 @@
       <div>
         <div class="flex">
           <div
-            class="flex-row items-center justify-center w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4"
-          >
+            class="flex-row items-center justify-center rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4">
             <div class="flex gap-4 items-center justify-between">
               <div>
                 <h5 class="text-[16px]">Total Employee</h5>
@@ -16,24 +15,17 @@
             <ProgressBar class="mt-20" :progress="60" :label="'Attendance'" />
           </div>
           <div
-            class="flex items-center justify-center gap-4 w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 px-4 py-4"
-          >
+            class="flex items-center justify-center gap-4 rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 px-4 py-4">
             <div>
               <h5 class="text-[16px]">On Time</h5>
               <h2 class="text-[40px] font-bold">32</h2>
             </div>
             <div class="flex justify-between gap-3">
-              <circle-progress
-                :percent="40"
-                :size="140"
-                :is-gradient="true"
-                :show-percent="true"
-                :gradient="{
-                  angle: 90,
-                  startColor: '#5c14f5',
-                  stopColor: '#5c14f5'
-                }"
-              />
+              <circle-progress :percent="40" :size="140" :is-gradient="true" :show-percent="true" :gradient="{
+                angle: 90,
+                startColor: '#5c14f5',
+                stopColor: '#5c14f5'
+              }" />
               <div class="pi pi-clock" style="font-size: 1.5rem"></div>
             </div>
           </div>
@@ -41,8 +33,7 @@
 
         <div class="flex">
           <div
-            class="flex-row items-center justify-center w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4"
-          >
+            class="flex-row items-center justify-center w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4">
             <div class="flex gap-4 items-center justify-between">
               <div>
                 <h5 class="text-[16px]">Late Arrival</h5>
@@ -53,8 +44,7 @@
             <ProgressBar class="mt-20" :progress="20" :label="'Late Arrival'" />
           </div>
           <div
-            class="flex-row items-center justify-center w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4"
-          >
+            class="flex-row items-center justify-center w-[310px] h-[300px] rounded-md shadow-[0_0_10px_0_rgba(0,0,0,0.5)] mt-4 mr-4 px-8 pt-4">
             <div class="flex gap-4 items-center justify-between">
               <div>
                 <h5 class="text-[16px]">Absent</h5>
@@ -71,9 +61,6 @@
       <Clock />
     </div>
   </div>
-  <keep-alive>
-    <Chart class="flex justify-center mt-4" />
-  </keep-alive>
 </template>
 
 <script setup>

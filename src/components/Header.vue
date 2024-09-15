@@ -6,11 +6,10 @@
             <!-- </div> -->
             <div class="py-2"></div>
             <div class="flex space-x-3 items-center justify-center px-3">
-                <div class="text-sm text-white">Admin</div>
-                <Avatar 
-                    icon="cursor-pointer pi pi-user" 
-                    class="mr-2" 
-                    style="background-color:#9c27b0; color: #ffffff" 
+                <div class="text-sm text-white">{{ user.name }}</div>
+                <Avatar  
+                    :image="BASE_URL + user.avatar"
+                    class="mr-2"  
                     shape="circle" 
                     @click="toggle" 
                     aria-haspopup="true" 
@@ -28,6 +27,8 @@
 </template>
 
 <script>
+import BASE_URL from '@/stores/config'
+import VueCookies from 'vue-cookies'
 export default {
     props: {
         dataOpenSidebar: Boolean,
@@ -35,6 +36,8 @@ export default {
     },
     data() {
         return {
+            BASE_URL: BASE_URL,
+            user: VueCookies.get('user'),
             items: [
                 {
                     label: 'Change Password',
@@ -61,20 +64,10 @@ export default {
             this.$refs.menu.toggle(event);
         },
         logout() {
-            // Clear any stored data related to login
-            localStorage.clear(); // Clear all localStorage
-            sessionStorage.clear(); // Clear all sessionStorage
-            
-            // Redirect to landing page
-            this.$router.push({ name: 'login' });
+            VueCookies.remove('token');
+            VueCookies.remove('user');
 
-            // Optional: Show a toast notification
-            this.$toast.add({
-                severity: 'warn',
-                summary: 'Logged Out',
-                detail: 'You have been logged out',
-                life: 3000
-            });
+            this.$router.push({ name: 'login' });
         }
     }
 }

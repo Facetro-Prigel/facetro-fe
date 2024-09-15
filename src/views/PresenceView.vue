@@ -10,7 +10,6 @@ import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
 import BASE_URL from '@/stores/config'
 import { socket } from '../socket';
-
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)
 const camera = ref(null)
@@ -145,8 +144,7 @@ effect(() => {
 </script>
 
 <template>
-  <Header />
-  <main class="flex items-center justify-center w-full relative">
+  <main class="flex items-center justify-center w-full relative h-screen">
     <div class="w-full max-w-[1200px] flex flex-col justify-center items-center">
       <TitleComponent title="UNNESTech" subtitle="Presence" />
       <Modal ref="modal" />
