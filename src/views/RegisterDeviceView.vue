@@ -9,7 +9,7 @@
                     <label for="token" class="m-2">Token:</label>
                     <input type="text" name="token" v-model="data.token" class="rounded-l-lg text-xl px-2 py-1 bg-blue-200" v-on:keyup.enter="validateToken">
                 </div>
-                <button ref="sendBtn" disabled="true" @click="validateToken"  class="mt-2 p-3 rounded-lg  transition duration-300 bg-blue-600  text-white hover:bg-blue-800 disabled:bg-gray-600"><i class="fa fa-paper-plane mr-2"></i>Kirim</button>
+                <button ref="sendBtn" disabled="true" @click="validateToken"  class="mt-2 p-3 rounded-lg  transition duration-300 bg-blue-600  text-white hover:bg-blue-800 disabled:bg-gray-600"><i class="pi pi-send mr-2"></i>Kirim</button>
             
             </div>
         </div>

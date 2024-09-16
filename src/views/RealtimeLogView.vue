@@ -6,7 +6,7 @@
         <Time />
         <dialog id="my_modal_1" class="modal" ref="modal">
             <div class="modal-box ">
-                <h3 class="font-bold text-3xl mb-2"><i class="fa fa-info-circle"></i> Baru Saja Presensi</h3>
+                <h3 class="font-bold text-3xl mb-2"><i class="pi pi-info-circle"></i> Baru Saja Presensi</h3>
                 <div class="flex justify-center items-center">
                     <div class="w-1/2 overflow-hidden rounded-lg">
                         <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="[0, 0, 20]"

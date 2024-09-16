@@ -14,19 +14,19 @@
                   <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
                   <div>
                       <label for="email"
-                          class="block mb-2 text-sm font-medium text-white "><i class="fas fa-envelope"></i> E-mail</label>
+                          class="block mb-2 text-sm font-medium text-white "><i class="pi pi-envelope"></i> E-mail</label>
                       <input type="email" name="email" ref="emailField"
                           class="bg-gray-50 border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                           placeholder="name@students.unnes.ac.id" required="">
                   </div>
                   <div>
                       <label for="password"
-                          class="block mb-2 text-sm font-medium text-white"><i class="fas fa-lock"></i> Password</label>
+                          class="block mb-2 text-sm font-medium text-white"><i class="pi pi-lock"></i> Password</label>
                       <div class="flex justify-center items-center">
                           <input type="password" name="password" ref="passwordField" placeholder="••••••••"
                           class="bg-gray-50 border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                           required="">
-                          <button class="fa fa-eye text-white p-2" @mousedown="passwordField.type ='text'" @mouseup="passwordField.type ='password'"></button>
+                          <button class="pi pi-eye text-white p-2" @mousedown="passwordField.type ='text'" @mouseup="passwordField.type ='password'"></button>
                       </div>
                   </div>
                   <div class="flex items-center justify-between">
@@ -36,7 +36,7 @@
                   </div>
                   <button @click="tombolLogin"
                       class="bg-secondary-300 py-1 px-2 text-primary rounded-md drop-shadow-md hover:bg-scondary-500 hover:text-white transition-colors duration-300">
-                      <i class="fa fa-right-to-bracket mr-2"></i>Masuk
+                      <i class="pi pi-send mr-2"></i>Masuk
                   </button>
               </div>
           </div>

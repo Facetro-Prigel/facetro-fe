@@ -17,7 +17,7 @@
                 class="h-full w-full absolute opacity-0 hover:cursor-pointer z-30" @change="handleFileUpload" />
               <div
                 class="flex flex-col transition-all duration-300 justify-center items-center h-full w-full absolute bg-gray-800/50 z-10 opacity-0 group-hover:opacity-100">
-                <i class="fas fa-file-upload text-white text-6xl"></i>
+                <i class="pi pi-upload text-white text-6xl"></i>
                 <p class="text-sm mt-2 text-white"><span class="font-bold">Click to upload</span> drag or drop</p>
               </div>
               <img class="w-full rounded-lg" :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
@@ -57,7 +57,7 @@
             <div class="flex justify-center items-center">
               <input v-model="user.password" type="password" id="password" ref="passwordField"
                 placeholder="Enter Password" class="border border-gray-300 rounded-md p-2 w-full" />
-              <button class="fa fa-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
+              <button class="pi pi-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
                 @mouseup="passwordField.type = 'password'"></button>
               </div>
               <div class="text-red-600 text-sm">{{ error.password }}</div>

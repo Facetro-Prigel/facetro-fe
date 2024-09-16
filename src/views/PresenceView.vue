@@ -155,12 +155,11 @@ effect(() => {
         <div class="ml-4 flex flex-col items-start justify-center">
           <DeviceName/>
           <Time/>
-          <label for="identitas" class="text-2xl mt-2"><i class="fa fa-address-card"></i> <i
-              class="fa-brands fa-nfc-symbol"></i> Indentitas (NIM/NIP)</label>
+          <label for="identitas" class="text-2xl mt-2"><i class="pi pi-id-card"></i>Indentitas (NIM/NIP)</label>
           <input v-on:keyup.enter="sendImage" type="text" v-model="idInput.data" class="w-full mt-2 text-2xl rounded-md border border-black px-3">
           <button @click="sendImage" disabled="true" ref="saveBtn"
             class="bg-blue-700 transition duration-300 text-white py-2 mt-2 px-3 rounded-lg disabled:bg-gray-500  hover:bg-blue-900 hover:drop-shadow-lg ">
-            <i class="fa fa-save mr-2"></i>Simpan</button>
+            <i class="pi pi-save mr-2"></i>Simpan</button>
         </div>
       </div>
       <div class="mt-5 bg-gray-300 p-4 rounded-lg drop-shadow-lg flex flex-row ">

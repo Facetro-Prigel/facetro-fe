@@ -1,7 +1,7 @@
 <template>
     <div class="flex rounded-lg justify-center items-center bg-black text-white border-4 border-black  text-md p-2">
         <div>
-            <i class="fa fa-computer mr-1"></i> {{ deviceName }}
+            <i class="pi pi-desktop mr-1"></i> {{ deviceName }}
         </div>
         <div class="bg-white ml-2 text-black px-2 rounded font-extrabold">
             <i class="fa fa-wifi" :class="{
