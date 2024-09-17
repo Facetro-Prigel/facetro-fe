@@ -18,7 +18,7 @@
           <label for="name" class="block text-sm font-medium text-gray-700">Guard Name </label>
           <input v-model="permission.guardName" type="text" id="name" placeholder="Enter name"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.guadName }}</div>
+          <div class="text-red-600 text-sm">{{ error.guardName }}</div>
         </div>
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-gray-700">Description</label>
@@ -51,7 +51,7 @@ const props = defineProps({
 })
 const error = ref({
   name: "",
-  guadName: "",
+  guardName: "",
   description: ""
 })
 const alertSection = ref();
@@ -59,7 +59,7 @@ const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'permission-added'])
 const permission = ref({
   name: "",
-  guadName: "",
+  guardName: "",
   description: ""
 })
 
@@ -92,7 +92,7 @@ const handleAddPermission = async () => {
 const resetForm = () => {
   permission.value = {
     name: "",
-    guadName: "",
+    guardName: "",
     description: "",
   }
   alertData.value ={ status: '', msg: '' }
