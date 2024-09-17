@@ -241,12 +241,9 @@ const handleAddUser = async () => {
         alertSection.value.scrollIntoView({ behavior: 'smooth' });
       }
     if (user.value.file_uuid) {
-      console.table(user.value)
       let data = await createUser(userData)
       alertData.value = { status: data.status, msg: data.msg }
-      console.table(data.validateError)
       if (data.validateError) {
-        console.log('sasas')
         error.value = data.validateError
       }
       if (data.status == 'success') {

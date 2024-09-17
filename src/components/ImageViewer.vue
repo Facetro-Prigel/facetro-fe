@@ -1,6 +1,6 @@
 <template>
     <div ref="imageView" class="overflow-hidden rounded-xl m-2 relative drop-shadow-md max-w-[400px] transition-all duration-300 hover:scale-110">
-        <img v-if="isImage" :src="image" alt="Image" class="w-full" ref="imageElem" @load="makeBoundingBox(boundingBox, imageElem, bbox)"/>
+        <img v-if="isImage" :src="image" alt="Image" class="w-full" ref="imageElem" @load="makeBoundingBox(boundingBox, imageElem, bbox)" @error="imageError()"/>
         <video v-if="isVideo" autoplay playsinline loop muted :src="image"></video>
         <div v-if="isImage" ref="boundingBox" class="absolute border-4 top-0 rounded-2xl block animate-pulse translate-all duration-300 bg-gradient-to-br  from-white/40 via-white/30 to-white/60"
             :class="{ 'border-green-500': isSuccess, 'border-red-500': !isSuccess }"> </div>
@@ -30,6 +30,9 @@ const boundingBox = ref();
 const imageElem = ref();
 const imageView = ref();
 
+const imageError = () =>{
+    props.image = no_record_vid
+}
 
 const isImage = computed(() => {
     return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(props.image)

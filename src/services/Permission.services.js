@@ -4,7 +4,7 @@ import BASE_URL from '@/stores/config';
 
 const API_URL = BASE_URL + 'permission/';
 
-export const fetchPermission = async () => {
+export const fetchPermissions = async () => {
   try {
     const res = await axios.get(API_URL, {
       headers: {
@@ -16,10 +16,24 @@ export const fetchPermission = async () => {
     return res.data.data;
   } catch (error) {
     error.response.status = 'fail'
+    error.response.msg= error.response.data.error
     return error.response;
   }
 };
-
+export const fetchPermission = async (uui) => {
+  try {
+    const res = await axios.get(API_URL+uui, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    });
+    res.data.status = 'success'
+    return res.data;
+  } catch (error) {
+    return {status: 'fail', msg: 'Gagal mengambil data user'};
+  }
+};
 export const createPermission = async (permission) => {
   try {
     const res = await axios.post(API_URL, permission, {
@@ -28,9 +42,12 @@ export const createPermission = async (permission) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
@@ -42,9 +59,12 @@ export const updatePermission = async (id, permission) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
@@ -58,6 +78,6 @@ export const deletePermission = async (id) => {
     });
     return res.data;
   } catch (error) {
-    return error.message;
+    return error.response.data;
   }
 };

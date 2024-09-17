@@ -13,12 +13,13 @@
           </button>
         </div>
       </template>
-      <Column field="name" header="Name" sortable>
+
+      <Column field="identityNumber" header="Identity Number" sortable>
         <template #header="slotProps">
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <span class="text-black">{{ slotProps.data.name }}</span>
+          <span class="text-black">{{ slotProps.data.identityNumber }}</span>
         </template>
       </Column>
       <Column field="avatar" header="Avatar">
@@ -28,7 +29,7 @@
         <template #body="slotProps">
           <div class="flex max-w-[175px] min-w-[100px]">
             <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox"
-              :image="BASE_URL + slotProps.data.avatar ?? '/src/assets/video/search_person.mp4'" />
+              :image="BASE_URL + slotProps.data.avatar" />
               <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
@@ -37,12 +38,12 @@
           </div>
         </template>
       </Column>
-      <Column field="identityNumber" header="Identity Number" sortable>
+      <Column field="name" header="Name" sortable>
         <template #header="slotProps">
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <span class="text-black">{{ slotProps.data.identityNumber }}</span>
+          <span class="text-black">{{ slotProps.data.name }}</span>
         </template>
       </Column>
       <Column field="usergroup" header="Group" sortable>
@@ -83,14 +84,14 @@
 
     <div v-if="isConfirmDialogVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
       <div class="bg-white p-6 rounded shadow-md">
-        <h2 class="text-lg font-semibold mb-4">Confirmation</h2>
-        <p>Are you sure you want to delete this user?</p>
+        <h2 class="text-lg font-semibold mb-4">Konfirmasi</h2>
+        <p>Apakah Anda yakin ingin menghapus pengguna ini?</p>
         <div class="flex justify-end mt-4">
           <button @click="handleDeleteUser(confirmingUserId)" class="bg-red-500 text-white px-4 py-2 rounded mr-2">
-            Yes
+            Ya
           </button>
           <button @click="isConfirmDialogVisible = false" class="bg-gray-300 text-black px-4 py-2 rounded">
-            No
+            Tidak
           </button>
         </div>
       </div>
@@ -115,7 +116,7 @@ import BASE_URL from '@/stores/config'
 import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroup } from '@/services/Group.services'
 import { fetchRole } from '@/services/Role.services'
-import { fetchPermission } from '@/services/Permission.services'
+import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 
 const users = ref([])
@@ -165,7 +166,7 @@ const getRole = async () => {
 
 const getPemission = async () => {
   try {
-    const response = await fetchPermission()
+    const response = await fetchPermissions()
     permissionOptions.value = response.map(item => ({
       uuid: item.uuid,
       label: item.name
