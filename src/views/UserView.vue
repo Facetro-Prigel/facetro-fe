@@ -1,11 +1,11 @@
 <template>
   <div class="card p-4">
-    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem" v-model:filters="filters" :globalFilterFields="['name', 'identityNumber', 'usergroup', 'roleuser' ]" >
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
             <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input type="text" placeholder="Search..."
+            <input v-model="filters['global'].value" type="text" placeholder="Search..."
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
@@ -27,13 +27,13 @@
         </template>
         <template #body="slotProps">
           <div class="flex max-w-[175px] min-w-[100px]">
-            <!-- <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox ?? [0, 0, 0]"
-              :image="BASE_URL + slotProps.data.avatar ?? '/src/assets/video/search_person.mp4'" /> -->
-              <img
+            <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox"
+              :image="BASE_URL + slotProps.data.avatar ?? '/src/assets/video/search_person.mp4'" />
+              <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
                 class="w-full shadow-md rounded"
-              />
+              /> -->
           </div>
         </template>
       </Column>
@@ -116,7 +116,7 @@ import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroup } from '@/services/Group.services'
 import { fetchRole } from '@/services/Role.services'
 import { fetchPermission } from '@/services/Permission.services'
-import no_image_icon from '@/assets/no_images.png';
+import ImageViewer from '@/components/ImageViewer.vue'
 
 const users = ref([])
 const isConfirmDialogVisible = ref(false)
@@ -129,7 +129,9 @@ const groupOptions = []
 
 const roleOptions = []
 const permissionOptions = []
-
+const filters = ref(
+  {'global': { value: null},'name': { value: null}, 'identityNumber': { value: null}, 'usergroup': { value: null}, 'roleuser': { value: null} }
+)
 const getUsers = async () => {
   try {
     const response = await fetchUsers()

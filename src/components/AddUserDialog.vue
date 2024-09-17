@@ -57,7 +57,7 @@
             <div class="flex justify-center items-center">
               <input v-model="user.password" type="password" id="password" ref="passwordField"
                 placeholder="Enter Password" class="border border-gray-300 rounded-md p-2 w-full" />
-              <button class="fa fa-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
+              <button class="pi pi-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
                 @mouseup="passwordField.type = 'password'"></button>
               </div>
               <div class="text-red-600 text-sm">{{ error.password }}</div>

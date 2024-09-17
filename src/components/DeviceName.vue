@@ -4,7 +4,7 @@
             <i class="pi pi-desktop mr-1"></i> {{ deviceName }}
         </div>
         <div class="bg-white ml-2 text-black px-2 rounded font-extrabold">
-            <i class="fa fa-wifi" :class="{
+            <i class="pi pi-wifi" :class="{
                 'text-green-800': wifiConection.status == true,
                 'text-red-800': wifiConection.status == false
             }"></i> {{ wifiConection.let }}

@@ -23,7 +23,7 @@
                       <label for="password"
                           class="block mb-2 text-sm font-medium text-white"><i class="pi pi-lock"></i> Password</label>
                       <div class="flex justify-center items-center">
-                          <input type="password" name="password" ref="passwordField" placeholder="••••••••"
+                          <input v-on:keyup.enter="tombolLogin" type="password" name="password" ref="passwordField" placeholder="••••••••"
                           class="bg-gray-50 border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                           required="">
                           <button class="pi pi-eye text-white p-2" @mousedown="passwordField.type ='text'" @mouseup="passwordField.type ='password'"></button>

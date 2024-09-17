@@ -6,7 +6,7 @@
         }">
         <button @click="closeModal" :disabled="serverStatus == 'pending'"
             class="text-white absolute text-xl right-3 top-0 bg-red-500 px-2 rounded mt-3 hover:bg-red-700 transtions duration-300 hover:drop-shadow-lg disabled:bg-gray-700"><i
-                class="fa fa-times"></i></button>
+                class="pi pi-times"></i></button>
         <h1 class="text-2xl mb-2 font-bold">Hasil Presensi</h1>
         <div class="rounded-lg bg-gray-300 p-4 flex felx-col drop-shadow-lg transition-all duration-500 items-center ">
             <ImageViewer type="Gambar yang Dibandingkan" :is-success="serverStatus.code == 'success'"
@@ -20,13 +20,13 @@
             'bg-red-500': serverStatus.code == 'fail',
         }">
             <div v-if="serverStatus.code == 'pending'" class="items-center flex text-black">
-                <i class="fa fa-spinner animate-spin text-2xl mr-2"></i> Tunggu Sebentar
+                <i class="pi pi-spinner animate-spin text-2xl mr-2"></i> Tunggu Sebentar
             </div>
             <div v-if="serverStatus.code == 'success'" class="items-center flex">
-                <i class="fa fa-check text-2xl mr-2"></i> Wajah Anda Cocok!
+                <i class="pi pi-check text-2xl mr-2"></i> Wajah Anda Cocok!
             </div>
             <div v-if="serverStatus.code == 'fail'" class="items-center flex ">
-                <i class="fa fa-ban text-2xl mr-2"></i> {{ serverStatus.msg }}
+                <i class="pi pi-ban text-2xl mr-2"></i> {{ serverStatus.msg }}
             </div>
         </div>
         <table v-show="serverStatus.code == 'success'" class="text-left mt-6 text-lg">

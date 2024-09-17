@@ -52,8 +52,8 @@ export default {
                     }
                 },
                 {
-                    label: 'Exit',
-                    icon: 'pi pi-times',
+                    label: 'Logout',
+                    icon: 'pi pi-sign-out',
                     command: this.logout
                 }
             ]

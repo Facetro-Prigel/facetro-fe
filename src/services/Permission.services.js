@@ -12,9 +12,11 @@ export const fetchPermission = async () => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.status = 'success'
     return res.data.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    return error.response;
   }
 };
 
