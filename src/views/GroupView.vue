@@ -38,9 +38,19 @@
           <span>{{ slotProps.data.locations }}</span>
         </template>
       </Column>
-      <Column field="device.name" header="Room" sortable>
+      <Column field="device.name" header="Presence Location" sortable>
         <template #body="slotProps">
           <span>{{ slotProps.data.device.name }}</span>
+        </template>
+      </Column>
+      <Column field="device.user" header="Notify to" sortable>
+        <template #body="slotProps">
+          <div class="flex">
+            <div class="max-w-[75px]">
+              <ImageViewer :image="BASE_URL + slotProps.data.users.avatar" :bbox="slotProps.data.users.bbox" :isSuccess="true"</ImageViewer>
+            </div>
+            <span>{{ slotProps.data.users.name }}</span>
+          </div>
         </template>
       </Column>
       <Column header="Action">
@@ -130,7 +140,8 @@ import { ref, onMounted } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { fetchGroup, createGroup, updateGroup, deleteGroup } from '@/services/Group.services'
-
+import ImageViewer from '@/components/ImageViewer.vue'
+import BASE_URL from '@/stores/config'
 // State variables
 const group = ref([])
 const isConfirmDialogVisible = ref(false)

@@ -15,11 +15,10 @@ const props = defineProps(
     {
         image: {
             type: String,
-            required: true
+            required: true,
         },
         isSuccess:{
             type: Boolean,
-            reqired: true
         },
         bbox:{
             type: Array,
