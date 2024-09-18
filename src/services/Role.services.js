@@ -4,7 +4,7 @@ import BASE_URL from '@/stores/config';
 
 const API_URL = BASE_URL + 'role/';
 
-export const fetchRole = async () => {
+export const fetchRoles = async () => {
   try {
     const res = await axios.get(API_URL, {
       headers: {
@@ -12,44 +12,72 @@ export const fetchRole = async () => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
-    return res.data.data;
+    res.data.status = 'success'
+    return res.data;
   } catch (error) {
-    return error.message;
+    res.data.status = 'fai'
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.msg
+    return error.response;
   }
 };
-
-export const createGroup = async (group) => {
+export const fetchRole = async (uui) => {
   try {
-    console.log('Sending data to server:', group);
-    const res = await axios.post(API_URL, group, {
+    const res = await axios.get(API_URL+uui, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    });
+    res.data.status = 'success'
+    delete res.data.data.uuid 
+    if(res.data.data.permisionrole){
+      res.data.data.permisions = await res.data.data.permisionrole.map(e => e.permission.uuid)
+      delete res.data.data.permisionrole
+    }
+    console.info(res.data)
+    return res.data;
+  } catch (error) {
+    console.error(error)
+    return {status: 'fail', msg: 'Gagal mengambil data peran'};
+  }
+};
+export const createRole = async (value) => {
+  try {
+    const res = await axios.post(API_URL, value, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
-    console.log('Server response:', res.data);
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    console.error('Error creating group:', error.message);
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
-export const updateGroup = async (id, group) => {
+
+export const updateRole = async (id, permission) => {
   try {
-    const res = await axios.put(`${API_URL}${id}`, group, {
+    const res = await axios.put(`${API_URL}${id}`, permission, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.msg
+    return error.response;
   }
 };
 
-export const deleteGroup = async (id) => {
+export const deleteRole = async (id) => {
   try {
     const res = await axios.delete(`${API_URL}${id}`, {
       headers: {
@@ -59,6 +87,6 @@ export const deleteGroup = async (id) => {
     });
     return res.data;
   } catch (error) {
-    return error.message;
+    return error.response.data;
   }
 };

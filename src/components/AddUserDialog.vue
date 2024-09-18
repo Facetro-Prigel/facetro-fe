@@ -144,7 +144,7 @@
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full">
               <template #footer>
                 <div class="py-2 px-4">
-                  <b>{{ user.permission ? user.permission.length : 0 }}</b> premission{{ (user.permission ?
+                  <b>{{ user.permission ? user.permission.length : 0 }}</b> permission{{ (user.permission ?
                     user.permission.length : 0) > 1 ? 's' : '' }} selected.
                 </div>
               </template>

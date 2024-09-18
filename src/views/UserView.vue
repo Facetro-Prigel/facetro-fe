@@ -115,7 +115,7 @@ import EditUserDialog from '../components/EditUserDialog.vue'
 import BASE_URL from '@/stores/config'
 import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroup } from '@/services/Group.services'
-import { fetchRole } from '@/services/Role.services'
+import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 
@@ -154,13 +154,13 @@ const getGroup = async () => {
 }
 const getRole = async () => {
   try {
-    const response = await fetchRole()
-    roleOptions.value = response.map(item => ({
+    const response = await fetchRoles()
+    roleOptions.value = response.data.map(item => ({
       uuid: item.uuid,
       label: item.name
     }));
   } catch (error) {
-    console.error('Error fetching group:', error)
+    console.error('Error fetching Role:', error)
   }
 }
 
@@ -172,7 +172,7 @@ const getPemission = async () => {
       label: item.name
     }));
   } catch (error) {
-    console.error('Error fetching group:', error)
+    console.error('Error fetching Permission:', error)
   }
 }
 

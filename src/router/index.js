@@ -20,6 +20,7 @@ import Master from '@/layouts/Master.vue'
 import RealtimeLogView from '@/views/RealtimeLogView.vue'
 import UserView from '../views/UserView.vue'
 import PermissionView from '../views/PermissionView.vue'
+import RoleView from '@/views/RoleView.vue'
 import VueCookies from 'vue-cookies'
 const routes = [
   {
@@ -79,6 +80,11 @@ const routes = [
         path: '/permission',
         name: 'permission',
         component: PermissionView
+      },
+      {
+        path: '/role',
+        name: 'role',
+        component: RoleView
       }
     ]
   },
