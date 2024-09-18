@@ -18,7 +18,8 @@
               <div
                 class="flex flex-col transition-all duration-300 justify-center p-2 items-center h-full w-full absolute bg-gray-800/50 z-10 opacity-0 group-hover:opacity-100">
                 <i class="pi pi-upload text-white text-6xl"></i>
-                <p class="text-sm mt-2 text-white text-center"><span class="font-bold">Click to upload</span> drag or drop</p>
+                <p class="text-sm mt-2 text-white text-center"><span class="font-bold">Click to upload</span> drag or
+                  drop</p>
               </div>
               <img class="w-full rounded-lg" :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
                 alt="Uploaded Image">
@@ -55,12 +56,10 @@
             <label for="password" class="block text-sm font-medium text-gray-700">Password<span
                 class="text-red-400">*</span></label>
             <div class="flex justify-center items-center">
-              <input v-model="user.password" type="password" id="password" ref="passwordField"
-                placeholder="Enter Password" class="border border-gray-300 rounded-md p-2 w-full" />
-              <button class="pi pi-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
-                @mouseup="passwordField.type = 'password'"></button>
-              </div>
-              <div class="text-red-600 text-sm">{{ error.password }}</div>
+              <Password v-model="user.password" type="password" id="password" placeholder="Enter Password"
+                class="border border-gray-300 rounded-md p-2 w-full focus:outline-none" toggleMask />
+            </div>
+            <div class="text-red-600 text-sm">{{ error.password }}</div>
           </div>
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Birthday<span class="text-red-400">*</span></label>
@@ -173,6 +172,7 @@ import { createUser, fileUpload, unnesImage as unnesImageService } from '@/servi
 import imageCompression from 'browser-image-compression';
 import Alert from './Alert.vue';
 import no_image_icon from '@/assets/no_images.png';
+import Password from 'primevue/password';
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -203,7 +203,6 @@ const error = ref({
   telegramId: "",
   nfc_data: ""
 })
-const passwordField = ref();
 const alertSection = ref();
 const unnesImage = ref();
 const alertData = ref({ status: '', msg: '' })
@@ -237,9 +236,9 @@ const handleAddUser = async () => {
       ...user.value
     }
     if (alertSection.value) {
-        // Memanggil scrollIntoView pada elemen DOM
-        alertSection.value.scrollIntoView({ behavior: 'smooth' });
-      }
+      // Memanggil scrollIntoView pada elemen DOM
+      alertSection.value.scrollIntoView({ behavior: 'smooth' });
+    }
     if (user.value.file_uuid) {
       let data = await createUser(userData)
       alertData.value = { status: data.status, msg: data.msg }

@@ -28,7 +28,7 @@
         </template>
         <template #body="slotProps">
           <div class="flex max-w-[175px] min-w-[100px]">
-            <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="slotProps.data.bbox"
+            <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="true" :bbox="slotProps.data.bbox"
               :image="BASE_URL + slotProps.data.avatar" />
               <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"

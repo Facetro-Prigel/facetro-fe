@@ -55,10 +55,8 @@
             <label for="password" class="block text-sm font-medium text-gray-700">Password<span
                 class="text-red-400">*</span></label>
             <div class="flex justify-center items-center">
-              <input v-model="user.password" type="password" id="password" ref="passwordField"
-                placeholder="Enter Password" class="border border-gray-300 rounded-md p-2 w-full" />
-              <button class="pi pi-eye p-2 hover:cursor-pointer" @mousedown="passwordField.type = 'text'"
-                @mouseup="passwordField.type = 'password'"></button>
+              <Password v-model="user.password" type="password" id="password" placeholder="Enter Password"
+                class="border border-gray-300 rounded-md p-2 w-full focus:outline-none" toggleMask />
               </div>
               <div class="text-red-600 text-sm">{{ error.password }}</div>
           </div>
@@ -173,6 +171,7 @@ import { fetchUser, fileUpload, updateUser,  unnesImage as unnesImageService } f
 import imageCompression from 'browser-image-compression';
 import Alert from './Alert.vue';
 import no_image_icon from '@/assets/no_images.png';
+import Password from 'primevue/password';
 import BASE_URL from '@/stores/config';
 const props = defineProps({
   uuid:{
@@ -209,7 +208,6 @@ const error = ref({
   nfc_data: ""
 })
 const alertSection = ref()
-const passwordField = ref();
 const unnesImage = ref();
 const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'user-added'])

@@ -42,6 +42,12 @@
               <span v-show="dataOpenSidebar">Group</span></router-link>
           </div>
           <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
+            <router-link to="/device" class="items-center px-2 flex space-x-2">
+              <span class="items-center pi pi-microchip" v-tooltip.right="'Device'"></span>
+              <span v-show="dataOpenSidebar">Device</span>
+            </router-link>
+          </div>
+          <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
             <router-link to="/attendance" class="items-center px-2 flex space-x-2"><span class="pi pi-chart-bar"
                 v-tooltip.right="'Attendance'"></span>
               <span v-show="dataOpenSidebar">Attendance</span></router-link>
@@ -56,12 +62,7 @@
                 v-tooltip.right="'Camera'"></span>
               <span v-show="dataOpenSidebar">Camera</span></router-link>
           </div>
-          <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
-            <router-link to="/device" class="items-center px-2 flex space-x-2">
-              <span class="items-center pi pi-microchip" v-tooltip.right="'Device'"></span>
-              <span v-show="dataOpenSidebar">Device</span>
-            </router-link>
-          </div>
+          
         </div>
         <div class="menu-man text-left px-2 justify-self-end whitespace-nowrap">
           <div class="py-3 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">

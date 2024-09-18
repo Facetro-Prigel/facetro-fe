@@ -15,14 +15,14 @@
           <div class="text-red-600 text-sm">{{ error.name }}</div>
         </div>
         <div class="mb-4">
-          <label for="name" class="block text-sm font-medium text-gray-700">Guard Name </label>
-          <input v-model="role.guardName" type="text" id="name" placeholder="Enter name"
+          <label for="guard_name" class="block text-sm font-medium text-gray-700">Guard Name </label>
+          <input v-model="role.guardName" type="text" id="guard_name" placeholder="Enter Guadrd Name"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.guardName }}</div>
         </div>
         <div class="mb-4">
-          <label for="name" class="block text-sm font-medium text-gray-700">Description</label>
-          <textarea v-model="role.description" type="text" id="name" placeholder="Enter name"
+          <label for="Descriotion" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea v-model="role.description" type="text" id="Descriotion" placeholder="Enter Descriotion"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.description }}</div>
         </div>

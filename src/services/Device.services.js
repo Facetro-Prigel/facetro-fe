@@ -4,7 +4,7 @@ import BASE_URL from '@/stores/config';
 
 const API_URL = BASE_URL + 'device/';
 
-export const fetchDevice = async () => {
+export const fetchDevices = async () => {
   try {
     const res = await axios.get(API_URL, {
       headers: {
@@ -12,9 +12,31 @@ export const fetchDevice = async () => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.data.status = 'success'
     return res.data.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
+  }
+};
+
+export const fetchDevice = async (id) => {
+  try {
+    const res = await axios.get(API_URL+id, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    });
+    res.data.data.status = 'success'
+    res.data.data.location = res.data.data.locations
+    delete res.data.data.locations
+    return res.data.data;
+  } catch (error) {
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
@@ -26,9 +48,12 @@ export const createDevice = async (device) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
@@ -40,9 +65,12 @@ export const updateDevice = async (id, device) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'fail'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };
 
