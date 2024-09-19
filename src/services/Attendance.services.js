@@ -11,7 +11,7 @@ const config_u = {
 }
 export const fetchAttendanceLogs = async () => {
   try {
-    const response = await axios.get(API_URL,config_u);
+    const response = await axios.get(API_URL, config_u);
     return response.data;
   } catch (error) {
     console.error('Ada kesalahan saat mengambil data log kehadiran!', error);
