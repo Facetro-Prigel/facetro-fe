@@ -1,25 +1,15 @@
 <template>
   <div class="card p-4">
     <!-- Table with search and buttons -->
-    <DataTable
-      :value="group"
-      paginator
-      :rows="10"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      tableStyle="min-width: 50rem"
-    >
+    <DataTable :value="group" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
+      v-model:filters="filters" :globalFilterFields="['name', 'location', 'device.name', 'users.name']">
       <!-- Header template with search and add button -->
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
-            <i
-              class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            ></i>
-            <input
-              type="text"
-              placeholder="Search..."
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10"
-            />
+            <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input v-model="filters['global'].value" type="text" placeholder="Search..."
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="openAddGroupDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
             + Add Group
@@ -43,11 +33,12 @@
           <span>{{ slotProps.data.device.name }}</span>
         </template>
       </Column>
-      <Column field="device.user" header="Notify to" sortable>
+      <Column field="users.name" header="Notify to" sortable>
         <template #body="slotProps">
           <div class="flex">
             <div class="max-w-[75px]">
-              <ImageViewer :image="BASE_URL + slotProps.data.users.avatar" :bbox="slotProps.data.users.bbox" :isSuccess="true"</ImageViewer>
+              <ImageViewer :image="BASE_URL + slotProps.data.users.avatar" :bbox="slotProps.data.users.bbox"
+                :isSuccess="true" </ImageViewer>
             </div>
             <span>{{ slotProps.data.users.name }}</span>
           </div>
@@ -55,16 +46,10 @@
       </Column>
       <Column header="Action">
         <template #body="slotProps">
-          <button
-            @click="openEditGroupDialog(slotProps.data.uuid)"
-            class="text-blue-500 hover:text-blue-700 p-1"
-          >
+          <button @click="openEditGroupDialog(slotProps.data.uuid)" class="text-blue-500 hover:text-blue-700 p-1">
             <i class="pi pi-pencil"></i>
           </button>
-          <button
-            @click="confirmDeleteGroup(slotProps.data.uuid)"
-            class="text-red-500 hover:text-red-700 p-1"
-          >
+          <button @click="confirmDeleteGroup(slotProps.data.uuid)" class="text-red-500 hover:text-red-700 p-1">
             <i class="pi pi-trash"></i>
           </button>
         </template>
@@ -72,33 +57,24 @@
     </DataTable>
 
     <!-- Confirmation dialog for delete -->
-    <div
-      v-if="isConfirmDialogVisible"
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
-    >
+    <div v-if="isConfirmDialogVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
       <div class="bg-white p-6 rounded shadow-md">
         <h2 class="text-lg font-semibold mb-4">Confirmation</h2>
         <p>Are you sure you want to delete this group?</p>
         <div class="flex justify-end mt-4">
-          <button
-            @click="handleDeleteGroup(confirmingGroupId)"
-            class="bg-red-500 text-white px-4 py-2 rounded mr-2"
-          >
+          <button @click="handleDeleteGroup(confirmingGroupId)" class="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Yes
           </button>
-          <button
-            @click="isConfirmDialogVisible = false"
-            class="bg-gray-300 text-black px-4 py-2 rounded"
-          >
+          <button @click="isConfirmDialogVisible = false" class="bg-gray-300 text-black px-4 py-2 rounded">
             No
           </button>
         </div>
       </div>
     </div>
-    <AddGroupDialog :visible="isAddGroupDialogVisible" :users="userOptions" :device="deviceOption" @update:visible="isAddGroupDialogVisible = $event"
-    @group-added="getGroup()"/>
-    <EditGroupDialog :uuid="selectedGruopId" :visible="isEditGroupDialogVisible" :users="userOptions" :device="deviceOption" @update:visible="isEditGroupDialogVisible = $event"
-    @group-added="getGroup()"/>
+    <AddGroupDialog :visible="isAddGroupDialogVisible" :users="userOptions" :device="deviceOption"
+      @update:visible="isAddGroupDialogVisible = $event" @group-added="getGroup()" />
+    <EditGroupDialog :uuid="selectedGruopId" :visible="isEditGroupDialogVisible" :users="userOptions"
+      :device="deviceOption" @update:visible="isEditGroupDialogVisible = $event" @group-added="getGroup()" />
   </div>
 </template>
 
@@ -114,12 +90,19 @@ import EditGroupDialog from '@/components/EditGroupDialog.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import BASE_URL from '@/stores/config'
 // State variables
+const filters = ref({
+  global: { value: null },
+  name: { value: null },
+  'location': { value: null },
+  'device.name': { value: null }, 
+  'users.name': { value: null }
+});
 const group = ref([])
 const isConfirmDialogVisible = ref(false)
 const confirmingGroupId = ref(null)
 const isAddGroupDialogVisible = ref(false)
 const isEditGroupDialogVisible = ref(false)
-const selectedGruopId= ref()
+const selectedGruopId = ref()
 const userOptions = ref()
 const deviceOption = ref()
 const getDevice = async () => {
@@ -172,7 +155,7 @@ const openAddGroupDialog = () => {
 
 const openEditGroupDialog = (data) => {
   isEditGroupDialogVisible.value = true
-  selectedGruopId.value=data
+  selectedGruopId.value = data
 }
 
 // Lifecycle hook
@@ -183,5 +166,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

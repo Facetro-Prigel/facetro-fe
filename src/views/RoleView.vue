@@ -1,7 +1,7 @@
 <template>
   <div class="card p-4">
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-briefcase"></i> Manage Roles</h1>
-    <DataTable :value="datas" paginator v-model:filters="filters" :rows="5" :rowsPerPageOptions="[5, 10, 20]"
+    <DataTable :value="datas" paginator  :rows="5" :rowsPerPageOptions="[5, 10, 20]" v-model:filters="filters"
       :globalFilterFields="['name', 'description']" tableStyle="min-width: 50rem">
       <template #header>
 
