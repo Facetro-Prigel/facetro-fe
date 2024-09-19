@@ -133,12 +133,7 @@ const confirmingDeviceId = ref(null)
 const filters = ref(
   {'global': { value: null}, 'name': { value: null}, 'locations': { value: null} }
 )
-const newDevice = ref({
-  id: null,
-  name: '',
-  location: '',
-  token: ''
-})
+
 
 const getDevice = async () => {
   try {
@@ -172,8 +167,8 @@ const openEditDeviceDialog = (id) => {
   isEditDeviceDialogVisible.value = true
 }
 
-onMounted(() => {
-  getDevice()
+onMounted(async () => {
+  await getDevice()
 })
 </script>
 

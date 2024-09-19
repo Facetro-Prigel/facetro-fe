@@ -53,7 +53,6 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { fetchDevice, updateDevice } from '@/services/Device.services'
-import Chip from 'primevue/chip';
 import Alert from './Alert.vue';
 const props = defineProps({
   visible: {

@@ -114,7 +114,7 @@ import AddUserDialog from '../components/AddUserDialog.vue'
 import EditUserDialog from '../components/EditUserDialog.vue'
 import BASE_URL from '@/stores/config'
 import { fetchUsers, deleteUser } from '@/services/User.services'
-import { fetchGroup } from '@/services/Group.services'
+import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
@@ -143,7 +143,7 @@ const getUsers = async () => {
 }
 const getGroup = async () => {
   try {
-    const response = await fetchGroup()
+    const response = await fetchGroups()
     groupOptions.value = response.map(item => ({
       uuid: item.uuid,
       label: item.name
