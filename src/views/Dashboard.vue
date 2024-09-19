@@ -1,5 +1,8 @@
 <template>
-  <div class="flex items-center justify-center">
+  <div class="flex text-4xl items-center justify-center h-screen">
+    Dashboard Coming Soon
+  </div>
+  <!-- <div class="flex items-center justify-center">
     <div>
       <div>
         <div class="flex">
@@ -60,7 +63,7 @@
     <div>
       <Clock />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup>

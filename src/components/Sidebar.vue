@@ -6,9 +6,9 @@
       class="bg-black-900 bg-opacity-100 backdrop-filter backdrop-blur-lg border-r border-white border-opacity-10 h-[120px] flex justify-center items-center">
       <div class="text-xl font-bold text-center flex items-center justify-center text-white h-full"
         v-show="dataOpenSidebar">
-        <img src="/src/assets/FACETRO.png" alt="" style="width: 200px; height: auto" />
+        <img src="/src/assets/logo/logo-unnes-horizontal.png" alt="" style="width: 200px; height: auto" />
       </div>
-      <img src="/src/assets/Icon.png" v-show="!dataOpenSidebar" class="p-1 w-[64px]" alt="Icon" />
+      <img src="/src/assets/logo/UNNES.png" v-show="!dataOpenSidebar" class="p-1 w-[64px]" alt="Icon" />
     </div>
     <div class="flex justify-end p-5 cursor-pointer hover:bg-primary-400" @click="dataOpenSidebar = !dataOpenSidebar">
       <i class="pi pi-bars" style="color: white"></i>
@@ -52,24 +52,7 @@
                 v-tooltip.right="'Attendance'"></span>
               <span v-show="dataOpenSidebar">Attendance</span></router-link>
           </div>
-          <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
-            <router-link to="/room" class="items-center px-2 flex space-x-2"><span class="pi pi-building"
-                v-tooltip.right="'Room'"></span>
-              <span v-show="dataOpenSidebar">Room</span></router-link>
-          </div>
-          <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
-            <router-link to="/camera" class="items-center px-2 flex space-x-2"><span class="pi pi-camera"
-                v-tooltip.right="'Camera'"></span>
-              <span v-show="dataOpenSidebar">Camera</span></router-link>
-          </div>
-          
-        </div>
-        <div class="menu-man text-left px-2 justify-self-end whitespace-nowrap">
-          <div class="py-3 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
-            <a href="https://website-nuxt-front.vercel.app/" target="_blank" class="px-2 flex space-x-2"><span
-                class="pi pi-sign-out" v-tooltip.right="'Logout'"></span>
-              <span v-show="dataOpenSidebar">Logout</span></a>
-          </div>
+        
         </div>
       </div>
     </div>

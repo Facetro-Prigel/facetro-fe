@@ -281,21 +281,12 @@ const handleAvatarUpload = (event) => {
 
 const resetForm = () => {
   user.value = {
-    usergroup: [],
-    permission: [],
-    avatar: '',
-    file_uuid: '',
-    email: "",
-    name: "",
-    identityNumber: "",
-    password: "",
-    batch: "",
-    birthday: "",
-    program_study: "",
-    phoneNumber: "",
-    telegramId: "",
-    nfc_data: ""
-  }
+  name: '',
+  identityNumber: '',
+  usergroup: [],
+  roleuser: null,
+  avatar: ''
+}
   uplodedImage.value = ''
   unnesImage.value = ''
   alertData.value = { status: 'close', msg: 'close' }
