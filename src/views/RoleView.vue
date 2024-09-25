@@ -65,6 +65,7 @@ import AddRoleDialog from '@/components/AddRoleDialog.vue';
 import EditRoleDialog from '@/components/EditRoleDialog.vue';
 import { fetchRoles, deleteRole } from '@/services/Role.services';
 import { fetchPermissions } from '@/services/Permission.services';
+import { socket } from "@/socket";
 const filters = ref({
   global: { value: null },
   name: { value: null },
@@ -121,10 +122,15 @@ const getPemission = async () => {
     console.error('Error fetching Permission:', error)
   }
 }
-onMounted(async () => {
-  await getRoles()
-  await getPemission()
-  console.table(permissionOptions.value)
+const getUpdate = () =>{
+  getRoles()
+  getPemission()
+}
+onMounted(() => {
+  getUpdate()
+  socket.on("update CUD", (...args) => {
+    getUpdate()
+  });
 })
 
 </script>

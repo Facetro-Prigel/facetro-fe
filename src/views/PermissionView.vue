@@ -64,6 +64,7 @@ import Column from 'primevue/column';
 import AddPermissionDialog from '@/components/AddPermissionDialog.vue';
 import EditPermissionDialog from '@/components/EditPermissionDialog.vue';
 import { fetchPermissions, deletePermission } from '@/services/Permission.services';
+import { socket } from "@/socket";
 const filters = ref({
   global: { value: null },
   name: { value: null },
@@ -107,6 +108,9 @@ const openEditPermissionDialog = (user) => {
 }
 onMounted(async () => {
   await getPermissions()
+  socket.on("update CUD", (...args) => {
+    getPermissions()
+  });
 })
 
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div class="card p-4">
-    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem" v-model:filters="filters" :globalFilterFields="['name', 'identityNumber', 'usergroup', 'roleuser' ]" >
+    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem" v-model:filters="filters" 
+    :globalFilterFields="['name', 'identityNumber', 'usergroup', 'roleuser' ]" >
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
@@ -51,10 +52,11 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <div v-for="item in slotProps.data.usergroup" :key="item.id"
-            class="bg-blue-500 text-white p-1 mb-2 rounded-lg">
-            {{ item.group.name }}
-          </div>
+          <Chip v-for="item in slotProps.data.usergroup" :key="index" class="p-1 m-1">
+              <span
+                class="bg-primary-500 text-white rounded-full flex p-1 items-center justify-center m-2 text-[10px]"><i class="pi pi-users"></i></span>
+              <span class="mr-2 text-[10px]">{{ item.group.name }}</span>
+          </Chip>
         </template>
       </Column>
       <Column field="roleuser" header="Role" sortable>
@@ -62,9 +64,11 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <div v-for="item in slotProps.data.roleuser" :key="item.id" class="bg-sky-800 text-white p-1 mb-2 rounded-lg">
-            {{ item.role.name }}
-          </div>
+          <Chip v-for="item in slotProps.data.roleuser" :key="index" class="p-1 m-1">
+              <span
+                class="bg-green-500 text-white rounded-full flex p-1 items-center justify-center m-2 text-[10px]"><i class="pi pi-briefcase"></i></span>
+              <span class="mr-2 text-[10px]">{{ item.role.name }}</span>
+          </Chip>
         </template>
       </Column>
       <Column header="Action">
@@ -118,6 +122,7 @@ import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
+import { socket } from "@/socket";
 
 const users = ref([])
 const isConfirmDialogVisible = ref(false)
@@ -202,12 +207,18 @@ const openEditUserDialog = (user) => {
   selectedUser.value = user
   isEditUserDialogVisible.value = true
 }
+const updater = () =>{
+  getUsers();
+  getGroup();
+  getRole();
+  getPemission();
+}
 
-onMounted(async () => {
-  await getUsers();
-  await getGroup();
-  await getRole();
-  await getPemission();
+onMounted(() => {
+  updater()
+  socket.on("update CUD", (...args) => {
+    updater()
+  });
 })
 </script>
 

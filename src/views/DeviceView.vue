@@ -124,6 +124,7 @@ import { fetchDevices, deleteDevice } from '@/services/Device.services'
 import PriveteCopy from '@/components/PriveteCopy.vue'
 import AddDeviceDialog from '@/components/AddDeviceDialog.vue'
 import EditDeviceDialog from '@/components/EditDeviceDialog.vue'
+import { socket } from "@/socket";
 const device = ref([])
 const isConfirmDialogVisible = ref(false)
 const isAddDeviceDialogVisible = ref(false)
@@ -169,6 +170,9 @@ const openEditDeviceDialog = (id) => {
 
 onMounted(async () => {
   await getDevice()
+  socket.on("update CUD", (...args) => {
+    getDevice()
+  });
 })
 </script>
 

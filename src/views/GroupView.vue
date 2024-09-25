@@ -89,6 +89,7 @@ import AddGroupDialog from '@/components/AddGroupDialog.vue'
 import EditGroupDialog from '@/components/EditGroupDialog.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import BASE_URL from '@/stores/config'
+import { socket } from "@/socket";
 // State variables
 const filters = ref({
   global: { value: null },
@@ -163,6 +164,11 @@ onMounted(() => {
   getGroup()
   getUsers()
   getDevice()
+  socket.on("update CUD", (...args) => {
+    getGroup()
+    getUsers()
+    getDevice()
+  });
 })
 </script>
 
