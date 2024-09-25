@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             BASE_URL: BASE_URL,
-            user: VueCookies.get('user'),
+            user: VueCookies.get('user_data') ?? '',
             items: [
                 {
                     label: 'Change Password',
