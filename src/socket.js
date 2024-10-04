@@ -1,13 +1,13 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
-
+import BASE_URL from '@/stores/config'
 export const state = reactive({
   connected: true,
   rejectUnauthorized: false,
 });
 
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = "https://103.23.100.110";
+const URL = BASE_URL.slice(0, -1);
 // const URL = "http://localhost:3000";
 
 export const socket = io(URL);

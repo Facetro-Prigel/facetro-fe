@@ -74,7 +74,7 @@ const closeModal = () => {
   }
 
 }
-const sendImage = (identity = null) => {
+const sendImage = (identity) => {
   is_finish = false
   modal.value.data = {};
   modal.value.serverStatus.code = "pending"
@@ -84,7 +84,7 @@ const sendImage = (identity = null) => {
     modal.value.data.clientPhoto = ImageFrame.value
     let data = {
       "image": ImageFrame.value,
-      "identity": identity ?? idInput.value.data
+      "identity": identity ? identity : idInput.value.data
     }
     let config_u = {
       headers: {
@@ -156,10 +156,9 @@ onMounted(
 )
 watch(() => idInput.value.data.length, (newVal) => {
   idInput.value.data = idInput.value.data.replace(/[^0-9]/g, '')
-  let saveButtonObj = saveBtn.value.disabled
-  saveButtonObj = false
-  if (newVal < 5) {
-    saveButtonObj = false
+  saveBtn.value.disabled = true
+  if (newVal > 5) {
+    saveBtn.value.disabled = false
   }
 })
 </script>
@@ -183,9 +182,9 @@ watch(() => idInput.value.data.length, (newVal) => {
          </div>
           <Time />
           <label for="identitas" class="text-3xl md:text-2xl mt-2"><i class="pi pi-id-card"></i> Indentitas (NIM/NIP)</label>
-          <input v-on:keyup.enter="sendImage" type="text" v-model="idInput.data"
+          <input v-on:keyup.enter="sendImage()" type="text" v-model="idInput.data"
             class="w-full mt-2 text-2xl rounded-md border border-black px-3">
-          <button @click="sendImage" disabled="true" ref="saveBtn"
+          <button @click="sendImage()" disabled="true" ref="saveBtn"
             class="bg-blue-700 transition duration-300 text-white py-2 mt-2 px-3 rounded-lg disabled:bg-gray-500  hover:bg-blue-900 hover:drop-shadow-lg ">
             <i class="pi pi-save mr-2"></i>Simpan</button>
         </div>
