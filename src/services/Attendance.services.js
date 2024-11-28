@@ -1,7 +1,6 @@
 import axios from 'axios';
-import BASE_URL from '@/stores/config'
 import VueCookies from 'vue-cookies'
-
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const API_URL = BASE_URL+'log';
 const config_u = {
   headers: {

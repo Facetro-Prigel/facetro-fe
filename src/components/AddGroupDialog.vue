@@ -58,10 +58,10 @@
 import { ref, watch } from 'vue';
 import Alert from './Alert.vue';
 import Dropdown from 'primevue/dropdown';
-import BASE_URL from '@/stores/config';
 import Avatar from 'primevue/avatar';
 import no_image_icon from '@/assets/no_images.png';
 import { createGroup } from '@/services/Group.services';
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   visible: {
     type: Boolean,

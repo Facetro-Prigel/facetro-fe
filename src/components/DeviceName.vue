@@ -16,7 +16,7 @@
 import { ref, onMounted } from 'vue';
 import VueCookies from 'vue-cookies';
 import axios from 'axios';
-import config from '@/stores/config'
+const config = import.meta.env.VITE_BACKEND_API
 const deviceName = ref()
 const wifiConection = ref({status:'',let:''})
 onMounted(

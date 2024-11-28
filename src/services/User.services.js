@@ -1,6 +1,6 @@
 import axios from 'axios';
 import VueCookies from 'vue-cookies';
-import BASE_URL from '@/stores/config';
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 
 const API_URL = BASE_URL + 'user/';
 

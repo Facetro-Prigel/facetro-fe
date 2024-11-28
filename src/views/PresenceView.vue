@@ -8,7 +8,7 @@ import { ref, onMounted, watch } from 'vue'
 import axios from 'axios';
 import VueCookies from 'vue-cookies'
 import { useForbiddenStore } from '@/stores/forbidden.js';
-import BASE_URL from '@/stores/config'
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 import { socket } from '../socket';
 const idInput = ref({ data: "" })
 const ImageFrame = ref(null)

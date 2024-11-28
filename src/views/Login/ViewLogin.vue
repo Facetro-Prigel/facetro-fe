@@ -49,7 +49,7 @@ import { login } from '@/services/Noname.services.js'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Alert from '@/components/Alert.vue'
-import BASE_URL from '@/stores/config'
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const emailField = ref()
 const passwordField = ref()
 const image = ref()

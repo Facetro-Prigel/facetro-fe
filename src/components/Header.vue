@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import BASE_URL from '@/stores/config'
 import VueCookies from 'vue-cookies'
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 export default {
     props: {
         dataOpenSidebar: Boolean,

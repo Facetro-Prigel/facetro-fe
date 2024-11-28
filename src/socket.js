@@ -1,10 +1,10 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
-import BASE_URL from '@/stores/config'
 export const state = reactive({
   connected: true,
   rejectUnauthorized: false,
 });
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 
 // "undefined" means the URL will be computed from the `window.location` object
 const URL = BASE_URL.slice(0, -1);

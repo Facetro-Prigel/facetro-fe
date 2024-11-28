@@ -116,14 +116,13 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import AddUserDialog from '../components/AddUserDialog.vue'
 import EditUserDialog from '../components/EditUserDialog.vue'
-import BASE_URL from '@/stores/config'
 import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 import { socket } from "@/socket";
-
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const users = ref([])
 const isConfirmDialogVisible = ref(false)
 const confirmingUserId = ref(null)

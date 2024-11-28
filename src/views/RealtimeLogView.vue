@@ -38,7 +38,7 @@ import { onMounted, ref } from "vue";
 import { socket } from "@/socket";
 import Time from "@/components/Time.vue";
 import ImageViewer from '@/components/ImageViewer.vue'
-import BASE_URL from '@/stores/config'
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const modal = ref()
 const backDrop = ref()
 const convertToLocale = (time) => {

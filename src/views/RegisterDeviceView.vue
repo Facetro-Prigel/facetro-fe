@@ -19,14 +19,13 @@ import { effect, ref } from 'vue';
 import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import BASE_URL from '@/stores/config';
 import loadingImg from '@/assets/loading.gif'
 import ImgVeri from '@/assets/verivication_symbol.png'
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const sendBtn = ref();
 const data = ref({token:""});
 const router = useRouter();
 const image = ref();
-console.log(import.meta.env.VITE_BACKEND_API)
 let config_u = {
       headers: {
         "Content-Type": "application/json",

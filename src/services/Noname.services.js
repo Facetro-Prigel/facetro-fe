@@ -1,22 +1,6 @@
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
-import BASE_URL from '@/stores/config';
-
-// using in .env make VITE_VUE_APP_BASE_URL
-
-export const anotherfunction = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_VUE_APP_BASE_URL}`, {
-      headers: {
-        'Cache-Control': 'no-cache' // Mengatur header Cache-Control untuk memastikan data selalu diambil dari server
-      }
-    })
-    return res.data.data
-  } catch (error) {
-    return error.message
-  }
-}
-
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 export const login = async (data) => {
   try {
     const res = await axios

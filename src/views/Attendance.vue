@@ -82,7 +82,7 @@
   import ImageViewer from '@/components/ImageViewer.vue'
   import { fetchAttendanceLogs } from '@/services/Attendance.services';
   import { ref, onMounted } from  'vue'
-  import BASE_URL from '@/stores/config';
+  const BASE_URL = import.meta.env.VITE_BACKEND_API
   const attendanceCards = ref([])
   const getLogs = async () => {
     return await fetchAttendanceLogs()

@@ -172,7 +172,7 @@ import imageCompression from 'browser-image-compression';
 import Alert from './Alert.vue';
 import no_image_icon from '@/assets/no_images.png';
 import Password from 'primevue/password';
-import BASE_URL from '@/stores/config';
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   uuid:{
     type: String,

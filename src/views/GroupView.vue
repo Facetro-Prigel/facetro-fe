@@ -88,8 +88,8 @@ import { fetchDevices } from '@/services/Device.services'
 import AddGroupDialog from '@/components/AddGroupDialog.vue'
 import EditGroupDialog from '@/components/EditGroupDialog.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
-import BASE_URL from '@/stores/config'
 import { socket } from "@/socket";
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 // State variables
 const filters = ref({
   global: { value: null },

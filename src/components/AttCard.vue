@@ -23,8 +23,8 @@
   
   <script setup>
   import ImageViewer from '../components/ImageViewer.vue';
-  import BASE_URL from '@/stores/config'
   import { ref, onMounted } from 'vue'
+  const BASE_URL = import.meta.env.VITE_BACKEND_API
   const props = defineProps({ 'cards': Array });
   const isActive = ref(false)
   const convertToLocale = (time) => {
