@@ -164,7 +164,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import MultiSelect from 'primevue/multiselect'
 import upload_image_icon from '@/assets/upload_image.png'
 import { fetchUser, fileUpload, updateUser,  unnesImage as unnesImageService } from '@/services/User.services';
@@ -218,9 +218,33 @@ const user = ref({
   identityNumber: '',
   usergroup: [],
   roleuser: null,
-  avatar: ''
+  avatar: '',
+  nfc_data: ''
 })
-
+const isCapturing = ref(false);
+const hexString = ref('');
+const handleKeydown = (event) => {
+  const key = event.key;
+  if (key === 'w') {
+    if (isCapturing.value) {
+      // Log hex string when second * is pressed
+      user.value.nfc_data = hexString.value.toUpperCase().replace(/[^A-F0-9]/g, '')
+      isCapturing.value = false;
+      hexString.value = '';
+    } else {
+      // Start capturing after first *
+      isCapturing.value = true;
+    }
+  } else if (isCapturing.value) {
+    // Append characters to hex string if capturing
+    if (/^[0-9A-Fa-f]$/.test(key)) {
+      hexString.value += key;
+    }
+  }
+};
+onMounted(()=>{
+  document.addEventListener('keydown', handleKeydown);
+})
 watch(() => props.visible, async (newVal) => {
   if (!newVal) {
      return resetForm()

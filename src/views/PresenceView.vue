@@ -121,6 +121,18 @@ const sendImage = (identity) => {
         'code': tmpData.isMatch ? "success" : "fail",
         'msg': tmpData.isMatch ? "Wajah Anda Cocok" : "Wajah Tidak Cocok"
       };
+      if(tmpData.isMatch){
+        axios.get('http://localhost:8080/door?time=30')
+    .then(response => {
+         alert(response.data.msg)
+    })
+    .catch(error => {
+        console.error('Error Status:', error.response?.status);
+        console.error('Error Data:', error.response?.data);
+        console.error('Error Message:', error.message);
+    });
+
+      }
       idInput.value.data = ''
       is_finish = true
     }).catch((error) => {
@@ -168,20 +180,24 @@ watch(() => idInput.value.data.length, (newVal) => {
     <div class="w-full max-w-[1200px] flex flex-col justify-center items-center ">
       <TitleComponent title="UNNESTech" subtitle="Presence" />
       <Modal ref="modal" />
-      <div class="flex items-center flex-col md:flex-row justify-center w-full drop-shadow-xl bg-gray-100 mt-8 p-2 md:pr-10 rounded-2xl py-5">
+      <div
+        class="flex items-center flex-col md:flex-row justify-center w-full drop-shadow-xl bg-gray-100 mt-8 p-2 md:pr-10 rounded-2xl py-5">
         <div class="md:hidden text-3xl font-bold mt-4">
-          <img src="/src/assets/logo/logo-unnes-horizontal.png" alt="" style="width: 350px; height: auto" class="invert" />
+          <img src="/src/assets/logo/logo-unnes-horizontal.png" alt="" style="width: 350px; height: auto"
+            class="invert" />
         </div>
         <div class="w-[700px] md:w-[500px]">
           <Camera @image-frame="getImageFrame" ref="camera" />
         </div>
         <div class="ml-4 flex flex-col items-center md:items-start
          justify-center">
-         <div class="mb-2 md:mb-1">
-           <DeviceName />
-         </div>
+          <div class="mb-2 md:mb-1">
+            <DeviceName />
+          </div>
           <Time />
-          <label for="identitas" class="text-3xl md:text-2xl mt-2"><i class="pi pi-id-card"></i> Indentitas (NIM/NIP)</label>
+          <label for="identitas" class="text-5xl md:text-2xl mt-2"><i class="pi pi-id-card"></i> Indentitas
+            (NIM/NIP)</label>
+          <div class="text-3xl md:text-lg">Ketik Indentitasmu atau Tap Kartu NFCmu</div>
           <input v-on:keyup.enter="sendImage()" type="text" v-model="idInput.data"
             class="w-full mt-2 text-2xl rounded-md border border-black px-3">
           <button @click="sendImage()" disabled="true" ref="saveBtn"

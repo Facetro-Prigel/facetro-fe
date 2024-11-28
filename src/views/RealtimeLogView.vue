@@ -1,12 +1,14 @@
 <template>
     <div class="flex flex-col justify-center items-center w-full text-center  h-screen">
-        <img src="/src/assets/logo/facetro_black.png" alt="Logo Facetro" class="w-1/4 inline ">
+        <!-- <img src="/src/assets/logo/facetro_black.png" alt="Logo Facetro" class="w-1/4 inline ">
         <h1 class="text-4xl font-bold mt-2">UNNESTech Headquarters</h1>
         <h2 class="text-3xl my-3">Realtime Member Attendance</h2>
-        <Time />
+        <Time /> -->
+        <div class="w-screen bg-black/75 absolute h-screen -z-10" v-if="backDrop"></div>
+        <video src="/src/assets/videos/KONASPI.mp4" muted loop autoplay class="absolute -z-20"></video>
         <dialog id="my_modal_1" class="modal" ref="modal">
-            <div class="modal-box ">
-                <h3 class="font-bold text-3xl mb-2"><i class="pi pi-info-circle"></i> Baru Saja Presensi</h3>
+            <div class="p-5 rounded-lg drop-shadow-lg">
+                <h3 class="font-bold text-3xl mb-2"><i class="pi pi-info-circle text-2xl"></i> Baru Saja Presensi</h3>
                 <div class="flex justify-center items-center">
                     <div class="w-1/2 overflow-hidden rounded-lg">
                         <ImageViewer type="Gambar Pembading" :is-success="true" :bbox="[0, 0, 20]"
@@ -23,7 +25,7 @@
                 </div>
                 <div class="modal-action">
                     <form method="dialog">
-                        <button class="btn bg-red-500 text-white">Tutup ({{ n }}s)</button>
+                        <button class="btn bg-red-500 text-white p-2 rounded-lg drop-shadow-lg">Tutup ({{ n }}s)</button>
                     </form>
                 </div>
             </div>
@@ -38,6 +40,7 @@ import Time from "@/components/Time.vue";
 import ImageViewer from '@/components/ImageViewer.vue'
 import BASE_URL from '@/stores/config'
 const modal = ref()
+const backDrop = ref()
 const convertToLocale = (time) => {
     return time.toLocaleString('id-ID', {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -57,6 +60,7 @@ const closeModal = () => {
     if (n.value == 0) {
         modal.value.open = false
         n.value = 15
+        backDrop.value = false
     } else {
         setTimeout(() => {
             n.value -= 1
@@ -76,6 +80,7 @@ onMounted(() => {
         data.value.project = y.sort((a, b) => a.length - b.length)
         if (modal.value) {
             modal.value.open = true
+            backDrop.value = true
             closeModal()
         }
     });

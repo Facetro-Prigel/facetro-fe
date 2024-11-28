@@ -22,14 +22,15 @@ import UserView from '../views/UserView.vue'
 import PermissionView from '../views/PermissionView.vue'
 import RoleView from '@/views/RoleView.vue'
 import VueCookies from 'vue-cookies'
+import DemoUserView from '@/views/DemoUserView.vue'
 const routes = [
   {
-    path:"/",
+    path: "/",
     component: Master,
-    meta:{
-      auth:true
+    meta: {
+      auth: true
     },
-    redirect: {name: 'home'},
+    redirect: { name: 'home' },
     children: [
       {
         path: '/dashboard',
@@ -85,8 +86,16 @@ const routes = [
         path: '/role',
         name: 'role',
         component: RoleView
-      }
+      },
     ]
+  },
+  {
+    path: '/demo_user',
+    name: 'demo_user',
+    meta: {
+      auth: true
+    },
+    component: DemoUserView
   },
   {
     path: '/',
@@ -116,6 +125,9 @@ const routes = [
   {
     path: '/presence',
     name: 'presence',
+    meta: {
+      device: true
+    },
     component: PresenceViewVue
   },
   {
@@ -129,38 +141,58 @@ const routes = [
     component: RealtimeLogView
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFoundView
-  },
-  {
     path: '/forbidden',
     name: 'forbidden',
     component: ForbiddenView
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFoundView
   }
+
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
-const authCheck = () =>{
+const authCheck = () => {
   return VueCookies.get('token') ? true : false;
 }
+const deviceCheck = () => {
+  return VueCookies.get('device_token') ? true : false;
+}
 router.beforeEach(
-  async (to, from ,next)=>{
-    if(to.meta.auth){
-      if(authCheck()){
+  async (to, from, next) => {
+    if (to.meta.auth) {
+      if (authCheck()) {
         return next()
-      }else{
-        return next({name:'login'})
+      } else {
+        return next({ name: 'login' })
       }
     }
-    if(to.name == 'login'){
-      if(!authCheck()){
+
+    if (to.name == 'login') {
+      if (!authCheck()) {
         return next()
-      }else{
-        return next({name:'dashboard'})
+      } else {
+        return next({ name: 'dashboard' })
+      }
+    }
+
+    if (to.name == 'device_register' ){
+      if (!deviceCheck()) {
+        return next()
+      } else {
+        return next({ name: 'presence' })
+      }
+    }
+    if (to.meta.device) {
+      if (deviceCheck()) {
+        return next()
+      } else {
+        return next({ name: 'device_register' })
       }
     }
     return next()

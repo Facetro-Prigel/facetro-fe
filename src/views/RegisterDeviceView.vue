@@ -1,6 +1,5 @@
 <template>
-    <Header/>
-    <main class="flex items-center justify-center w-full relative">
+    <main class="flex items-center justify-center w-full relative h-screen">
         <div class="w-full max-w-[1200px] flex flex-col justify-center items-center">
             <div class="bg-gray-100 my-3 rounded-lg drop-shadow-lg text-center p-5 flex flex-col items-center">
                 <h1 class="text-3xl font-bold mb-3">Mendaftarkan Perangkat Presensi</h1>
@@ -10,14 +9,12 @@
                     <input type="text" name="token" v-model="data.token" class="rounded-l-lg text-xl px-2 py-1 bg-blue-200" v-on:keyup.enter="validateToken">
                 </div>
                 <button ref="sendBtn" disabled="true" @click="validateToken"  class="mt-2 p-3 rounded-lg  transition duration-300 bg-blue-600  text-white hover:bg-blue-800 disabled:bg-gray-600"><i class="pi pi-send mr-2"></i>Kirim</button>
-            
             </div>
         </div>
     </main>
 </template>
 
 <script setup>
-import Header from '@/components/Header.vue';
 import { effect, ref } from 'vue';
 import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
@@ -29,6 +26,7 @@ const sendBtn = ref();
 const data = ref({token:""});
 const router = useRouter();
 const image = ref();
+console.log(import.meta.env.VITE_BACKEND_API)
 let config_u = {
       headers: {
         "Content-Type": "application/json",
