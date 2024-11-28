@@ -138,6 +138,9 @@ const routes = [
   {
     path: '/realtime_log',
     name: 'realtime_log',
+    meta: {
+      auth: true
+    },
     component: RealtimeLogView
   },
   {
