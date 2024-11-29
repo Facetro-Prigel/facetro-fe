@@ -2,9 +2,6 @@
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4" ref="alertSection">Edit Role</h2>
-      <div class="py-2">
-        <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
-      </div>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
         <div class="mb-4">
@@ -57,7 +54,8 @@
 import { ref, watch } from 'vue'
 import MultiSelect from 'primevue/multiselect'
 import { fetchRole, updateRole } from '@/services/Role.services'
-import Alert from './Alert.vue';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const props = defineProps({
   uuid:{
     type: String,
@@ -96,28 +94,27 @@ watch(() => props.visible, async (newVal) => {
   if(response.status == 'success'){
       role.value =response.data
   }else{
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
   }
 })
 const handleAddRole = async () => {
   try {
-    alertData.value = { status: 'process', msg: 'Mencoba menambahkan peran!' }
+    toast.add({ severity: 'warn', summary: 'Mencoba menyunting peran!', life: 3000 });
     console.table(role.value)
     let response = await updateRole(props.uuid, role.value)
     console.info(response)
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
+
     if (response.validateError)
       error.value = data.validateError
     if (response.status == 'success') {
-      setTimeout(() => {
         emit('role-added')
         emit('update:visible', false)
-      }, 2000);
     }
     return 0
   } catch (error) {
     console.error('Error adding role:', error)
-    alertData.value = { status: 'fail', msg: 'Error ketika nemambahkan peran!' }
+    toast.add({ severity: 'error', summary: 'Error ketika menyunting peran!' , life: 3000 });
   }
 }
 
@@ -128,7 +125,6 @@ const resetForm = () => {
     description: "",
     permisions:[]
   }
-  alertData.value ={ status: '', msg: '' }
 }
 </script>
 

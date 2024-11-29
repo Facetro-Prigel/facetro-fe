@@ -2,9 +2,6 @@
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4" ref="alertSection">Add Permission</h2>
-      <div class="py-2">
-        <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
-      </div>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
         <div class="mb-4">
@@ -42,7 +39,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { createPermission } from '@/services/Permission.services.js';
-import Alert from './Alert.vue';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -54,8 +52,6 @@ const error = ref({
   guardName: "",
   description: ""
 })
-const alertSection = ref();
-const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'permission-added'])
 const permission = ref({
   name: "",
@@ -70,22 +66,20 @@ watch(() => props.visible, (newVal) => {
 })
 const handleAddPermission = async () => {
   try {
-    alertData.value = { status: 'process', msg: 'Mencoba menambahkan izin!' }
+    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan izin!', life: 3000 });
     let response = await createPermission(permission.value)
     console.info(response )
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status == 'fail' ? 'error' : 'success', summary: response.msg , life: 3000 });
     if (response.validateError)
       error.value = data.validateError
     if (response.status == 'success') {
-      setTimeout(() => {
-        emit('permission-added')
-        emit('update:visible', false)
-      }, 2000);
+      emit('permission-added')
+      emit('update:visible', false)
     }
     return 0
   } catch (error) {
     console.error('Error adding user:', error)
-    alertData.value = { status: 'fail', msg: 'Error ketika nemambahkan izin!' }
+    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan izin!', life: 3000 });
   }
 }
 
@@ -95,7 +89,6 @@ const resetForm = () => {
     guardName: "",
     description: "",
   }
-  alertData.value ={ status: '', msg: '' }
 }
 </script>
 

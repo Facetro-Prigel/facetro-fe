@@ -2,9 +2,6 @@
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4" ref="alertSection">Add Group</h2>
-      <div class="py-2">
-        <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
-      </div>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
         <div class="mb-4">
@@ -56,11 +53,12 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import Alert from './Alert.vue';
 import Dropdown from 'primevue/dropdown';
 import Avatar from 'primevue/avatar';
 import no_image_icon from '@/assets/no_images.png';
 import { createGroup } from '@/services/Group.services';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   visible: {
@@ -81,8 +79,6 @@ const error = ref({
   location: "",
 })
 console.table(props.permisions)
-const alertSection = ref();
-const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'group-added'])
 const group = ref({
   name: "",
@@ -96,22 +92,20 @@ watch(() => props.visible, (newVal) => {
 })
 const handleAddGroup = async () => {
   try {
-    alertData.value = { status: 'process', msg: 'Mencoba menambahkan grup!' }
+    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan grup!', life: 3000 });
     let response = await createGroup(group.value)
     console.info(group.value)
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
     if (response.validateError)
       error.value = data.validateError
     if (response.status == 'success') {
-      setTimeout(() => {
-        emit('group-added')
-        emit('update:visible', false)
-      }, 2000);
+      emit('group-added')
+      emit('update:visible', false)
     }
     return 0
   } catch (error) {
     console.error('Error adding group:', error)
-    alertData.value = { status: 'fail', msg: 'Error ketika nemambahkan grup!' }
+    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan grup!', life: 3000 });
   }
 }
 
@@ -121,7 +115,6 @@ const resetForm = () => {
     guardName: "",
     description: "",
   }
-  alertData.value = { status: '', msg: '' }
 }
 </script>
 

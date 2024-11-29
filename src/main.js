@@ -16,7 +16,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
-
+import ToastService from 'primevue/toastservice';
 import { useStreamStore } from './stores/store'; // Import Pinia store dengan jalur yang benar
 
 const app = createApp(App);
@@ -34,5 +34,5 @@ app.directive('tooltip', Tooltip);
 app.use(router);
 app.use(PrimeVue);
 app.use(pinia);
-
+app.use(ToastService);
 app.mount('#app');

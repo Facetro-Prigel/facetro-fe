@@ -1,7 +1,8 @@
 <template>
     <main class="flex items-center justify-center w-full relative h-screen">
+        <Toast/>
         <div class="w-full max-w-[1200px] flex flex-col justify-center items-center">
-            <div class="bg-gray-100 my-3 rounded-lg drop-shadow-lg text-center p-5 flex flex-col items-center">
+            <div class="bg-gray-100 my-3 rounded-lg drop-shadow-lg text-center p-8 flex flex-col items-center">
                 <h1 class="text-3xl font-bold mb-3">Mendaftarkan Perangkat Presensi</h1>
                 <img  ref="image" src="@/assets/verivication_symbol.png" class="w-[250px]" alt="Computer Verification">
                 <div class="bg-white w-fit rounded-lg drop-shadow-lg flex flex-row overflow-hidden border border-black">
@@ -16,16 +17,23 @@
 
 <script setup>
 import { effect, ref } from 'vue';
+import Toast from 'primevue/toast';
 import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import loadingImg from '@/assets/loading.gif'
 import ImgVeri from '@/assets/verivication_symbol.png'
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
+
+
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const sendBtn = ref();
 const data = ref({token:""});
 const router = useRouter();
 const image = ref();
+const dialogStatus = ref(true) 
 let config_u = {
       headers: {
         "Content-Type": "application/json",
@@ -41,20 +49,24 @@ const validateToken = () =>{
         let tmpData = response.data
         VueCookies.set('device_token', tmpData.token,"31d")  
         VueCookies.set('device_name', tmpData.name,"31d")  
+        toast.add({ severity: 'Success', summary: "Token Berhasil diterima", life: 3000 });
         router.push({name:"presence"})
     }).catch((error)=>{
-        image.value.src=ImgVeri
+        image.value.src = ImgVeri
         sendBtn.value.disabled = true
-        let errorMessage =""
+        let errorMessage = [];
         if (error.response) {
-            errorMessage = error.response.status + ': ' + error.response.data.msg
+            errorMessage[0] = error.response.status
+            errorMessage[1] = error.response.data.msg
         } else if (error.request) {
-            errorMessage = error.request.status + ': ' + error.request.statusText + error.message
+            errorMessage[0] = error.request.status + ': ' + error.request.statusText
+            errorMessage[1] = error.message
             console.error(error.request)
         } else {
-            errorMessage = error.message
+            errorMessage[0] = error.message
+            errorMessage[1] = error.message
         }
-        alert(errorMessage)
+        toast.add({ severity: 'error', summary: errorMessage[0], detail: errorMessage[1], life: 3000 });
     })
 }
 effect(()=>{

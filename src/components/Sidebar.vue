@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- Preloader (hanya untuk User dan Attendance) -->
-    <div v-if="loading && (currentRoute === '/user' || currentRoute === '/attendance')" 
-         class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-75 z-50">
-      <div class="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-purple-500"></div>
-    </div>
 
     <!-- Sidebar -->
     <div

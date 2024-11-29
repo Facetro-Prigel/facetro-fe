@@ -1,15 +1,16 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
-      <h2 class="text-lg font-semibold mb-4" ref="alertSection">Add User</h2>
+      <h2 class="text-lg font-semibold mb-4" ref="alertSection"><i class="pi pi-user-plus mr-2"></i> Add User</h2>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
         <h1 class="text-lg font-bold text-center">Avatar <span class="text-red-400">*</span></h1>
         <div class="flex justify-center items-center">
           <div class="w-1/2 flex p-2">
-            <div class="w-1/2 pr-2">
+            <div class="w-1/2 pr-2 ">
               UNNES Photo
-              <img class="w-full rounded-xl" :src="unnesImage ? unnesImage : no_image_icon" alt="Uploaded Image">
+              <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
+                alt="Uploaded Image">
             </div>
             <div class="w-1/2 pl-2 relative rounded-lg h-max-[300px] overflow-hidden group">
               <div>Uploaded Image</div>
@@ -21,7 +22,7 @@
                 <p class="text-sm mt-2 text-white text-center"><span class="font-bold">Click to upload</span> drag or
                   drop</p>
               </div>
-              <img class="w-full rounded-lg" :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
+              <img class="w-full rounded-lg drop-shadow-lg" :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
                 alt="Uploaded Image">
             </div>
           </div>
@@ -173,6 +174,8 @@ import imageCompression from 'browser-image-compression';
 import Alert from './Alert.vue';
 import no_image_icon from '@/assets/no_images.png';
 import Password from 'primevue/password';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -235,36 +238,30 @@ const handleAddUser = async () => {
     const userData = {
       ...user.value
     }
-    if (alertSection.value) {
-      // Memanggil scrollIntoView pada elemen DOM
-      alertSection.value.scrollIntoView({ behavior: 'smooth' });
-    }
     if (user.value.file_uuid) {
       let data = await createUser(userData)
-      alertData.value = { status: data.status, msg: data.msg }
+      toast.add({ severity: data.status == 'fail' ? 'error' : 'success', summary: data.msg, life: 3000 });
       if (data.validateError) {
         error.value = data.validateError
       }
       if (data.status == 'success') {
-        setTimeout(() => {
-          emit('user-added')
-          emit('update:visible', false)
-        }, 2000);
+        emit('user-added')
+        emit('update:visible', false)
       }
       return 0
     }
     if (unnesImage.value) {
-      alertData.value = { status: 'process', msg: 'Tunggu gambar terunggah terlebih dahulu' }
+      toast.add({ severity: 'warn', summary: 'Tunggu gambar terunggah terlebih dahulu!', life: 3000 });
       uplodedImage.value = unnesImage.value
       await handleImageFileUpload(unnesImage.value)
       await handleAddUser()
     }
     if (!user.value.file_uuid) {
-      alertData.value = { status: 'fail', msg: 'Anda harus menggungah wajah!' }
+      toast.add({ severity: 'error', summary: 'Anda harus menggungah wajah!', life: 3000 });
     }
   } catch (error) {
     console.error('Error adding user:', error)
-    alertData.value = { status: 'fail', msg: 'Error adding user!' }
+    toast.add({ severity: 'error', summary: 'Error adding user!', life: 3000 });
   }
 }
 
@@ -281,12 +278,12 @@ const handleAvatarUpload = (event) => {
 
 const resetForm = () => {
   user.value = {
-  name: '',
-  identityNumber: '',
-  usergroup: [],
-  roleuser: null,
-  avatar: ''
-}
+    name: '',
+    identityNumber: '',
+    usergroup: [],
+    roleuser: null,
+    avatar: ''
+  }
   uplodedImage.value = ''
   unnesImage.value = ''
   alertData.value = { status: 'close', msg: 'close' }
