@@ -17,7 +17,7 @@
       </template>
       <template #loading>
         <div class="p-5 rounded-xl bg-white flex flex-col drop-shadow-md items-center">
-          <i class="pi pi-spinner text-3xl mb-2 animate-spin"></i> 
+          <ProgressSpinner />
           <p>Loading User data. Please wait.</p> 
         </div>
       </template>
@@ -127,7 +127,9 @@ import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
+import ProgressSpinner from 'primevue/progressspinner';
 import { socket } from "@/socket";
+
 import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API

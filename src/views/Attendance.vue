@@ -15,7 +15,7 @@
         </template>
         <template #loading>
           <div class="p-5 rounded-xl bg-white flex flex-col drop-shadow-md items-center">
-            <i class="pi pi-spinner text-3xl mb-2 animate-spin"></i>
+            <ProgressSpinner />
             <p>Loading attendance data. Please wait.</p>
           </div>
         </template>
@@ -92,6 +92,7 @@ import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
 import { fetchAttendanceLogs } from '@/services/Attendance.services';
 import { ref, onMounted } from 'vue'
+import ProgressSpinner from 'primevue/progressspinner';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const attendanceCards = ref([])
 const loading = ref(true)
