@@ -173,18 +173,16 @@ const fetchUserProfile = async () => {
     return;
   }
   const user_data = JSON.parse(localStorage.getItem("user_data"));
-  const uuid = user_data.uuid;
 
 try {
-    const response = await getUserProfile(uuid, token);
+    const response = await getUserProfile(token);
     if (response && response.data) {
       user.value = response.data;
 
-      // Mengubah tanggal lahir (birthday) agar bisa ditampilkan dalam format YYYY-MM-DD
       const birthdayData = response.data.birtday;
       if (birthdayData) {
         const date = new Date(birthdayData);
-        user.value.birthday = date.toISOString().split('T')[0]; // Mengubah tanggal lahir menjadi format YYYY-MM-DD
+        user.value.birthday = date.toISOString().split('T')[0]; 
       }
 
       groupMembers.value = response.data.usergroup.map(group => ({
@@ -219,7 +217,7 @@ const unnesImageHender = async () => {
 }
 
 const handleUpdateUser = async () => {
-  const token = VueCookies.get('token'); // Retrieve token
+  const token = VueCookies.get('token'); 
 
   const user_data = JSON.parse(localStorage.getItem("user_data"));
   const uuid = user_data.uuid;
@@ -237,19 +235,18 @@ const handleUpdateUser = async () => {
     const data = await updateUser(uuid, userData, token);
 
     if (data.status == 'success') {
-      alertData.value = { status: 'success', msg: 'Berhasil Update Data!' }; // Update with success message
+      alertData.value = { status: 'success', msg: 'Berhasil Update Data!' }; 
     } else {
-      alertData.value = { status: 'fail', msg: data.msg || 'Gagal Update Data' }; // Show fail message if error
+      alertData.value = { status: 'fail', msg: data.msg || 'Gagal Update Data' }; 
     }
 
-    // Reset error fields if needed
     if (data.validateError) {
       error.value = data.validateError;
     }
 
     location.reload();
   } catch (error) {
-    alertData.value = { status: 'fail', msg: 'Error updating user!' }; // Generic error message
+    alertData.value = { status: 'fail', msg: 'Error updating user!' }; 
   }
 
 };

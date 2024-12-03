@@ -4,14 +4,10 @@ const BASE_URL = import.meta.env.VITE_BACKEND_API
 
 const API_URL = BASE_URL + 'myprofile/';
 
-export const getUserProfile = async (uuid = "", token) => {
+export const getUserProfile = async (token) => {
   try {
     const userData = JSON.parse(localStorage.getItem('user_data'));
-    // Jika uuid kosong, coba ambil dari data pengguna yang sudah login
-    if (!uuid) {
-      uuid = userData?.uuid || ""; // Ambil uuid dari user_data jika tersedia
-    }
-    const res = await axios.get(`${API_URL}${uuid}`, { // Sesuaikan endpoint profil sesuai API Anda
+    const res = await axios.get(`${API_URL}`, { // Sesuaikan endpoint profil sesuai API Anda
       headers: {
         'Cache-Control': 'no-cache',
         'Authorization': `Bearer ${token}`
