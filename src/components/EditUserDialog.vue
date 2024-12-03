@@ -302,17 +302,6 @@ const handleUpdateUser = async () => {
   }
 }
 
-const handleAvatarUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      uplodedImage.value = e.target.result
-    }
-    reader.readAsDataURL(file)
-  }
-}
-
 const resetForm = () => {
   user.value = {
     usergroup: [],
@@ -354,6 +343,18 @@ const handleImageFileUpload = async (uplodedImage) => {
     user.value.file_uuid = imageResponse.file_uuid
   }
 }
+
+const handleAvatarUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      uplodedImage.value = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
 const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   imageName.value = file.name

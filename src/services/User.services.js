@@ -18,6 +18,7 @@ export const fileUpload = async (data) => {
     return {status: 'fail', msg: error.response.data.msg};
   }
 };
+
 export const unnesImage = async (number) => {
   try {
     const res = await axios.post(API_URL+'unnes', {identity_number:number},{
