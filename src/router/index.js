@@ -23,6 +23,8 @@ import PermissionView from '../views/PermissionView.vue'
 import RoleView from '@/views/RoleView.vue'
 import VueCookies from 'vue-cookies'
 import DemoUserView from '@/views/DemoUserView.vue'
+import MyProfile from '@/components/MyProfile.vue';
+
 const routes = [
   {
     path: "/",
@@ -36,6 +38,11 @@ const routes = [
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard
+      },
+      {
+        path: '/myprofile',
+        name: 'MyProfile',
+        component: MyProfile, // Add MyProfile route
       },
       {
         path: '/room',
