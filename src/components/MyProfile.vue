@@ -37,14 +37,6 @@
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.email }}</div>
         </div>
-        <div class="mb-4">
-          <label for="password" class="block text-sm font-medium text-gray-700">Password<span class="text-red-400">*</span></label>
-          <div class="flex justify-center items-center">
-            <Password v-model="user.password" type="password" id="password" placeholder="Enter Password"
-              class="border border-gray-300 rounded-md p-2 w-full focus:outline-none" toggleMask />
-          </div>
-          <div class="text-red-600 text-sm">{{ error.password }}</div>
-        </div>
 
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">
@@ -119,7 +111,6 @@ import VueCookies from 'vue-cookies';
 import Alert from './Alert.vue';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
-import Password from 'primevue/password';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 
 const props = defineProps({
@@ -145,7 +136,6 @@ const error = ref({
   email: "",
   name: "",
   identityNumber: "",
-  password: "",
   batch: "",
   birthday: "",
   program_study: "",
@@ -160,7 +150,6 @@ const user = ref({
   name: '',
   identityNumber: '',
   email: '',
-  password: '',
   birthday: '',
   batch: '',
   program_study: '',
