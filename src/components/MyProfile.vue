@@ -220,7 +220,6 @@ const handleUpdateUser = async () => {
   const token = VueCookies.get('token'); 
 
   const user_data = JSON.parse(localStorage.getItem("user_data"));
-  const uuid = user_data.uuid;
 
   if (!token) {
     alertData.value = { status: 'fail', msg: 'Session expired. Please login again.' };
@@ -232,7 +231,7 @@ const handleUpdateUser = async () => {
     if (imagePath.value){
       userData.avatar = imagePath.value;
     }
-    const data = await updateUser(uuid, userData, token);
+    const data = await updateUser(userData, token);
 
     if (data.status == 'success') {
       alertData.value = { status: 'success', msg: 'Berhasil Update Data!' }; 

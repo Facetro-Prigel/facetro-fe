@@ -22,11 +22,11 @@ export const getUserProfile = async (token) => {
 };
 
 
-export const updateUser = async (uuid, userData) => {
+export const updateUser = async (userData) => {
   const token = localStorage.getItem('token') || VueCookies.get('token'); // Dapatkan token dari localStorage atau VueCookies
 
   try {
-    const response = await axios.put(`${API_URL}${uuid}`, userData, {
+    const response = await axios.put(`${API_URL}`, userData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
