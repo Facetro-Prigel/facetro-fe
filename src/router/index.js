@@ -23,6 +23,8 @@ import PermissionView from '../views/PermissionView.vue'
 import Room from '../views/Room.vue'
 import ServiceView from '../views/ServicesView.vue'
 import UserView from '../views/UserView.vue'
+import MyProfile from '../components/MyProfile.vue'
+
 const routes = [
   {
     path: '/',
