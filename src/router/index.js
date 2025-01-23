@@ -1,33 +1,31 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import PresenceViewVue from '@/views/PresenceView.vue'
-import RegisterDeviceViewVue from '@/views/RegisterDeviceView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
+import Master from '@/layouts/Master.vue'
+import AttendanceView from '@/views/AttendanceView.vue'
+import DoorlockViewVue from '@/views/DoorlockView.vue'
 import ForbiddenView from '@/views/ForbiddenView.vue'
 import ViewLogin from '@/views/Login/ViewLogin.vue'
-import AttendanceView from '@/views/AttendanceView.vue'
-import GroupView from '../views/GroupView.vue'
-import RegisterView from '@/views/RegisterView.vue'
-import DeviceView from '../views/DeviceView.vue'
-import HomeView from '../views/HomeView.vue'
-import ServiceView from '../views/ServicesView.vue'
-import AboutView from '../views/AboutView.vue'
-import ContactView from '../views/ContactView.vue'
-import Dashboard from '../views/Dashboard.vue'
-import Room from '../views/Room.vue'
-import Camera from '../views/CameraView.vue'
-import Attendance from '../views/Attendance.vue'
-import Master from '@/layouts/Master.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
+import PresenceViewVue from '@/views/PresenceView.vue'
 import RealtimeLogView from '@/views/RealtimeLogView.vue'
-import UserView from '../views/UserView.vue'
-import PermissionView from '../views/PermissionView.vue'
+import RegisterDeviceViewVue from '@/views/RegisterDeviceView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 import RoleView from '@/views/RoleView.vue'
 import VueCookies from 'vue-cookies'
-import DemoUserView from '@/views/DemoUserView.vue'
-import MyProfile from '@/components/MyProfile.vue';
-
+import { createRouter, createWebHistory } from 'vue-router'
+import AboutView from '../views/AboutView.vue'
+import Attendance from '../views/Attendance.vue'
+import Camera from '../views/CameraView.vue'
+import ContactView from '../views/ContactView.vue'
+import Dashboard from '../views/Dashboard.vue'
+import DeviceView from '../views/DeviceView.vue'
+import GroupView from '../views/GroupView.vue'
+import HomeView from '../views/HomeView.vue'
+import PermissionView from '../views/PermissionView.vue'
+import Room from '../views/Room.vue'
+import ServiceView from '../views/ServicesView.vue'
+import UserView from '../views/UserView.vue'
 const routes = [
   {
-    path: "/",
+    path: '/',
     component: Master,
     meta: {
       auth: true
@@ -93,16 +91,8 @@ const routes = [
         path: '/role',
         name: 'role',
         component: RoleView
-      },
+      }
     ]
-  },
-  {
-    path: '/demo_user',
-    name: 'demo_user',
-    meta: {
-      auth: true
-    },
-    component: DemoUserView
   },
   {
     path: '/',
@@ -132,10 +122,12 @@ const routes = [
   {
     path: '/presence',
     name: 'presence',
-    meta: {
-      device: true
-    },
     component: PresenceViewVue
+  },
+  {
+    path: '/doorlock',
+    name: 'doorlock',
+    component: DoorlockViewVue
   },
   {
     path: '/device_register',
@@ -145,22 +137,18 @@ const routes = [
   {
     path: '/realtime_log',
     name: 'realtime_log',
-    meta: {
-      auth: true
-    },
     component: RealtimeLogView
-  },
-  {
-    path: '/forbidden',
-    name: 'forbidden',
-    component: ForbiddenView
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFoundView
+  },
+  {
+    path: '/forbidden',
+    name: 'forbidden',
+    component: ForbiddenView
   }
-
 ]
 
 const router = createRouter({
@@ -168,44 +156,23 @@ const router = createRouter({
   routes
 })
 const authCheck = () => {
-  return VueCookies.get('token') ? true : false;
+  return VueCookies.get('token') ? true : false
 }
-const deviceCheck = () => {
-  return VueCookies.get('device_token') ? true : false;
-}
-router.beforeEach(
-  async (to, from, next) => {
-    if (to.meta.auth) {
-      if (authCheck()) {
-        return next()
-      } else {
-        return next({ name: 'login' })
-      }
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.auth) {
+    if (authCheck()) {
+      return next()
+    } else {
+      return next({ name: 'login' })
     }
-
-    if (to.name == 'login') {
-      if (!authCheck()) {
-        return next()
-      } else {
-        return next({ name: 'dashboard' })
-      }
-    }
-
-    if (to.name == 'device_register' ){
-      if (!deviceCheck()) {
-        return next()
-      } else {
-        return next({ name: 'presence' })
-      }
-    }
-    if (to.meta.device) {
-      if (deviceCheck()) {
-        return next()
-      } else {
-        return next({ name: 'device_register' })
-      }
-    }
-    return next()
   }
-)
+  if (to.name == 'login') {
+    if (!authCheck()) {
+      return next()
+    } else {
+      return next({ name: 'dashboard' })
+    }
+  }
+  return next()
+})
 export default router

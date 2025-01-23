@@ -4,7 +4,7 @@ import Camera from '@/components/LiveCameraComponent.vue'
 import Modal from '@/components/Modal.vue'
 import Time from '@/components/Time.vue'
 import TitleComponent from '@/components/TitleComponent.vue'
-import { goToDoorlock } from '@/services/Doorlock.services'
+import { goToPresence } from '@/services/Presence.services'
 import { useForbiddenStore } from '@/stores/forbidden.js'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
@@ -17,9 +17,10 @@ const modal = ref(false)
 const saveBtn = ref(false)
 const isCapturing = ref(false)
 const hexString = ref('')
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 var is_finish = false
 var cookies
-const BASE_URL = import.meta.env.VITE_BACKEND_API
+
 const handleKeydown = (event) => {
   const key = event.key
   if (key === 'w') {
@@ -172,9 +173,9 @@ watch(
 <template>
   <main class="flex items-center justify-center w-full relative h-screen">
     <div class="w-full max-w-[1200px] flex flex-col justify-center items-center">
-      <!-- Tulisan Halaman Presensi -->
-      <h1 class="text-4xl font-bold text-center mt-6 mb-4">Halaman Presensi</h1>
-      <TitleComponent title="UNNESTech" subtitle="Presence" />
+      <!-- Tulisan Halaman Doorlock -->
+      <h1 class="text-4xl font-bold text-center mt-6 mb-4">Halaman Doorlock</h1>
+      <TitleComponent title="UNNESTech" subtitle="Doorlock" />
       <Modal ref="modal" />
       <div
         class="flex items-center flex-col md:flex-row justify-center w-full drop-shadow-xl bg-gray-100 mt-8 p-2 md:pr-10 rounded-2xl py-5"
@@ -213,10 +214,10 @@ watch(
             <i class="pi pi-save mr-2"></i>Simpan
           </button>
           <button
-            @click="goToDoorlock"
+            @click="goToPresence"
             class="bg-green-700 transition duration-300 text-white py-2 mt-2 px-4 rounded-lg hover:bg-green-900 hover:drop-shadow-lg"
           >
-            <i class="pi pi-lock mr-2"></i>Doorlock
+            <i class="pi pi-lock mr-2"></i>Presensi
           </button>
         </div>
       </div>
