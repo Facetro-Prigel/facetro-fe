@@ -5,7 +5,6 @@ import Modal from '@/components/Modal.vue'
 import Time from '@/components/Time.vue'
 import TitleComponent from '@/components/TitleComponent.vue'
 import { goToDoorlock } from '@/services/Doorlock.services'
-import BASE_URL from '@/stores/config'
 import { useForbiddenStore } from '@/stores/forbidden.js'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
@@ -20,7 +19,7 @@ const isCapturing = ref(false)
 const hexString = ref('')
 var is_finish = false
 var cookies
-
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 const handleKeydown = (event) => {
   const key = event.key
   if (key === 'w') {

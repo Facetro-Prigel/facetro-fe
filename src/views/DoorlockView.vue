@@ -5,7 +5,6 @@ import Modal from '@/components/Modal.vue'
 import Time from '@/components/Time.vue'
 import TitleComponent from '@/components/TitleComponent.vue'
 import { goToPresence } from '@/services/Presence.services'
-import BASE_URL from '@/stores/config'
 import { useForbiddenStore } from '@/stores/forbidden.js'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
@@ -18,6 +17,7 @@ const modal = ref(false)
 const saveBtn = ref(false)
 const isCapturing = ref(false)
 const hexString = ref('')
+const BASE_URL = import.meta.env.VITE_BACKEND_API
 var is_finish = false
 var cookies
 
