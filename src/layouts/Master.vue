@@ -1,39 +1,23 @@
 <template>
-    <div class="w-full h-full flex">
-      <Sidebar :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
+  <Toast />
+  <div class="w-full h-full flex">
+    <Sidebar :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
+    <div class="w-full h-full">
+      <HeaderTop :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
       <div class="w-full h-full">
-        <HeaderTop :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
-        <div class="w-full h-full">
-          <router-view/>
-        </div>
+        <router-view />
       </div>
-      <RoomCard :isSidebarOpen="isSidebarOpen"/>
     </div>
-  </template>
-  
-  <script>
-  import HeaderTop from '@/components/Header.vue';
-  import Sidebar from '@/components/Sidebar.vue';
-  import RoomCard from '@/components/RoomCard.vue';
-  
-  export default {
-    components: {
-      HeaderTop,
-      Sidebar
-    },
-    data() {
-      return {
-        openSidebar:true
-      }
-    },
-    methods: {
-        toggleSidebar() {
-            this.openSidebar = !this.openSidebar
-        }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  </style>
-  
+  </div>
+</template>
+
+<script setup>
+import HeaderTop from '@/components/Header.vue';
+import Sidebar from '@/components/Sidebar.vue';
+import Toast from 'primevue/toast';
+import { ref } from 'vue'
+const openSidebar = ref(true)
+const toggleSidebar = () =>{
+  openSidebar.value = !openSidebar.value
+}
+</script>

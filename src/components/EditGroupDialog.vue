@@ -70,6 +70,8 @@ import Dropdown from 'primevue/dropdown';
 import Avatar from 'primevue/avatar';
 import no_image_icon from '@/assets/no_images.png';
 import { updateGroup, fetchGroup } from '@/services/Group.services';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   uuid: {
@@ -111,27 +113,25 @@ watch(() => props.visible, async (newVal) => {
   if (response.status == 'success') {
     group.value = response.data
   } else {
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
   }
 })
 const handleEditGroup = async () => {
   try {
-    alertData.value = { status: 'process', msg: 'Mencoba menambahkan grup!' }
+    toast.add({ severity: 'warn', summary: 'Mencoba menyuting grup!', life: 3000 });
     let response = await updateGroup(props.uuid, group.value)
     console.info('ini', group.value)
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
     if (response.validateError)
       error.value = data.validateError
     if (response.status == 'success') {
-      setTimeout(() => {
         emit('group-added')
         emit('update:visible', false)
-      }, 2000);
     }
     return 0
   } catch (error) {
     console.error('Error adding group:', error)
-    alertData.value = { status: 'fail', msg: 'Error ketika nemambahkan grup!' }
+    toast.add({ severity: 'error', summary: 'Error ketika menyuting grup!', life: 3000 });
   }
 }
 
@@ -141,7 +141,6 @@ const resetForm = () => {
     guardName: "",
     description: "",
   }
-  alertData.value = { status: '', msg: '' }
 }
 </script>
 

@@ -2,9 +2,6 @@
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4" ref="alertSection">Add Device</h2>
-      <div class="py-2">
-        <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
-      </div>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
         <div class="mb-4">
@@ -16,7 +13,7 @@
         </div>
         <div class="mb-4">
           <label for="Location" class="block text-sm font-medium text-gray-700">Location<span
-            class="text-red-400">*</span></label>
+              class="text-red-400">*</span></label>
           <input v-model="device.location" type="text" id="Location" placeholder="Enter Location"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.location }}</div>
@@ -43,7 +40,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { createDevice } from '@/services/Device.services'
-import Alert from './Alert.vue';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -55,8 +53,6 @@ const error = ref({
   location: "",
   token: ""
 })
-const alertSection = ref();
-const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'device-added'])
 const device = ref({
   name: "",
@@ -70,10 +66,10 @@ watch(() => props.visible, (newVal) => {
 })
 const handleAddDevice = async () => {
   try {
-    alertData.value = { status: 'process', msg: 'Mencoba menambahkan perangkat!' }
+    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan perangkat!', life: 3000 });
     let response = await createDevice(device.value)
     console.info(response)
-    alertData.value = { status: response.status, msg: response.msg }
+    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
     if (response.validateError)
       error.value = data.validateError
     if (response.status == 'success') {
@@ -85,17 +81,16 @@ const handleAddDevice = async () => {
     return 0
   } catch (error) {
     console.error('Error adding device:', error)
-    alertData.value = { status: 'fail', msg: 'Error ketika nemambahkan perangkat!' }
+    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan perangkat!', life: 3000 });
   }
 }
 
 const resetForm = () => {
   device.value = {
-  name: "",
-  location: "",
-  token: null
-}
-  alertData.value ={ status: '', msg: '' }
+    name: "",
+    location: "",
+    token: null
+  }
 }
 </script>
 

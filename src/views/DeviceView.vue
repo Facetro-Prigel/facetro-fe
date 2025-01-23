@@ -125,6 +125,8 @@ import PriveteCopy from '@/components/PriveteCopy.vue'
 import AddDeviceDialog from '@/components/AddDeviceDialog.vue'
 import EditDeviceDialog from '@/components/EditDeviceDialog.vue'
 import { socket } from "@/socket";
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const device = ref([])
 const isConfirmDialogVisible = ref(false)
 const isAddDeviceDialogVisible = ref(false)
@@ -140,6 +142,7 @@ const getDevice = async () => {
   try {
     const response = await fetchDevices()
     device.value = response
+    toast.add({ severity: 'info', summary: 'List perangkat diperbarui!', life: 3000 });
   } catch (error) {
     console.error('Error fetching device:', error)
   }
@@ -147,7 +150,8 @@ const getDevice = async () => {
 
 const handleDeleteDevice = async (id) => {
   try {
-    await deleteDevice(id)
+    const res = await deleteDevice(id)
+    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
     getDevice()
     isConfirmDialogVisible.value = false
   } catch (error) {

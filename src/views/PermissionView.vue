@@ -1,6 +1,6 @@
 <template>
   <div class="card p-4">
-    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-key mr-2"></i>Manage Permissions</h1>
+    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-key mr-2"></i>Permission Management</h1>
     <DataTable :value="datas" paginator v-model:filters="filters" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50, 100]"
       :globalFilterFields="['name', 'description']" tableStyle="min-width: 50rem">
       <template #header>
@@ -65,6 +65,9 @@ import AddPermissionDialog from '@/components/AddPermissionDialog.vue';
 import EditPermissionDialog from '@/components/EditPermissionDialog.vue';
 import { fetchPermissions, deletePermission } from '@/services/Permission.services';
 import { socket } from "@/socket";
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
+
 const filters = ref({
   global: { value: null },
   name: { value: null },
@@ -79,12 +82,14 @@ const isConfirmDialogVisible = ref(false)
 const confirmingPermissionId = ref()
 const getPermissions = async () => {
   datas.value = await fetchPermissions()
+  toast.add({ severity: 'info', summary: 'List izin diperbarui!', life: 3000 });
 }
 const handleDeletePermission = async (id) => {
   try {
     const res = await deletePermission(id)
     if(res){
-      alert(res.msg)
+      console.log(res)
+      toast.add({ severity: 'success', summary: res.msg, life: 3000 });
     }
     getPermissions()
     isConfirmDialogVisible.value = false
@@ -110,6 +115,7 @@ onMounted(async () => {
   await getPermissions()
   socket.on("update CUD", (...args) => {
     getPermissions()
+
   });
 })
 

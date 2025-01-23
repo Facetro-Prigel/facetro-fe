@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- Preloader (hanya untuk User dan Attendance) -->
-    <div v-if="loading && (currentRoute === '/user' || currentRoute === '/attendance')" 
-         class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-75 z-50">
-      <div class="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-purple-500"></div>
-    </div>
 
     <!-- Sidebar -->
     <div
@@ -31,6 +26,13 @@
               <router-link to="/dashboard" class="px-2 flex space-x-2"><span
                   class="pi pi-microsoft" v-tooltip.right="'Dashboard'"></span>
                 <span v-show="dataOpenSidebar">Dashboard</span></router-link>
+            </div>
+            
+                        <!-- My Profile Menu -->
+                        <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
+              <router-link to="/myprofile" class="items-center px-2 flex space-x-2"><span
+                  class="pi pi-id-card" v-tooltip.right="'My Profile'"></span>
+                <span v-show="dataOpenSidebar">My Profile</span></router-link>
             </div>
             <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
               <router-link to="/user" class="items-center px-2 flex space-x-2" @click.native="showPreloader('/user')"><span

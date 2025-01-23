@@ -1,6 +1,6 @@
 <template>
   <div class="card p-4">
-    <!-- Table with search and buttons -->
+    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-users mr-2"></i>Group Management</h1>
     <DataTable :value="group" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
       v-model:filters="filters" :globalFilterFields="['name', 'location', 'device.name', 'users.name']">
       <!-- Header template with search and add button -->
@@ -89,6 +89,8 @@ import AddGroupDialog from '@/components/AddGroupDialog.vue'
 import EditGroupDialog from '@/components/EditGroupDialog.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import { socket } from "@/socket";
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 // State variables
 const filters = ref({
@@ -110,7 +112,6 @@ const getDevice = async () => {
   try {
     const response = await fetchDevices()
     deviceOption.value = response
-    console.table(deviceOption.value)
   } catch (error) {
     console.error('Error fetching device:', error)
   }
@@ -137,7 +138,8 @@ const getGroup = async () => {
 
 const handleDeleteGroup = async (id) => {
   try {
-    await deleteGroup(id)
+    let res = await deleteGroup(id)
+    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
     getGroup()
     isConfirmDialogVisible.value = false
   } catch (error) {
@@ -158,16 +160,17 @@ const openEditGroupDialog = (data) => {
   isEditGroupDialogVisible.value = true
   selectedGruopId.value = data
 }
-
-// Lifecycle hook
-onMounted(() => {
+const all= ()=>{
   getGroup()
   getUsers()
   getDevice()
+  toast.add({ severity: 'info', summary: 'List grup diperbarui!', life: 3000 });
+}
+// Lifecycle hook
+onMounted(() => {
+  all()
   socket.on("update CUD", (...args) => {
-    getGroup()
-    getUsers()
-    getDevice()
+    all()
   });
 })
 </script>

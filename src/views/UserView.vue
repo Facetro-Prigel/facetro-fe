@@ -1,6 +1,7 @@
 <template>
   <div class="card p-4">
-    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem" v-model:filters="filters" 
+    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-user mr-2"></i>User Management</h1>
+    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters" 
     :globalFilterFields="['name', 'identityNumber', 'usergroup', 'roleuser' ]" >
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -10,11 +11,16 @@
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
-            + Add User
+            <i class="pi pi-user-plus mr-2"></i> Add User
           </button>
         </div>
       </template>
-
+      <template #loading>
+        <div class="p-5 rounded-xl bg-white flex flex-col drop-shadow-md items-center">
+          <ProgressSpinner />
+          <p>Loading User data. Please wait.</p> 
+        </div>
+      </template>
       <Column field="identityNumber" header="Identity Number" sortable>
         <template #header="slotProps">
           <span class="text-black">{{ slotProps.header }}</span>
@@ -121,7 +127,11 @@ import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
 import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
+import ProgressSpinner from 'primevue/progressspinner';
 import { socket } from "@/socket";
+
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const users = ref([])
 const isConfirmDialogVisible = ref(false)
@@ -129,9 +139,8 @@ const confirmingUserId = ref(null)
 const isAddUserDialogVisible = ref(false)
 const isEditUserDialogVisible = ref(false)
 const selectedUser = ref(null)
-
 const groupOptions = []
-
+const loading = ref(true)
 const roleOptions = []
 const permissionOptions = []
 const filters = ref(
@@ -140,6 +149,7 @@ const filters = ref(
 const getUsers = async () => {
   try {
     const response = await fetchUsers()
+    loading.value = false
     users.value = response
   } catch (error) {
     console.error('Error fetching users:', error)
@@ -183,8 +193,10 @@ const getPemission = async () => {
 const handleDeleteUser = async (id) => {
   try {
     const res = await deleteUser(id)
-    if(res){
-      alert(res.msg)
+    if(res.status != 'fail'){
+      toast.add({ severity: 'success', summary: res.msg, life: 3000 });
+    }else{
+      toast.add({ severity: 'error', summary: res.data.error, life: 3000 });
     }
     getUsers()
     isConfirmDialogVisible.value = false
@@ -211,6 +223,7 @@ const updater = () =>{
   getGroup();
   getRole();
   getPemission();
+  toast.add({ severity: 'info', summary: 'List Pengguna diperbarui!', life: 3000 });
 }
 
 onMounted(() => {

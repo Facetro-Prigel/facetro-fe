@@ -18,8 +18,11 @@ export const login = async (data) => {
       )
       await VueCookies.set('token', res.data.token, '14d')
       delete res.data.token;
+      console.log(res.data);
+      localStorage.setItem("user_data", JSON.stringify(res.data));
       await VueCookies.set('user_data', res.data, '14d')
-      return {status: true, msg: `Selemat Datang ${res.data.name}`, img: res.data.avatar}
+      return {status: true, msg: `Selamat Datang ${res.data.name}`, img: res.data.avatar}
+      
   } catch (error) {
     return {status: false, msg: error.response.data.msg}
   }

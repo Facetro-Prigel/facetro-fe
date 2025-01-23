@@ -1,6 +1,6 @@
 <template>
   <div class="card p-4">
-    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-briefcase"></i> Manage Roles</h1>
+    <h1 class="text-xl font-semibold mb-5"><i class="pi pi-briefcase"></i> Role Management</h1>
     <DataTable :value="datas" paginator  :rows="5" :rowsPerPageOptions="[5, 10, 20]" v-model:filters="filters"
       :globalFilterFields="['name', 'description']" tableStyle="min-width: 50rem">
       <template #header>
@@ -66,6 +66,8 @@ import EditRoleDialog from '@/components/EditRoleDialog.vue';
 import { fetchRoles, deleteRole } from '@/services/Role.services';
 import { fetchPermissions } from '@/services/Permission.services';
 import { socket } from "@/socket";
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const filters = ref({
   global: { value: null },
   name: { value: null },
@@ -88,13 +90,12 @@ const getRoles = async () => {
 const handleDeleteRole = async (id) => {
   try {
     const res = await deleteRole(id)
-    if(res){
-      alert(res.msg)
-    }
+    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
     getRoles()
     isConfirmDialogVisible.value = false
   } catch (error) {
     console.error('Error deleting Role:', error)
+    toast.add({ severity: 'error', summary: 'Error deleting Role (check logs!)', life: 3000 });
   }
 }
 
@@ -125,6 +126,7 @@ const getPemission = async () => {
 const getUpdate = () =>{
   getRoles()
   getPemission()
+  toast.add({ severity: 'info', summary: 'List peran diperbarui!', life: 3000 });
 }
 onMounted(() => {
   getUpdate()

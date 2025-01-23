@@ -61,7 +61,7 @@ export const createGroup = async (group) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -78,7 +78,7 @@ export const updateGroup = async (id, group) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -92,8 +92,10 @@ export const deleteGroup = async (id) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status="success" 
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.data.status="error"
+    return error.response.data;
   }
 };

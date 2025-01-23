@@ -13,7 +13,7 @@ export const fetchDevices = async () => {
     res.data.data.status = 'success'
     return res.data.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -32,7 +32,7 @@ export const fetchDevice = async (id) => {
     delete res.data.data.locations
     return res.data.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -49,7 +49,7 @@ export const createDevice = async (device) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -66,7 +66,7 @@ export const updateDevice = async (id, device) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -80,8 +80,11 @@ export const deleteDevice = async (id) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status = 'success'
     return res.data;
   } catch (error) {
-    return error.message;
+    error.response.status = 'error'
+    error.response.msg= error.response.data.error
+    return error.response;
   }
 };

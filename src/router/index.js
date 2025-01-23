@@ -38,6 +38,11 @@ const routes = [
         component: Dashboard
       },
       {
+        path: '/myprofile',
+        name: 'MyProfile',
+        component: MyProfile, // Add MyProfile route
+      },
+      {
         path: '/room',
         name: 'room',
         component: Room

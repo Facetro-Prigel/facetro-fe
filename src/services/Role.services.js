@@ -53,7 +53,7 @@ export const createRole = async (value) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.error
     return error.response;
   }
@@ -71,7 +71,7 @@ export const updateRole = async (id, permission) => {
     res.data.status = 'success'
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
+    error.response.status = 'error'
     error.response.msg= error.response.data.msg
     return error.response;
   }
@@ -85,8 +85,10 @@ export const deleteRole = async (id) => {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }
     });
+    res.data.status="success" 
     return res.data;
   } catch (error) {
+    error.response.data.status="error"
     return error.response.data;
   }
 };

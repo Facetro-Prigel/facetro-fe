@@ -18,6 +18,42 @@ export const fileUpload = async (data) => {
     return {status: 'fail', msg: error.response.data.msg};
   }
 };
+export const birtdayUpload = async (data,uuid) => {
+  try {
+    const res = await axios.post(API_URL+'birthday', {image:data, uuid: uuid},{
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    });
+    res.data.status = 'success'
+    return res.data;
+  } catch (error) {
+    return {status: 'fail', msg: error.response.data.msg};
+  }
+};
+export const birthdayImage = async (uui) => {
+  try {
+    let res = await axios.get(API_URL+'birthday/'+uui, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Authorization': `Bearer ${VueCookies.get('token')}`,
+      },
+      responseType: 'blob', // Ensure the response is a blob
+    })
+    .then((response) => {
+      response.data = URL.createObjectURL(response.data)
+      return response
+    })
+    .catch((error) => {
+      console.error('Error fetching image:', error);
+      return {status: 'fail', msg: error.response};
+    });
+    return res;
+  } catch (error) {
+    return {status: 'fail', msg: error.response};
+  }
+};
 export const unnesImage = async (number) => {
   try {
     const res = await axios.post(API_URL+'unnes', {identity_number:number},{
