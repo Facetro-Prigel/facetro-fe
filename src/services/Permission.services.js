@@ -1,83 +1,52 @@
-import axios from 'axios';
+import apiClient from './Base.services';
 import VueCookies from 'vue-cookies';
-const BASE_URL = import.meta.env.VITE_BACKEND_API
 
-const API_URL = BASE_URL + 'permission/';
+const API_URL = 'permission/';
 
 export const fetchPermissions = async () => {
   try {
-    const res = await axios.get(API_URL, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.status = 'success'
-    return res.data.data;
+    const res = await apiClient.get(API_URL)
+    return res;
   } catch (error) {
-    error.response.status = 'fail'
-    error.response.msg= error.response.data.error
-    return error.response;
+    console.error('Error fetching permissions:', error);
+    return error
   }
 };
-export const fetchPermission = async (uui) => {
+export const fetchPermission = async (uuid) => {
   try {
-    const res = await axios.get(API_URL+uui, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.get(API_URL + uuid)
+    return res;
   } catch (error) {
-    return {status: 'fail', msg: 'Gagal mengambil data user'};
+    console.error('Error fetching permissions:', error);
+    return error
   }
 };
 export const createPermission = async (permission) => {
   try {
-    const res = await axios.post(API_URL, permission, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.post(API_URL, permission);
+    return res;
   } catch (error) {
-    error.response.status = 'fail'
-    error.response.msg= error.response.data.error
-    return error.response;
+    console.error(error)
+    return error;
   }
 };
 
 export const updatePermission = async (id, permission) => {
   try {
-    const res = await axios.put(`${API_URL}${id}`, permission, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
+    const res = await apiClient.put(`${API_URL}${id}`, permission);
     return res.data;
   } catch (error) {
-    error.response.status = 'fail'
-    error.response.msg= error.response.data.error
-    return error.response;
+    console.error(error)
+    return error;
   }
 };
 
 export const deletePermission = async (id) => {
   try {
-    const res = await axios.delete(`${API_URL}${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    return res.data;
+    const res = await apiClient.delete(`${API_URL}${id}`)
+    return res
   } catch (error) {
-    return error.response.data;
+    console.error(error)
+    return error
   }
 };

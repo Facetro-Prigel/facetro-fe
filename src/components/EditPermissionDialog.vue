@@ -13,7 +13,7 @@
         </div>
         <div class="mb-4">
           <label for="guard_name" class="block text-sm font-medium text-gray-700">Guard Name </label>
-          <input v-model="permission.guardName" type="text" id="guard_name" placeholder="Enter Guard Name"
+          <input v-model="permission.guard_name" type="text" id="guard_name" placeholder="Enter Guard Name"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.guardName }}</div>
         </div>
@@ -53,13 +53,13 @@ const props = defineProps({
 })
 const error = ref({
   name: "",
-  guardName: "",
+  guard_name: "",
   description: ""
 })
 const emit = defineEmits(['update:visible', 'permission-added'])
 const permission = ref({
   name: "",
-  guardName: "",
+  guard_name: "",
   description: ""
 })
 
@@ -68,35 +68,27 @@ watch(() => props.visible, async (newVal) => {
     resetForm()
   }
   const response = await fetchPermission(props.uuid)
-  if(response.status == 'success'){
-      permission.value =response.data
-  }else{
-    toast.add({ severity: response.status == 'fail' ? 'error' : 'success', summary: response.msg , life: 3000 });
+  if(!response.title){
+    permission.value =response
   }
 })
 const handleAddPermission = async () => {
   try {
-    toast.add({ severity: 'warn', summary: 'Mencoba mengubah izin!' , life: 3000 });
-    let response = await updatePermission(props.uuid, permission.value)
-    console.info(response)
-    toast.add({ severity: response.status == 'fail' ? 'error' : 'success', summary: response.msg , life: 3000 });
-    if (response.validateError)
-      error.value = data.validateError
-    if (response.status == 'success') {
-      emit('permission-added')
-      emit('update:visible', false)
-    }
+    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan izin!', life: 3000 });
+    let response = await updatePermission(props.uuid,permission.value)
+    emit('permission-added')
+    emit('update:visible', false)
     return 0
   } catch (error) {
     console.error('Error adding user:', error)
-    toast.add({ severity: 'error', summary: 'Error ketika mengubah izin!' , life: 3000 });
+    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan izin!', life: 3000 });
   }
 }
 
 const resetForm = () => {
   permission.value = {
     name: "",
-    guardName: "",
+    guard_name: "",
     description: "",
   }
 }

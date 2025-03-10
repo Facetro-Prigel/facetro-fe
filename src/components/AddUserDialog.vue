@@ -287,6 +287,12 @@ const handleAddUser = async () => {
     }
     return 0
   }
+  if (unnesImage.value) {
+      toast.add({ severity: 'warn', summary: 'Tunggu gambar terunggah terlebih dahulu!', life: 3000 });
+      uplodedImage.value = unnesImage.value
+      await handleImageFileUpload(unnesImage.value)
+      await handleAddUser()
+    }
   if (!user.value.file_uuid) {
     toast.add({ severity: 'error', summary: 'Anda harus menggungah wajah!', life: 3000 });
   }

@@ -14,6 +14,14 @@ export const getUserProfile = async (token) => {
   }
 };
 
+export const birthdayImage = async (uuid) => {
+  try {
+    const res = await apiClient.get(`${API_URL}birthday`)
+    return res;
+  } catch (error) {
+    console.error('Error fetching Birthday:', error);
+  }
+};
 
 export const updateUser = async (userData) => {
   try {
@@ -26,10 +34,9 @@ export const updateUser = async (userData) => {
 
 
 // Fungsi untuk mengambil gambar UNNES berdasarkan nomor identitas
-export const unnesImage = async (number) => {
-   
+export const unnesImage = async () => {
     try {
-      const res= await apiClient.post(`${API_URL}unnes`, { identity_number: number })
+      const res= await apiClient.post(`${API_URL}unnes`)
       return res;
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -39,15 +46,9 @@ export const unnesImage = async (number) => {
 
 export const fileUpload = async (data) => {
   try {
-    const res = await axios.post(API_URL+'image', {image:data},{
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.post(API_URL+'image', {image:data})
+    return res
   } catch (error) {
-    return {status: 'fail', msg: error.response.data.msg};
+    return error
   }
 };

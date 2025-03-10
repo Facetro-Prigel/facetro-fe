@@ -82,15 +82,10 @@ const isConfirmDialogVisible = ref(false)
 const confirmingPermissionId = ref()
 const getPermissions = async () => {
   datas.value = await fetchPermissions()
-  toast.add({ severity: 'info', summary: 'List izin diperbarui!', life: 3000 });
 }
 const handleDeletePermission = async (id) => {
   try {
     const res = await deletePermission(id)
-    if(res){
-      console.log(res)
-      toast.add({ severity: 'success', summary: res.msg, life: 3000 });
-    }
     getPermissions()
     isConfirmDialogVisible.value = false
   } catch (error) {
