@@ -17,7 +17,7 @@
                     <p class="text-sm text-white text-right">{{ user.user_roles[0] }}</p>
                 </div>
                 <Avatar  
-                    :image="BASE_URL + user.avatar"
+                    :image="BASE_URL +'avatar/'+ user.avatar"
                     class="mr-2" 
                     shape="circle"
                 />

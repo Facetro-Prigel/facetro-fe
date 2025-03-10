@@ -1,114 +1,63 @@
-import axios from 'axios';
-import VueCookies from 'vue-cookies';
-const BASE_URL = import.meta.env.VITE_BACKEND_API
 
-const API_URL = BASE_URL + 'user/';
+import apiClient from './Base.services';
+const API_URL = 'user/';
 
 export const fileUpload = async (data) => {
   try {
-    const res = await axios.post(API_URL+'image', {image:data},{
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.post(API_URL+'image', {image:data})
+    return res
   } catch (error) {
-    return {status: 'fail', msg: error.response.data.msg};
+    return error
   }
 };
-export const birtdayUpload = async (data,uuid) => {
+export const birthdayImage = async (uuid) => {
   try {
-    const res = await axios.post(API_URL+'birthday', {image:data, uuid: uuid},{
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
-  } catch (error) {
-    return {status: 'fail', msg: error.response.data.msg};
-  }
-};
-export const birthdayImage = async (uui) => {
-  try {
-    let res = await axios.get(API_URL+'birthday/'+uui, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`,
-      },
-      responseType: 'blob', // Ensure the response is a blob
-    })
-    .then((response) => {
-      response.data = URL.createObjectURL(response.data)
-      return response
-    })
-    .catch((error) => {
-      console.error('Error fetching image:', error);
-      return {status: 'fail', msg: error.response};
-    });
+    const res = await apiClient.get(`${API_URL}birthday/${uuid}`)
     return res;
   } catch (error) {
-    return {status: 'fail', msg: error.response};
+    console.error('Error fetching user data:', error);
   }
 };
 export const unnesImage = async (number) => {
   try {
-    const res = await axios.post(API_URL+'unnes', {identity_number:number},{
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.post(`${API_URL}unnes`, { identity_number: number })
+    return res;
   } catch (error) {
-    return {status: 'fail', msg: error.response.data.msg};
+    console.error('Error fetching user data:', error);
   }
 };
-export const fetchUser = async (uui) => {
+export const fetchUser = async (uuid) => {
   try {
-    const res = await axios.get(API_URL+uui, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
+    const res = await apiClient.get(API_URL + uuid);
     let y = 0
-    delete res.data.data.uuid 
-    delete res.data.data.bbox
-    res.data.data.identityNumber = parseInt(res.data.data.identityNumber)
-    if(res.data.data.birtday){
-      res.data.data.birthday = res.data.data.birtday.split('T')[0]
+    delete res.bbox
+    res.identity_number = parseInt(res.identity_number)
+    if (res.user_details) {
+      if (res.user_details.birthday) {
+        res.birthday = res.user_details.birthday.split('T')[0]
+      }
+      res.batch = res.user_details.batch
+      res.phone_number = res.user_details.phone_number,
+        res.program_study = res.user_details.program_study
+      delete res.user_details
     }
-    const tableRelated = ['group', 'role','permission']
-    const inputField = ['usergroup', 'role','permission']
-    for (const element of ['usergroup', 'roleuser','permissionUser']) {
-      if(res.data.data[element]){
-        res.data.data[inputField[y]] = await res.data.data[element].map(e => e[tableRelated[y]].uuid)
-        if(element != inputField[y]){
-          delete res.data.data[element]
-        }
+    const tableRelated = ['group', 'role', 'permission']
+    for (const element of ['user_group', 'role_user', 'permission_user']) {
+      if (res[element]) {
+        res[element] = await res[element].map(e => e[tableRelated[y]].uuid)
       }
       y++
     }
-    return res.data;
+    return res;
   } catch (error) {
-    return {status: 'fail', msg: 'Gagal mengambil data user'};
+    console.error('Error get user data:', error);
   }
 };
 export const fetchUsers = async () => {
   try {
-    const res = await axios.get(API_URL, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    return res.data.data;
+    const res = await apiClient.get(API_URL);
+    console.log(res)
+    return res;
   } catch (error) {
     return error.message;
   }
@@ -116,48 +65,30 @@ export const fetchUsers = async () => {
 
 export const createUser = async (user) => {
   try {
-    const res = await axios.post(API_URL, user, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    return {status: 'success', msg: "Pengguna Berhasil ditambahkan"};
+    const res = await apiClient.post(API_URL, user)
+    return res
   } catch (error) {
-    const response = error.response.data
-    response.status= 'fail'
-    return response;
+    console.error(error)
+    return error
   }
 };
 
 export const updateUser = async (id, user) => {
   try {
-    const res = await axios.put(`${API_URL}${id}`, user, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    return {status: 'success', msg: "Pengguna berhasil diubah"};
+    const res = await apiClient.put(`${API_URL}${id}`, user)
+    return res
   } catch (error) {
-    const response = error.response.data
-    response.status= 'fail'
-    return response;
+    console.error(error)
+    return error
   }
 };
 
 export const deleteUser = async (id) => {
   try {
-    const res = await axios.delete(`${API_URL}${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.status = 'success'
-    return res.data;
+    const res = await apiClient.delete(`${API_URL}${id}`)
+    return res
   } catch (error) {
-    error.response.status = 'fail'
-    return error.response;
+    console.error(error)
+    return error
   }
 };

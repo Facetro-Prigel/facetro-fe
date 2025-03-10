@@ -16,7 +16,6 @@
                         <img ref="image" src="@/assets/logo/UNNES.png" alt="Logo UNNES" title="Logo UNNES"
                             width="120px">
                     </div>
-                    <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
                     <div>
                         <label for="email" class="block mb-2 text-sm font-medium"><i class="pi pi-envelope"></i>
                             E-mail</label>
@@ -51,35 +50,33 @@
 </template>
 
 <script setup>
-import { login } from '@/services/Noname.services.js'
-import { ref, onMounted } from 'vue'
+import { login } from '@/services/Auth.services.js'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Alert from '@/components/Alert.vue'
+import VueCookies from 'vue-cookies';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const emailField = ref()
 const passwordField = ref()
 const image = ref()
 const router = useRouter()
-const alertData = ref({ status: '', msg: '' })
+VueCookies.remove('token');
+VueCookies.remove('user');
 const tombolLogin = async () => {
     emailField.value.disabled = true;
     passwordField.value.disabled = true;
-    alertData.value = { status: 'process', msg: 'Memperoses' }
-    let hasil = await login({
-        email: emailField.value.value,
-        password: passwordField.value.value
-    })
-    if (hasil.status) {
-        alertData.value = { status: 'success', msg: hasil.msg }
-        image.value.src = BASE_URL + hasil.img
+    try {
+        const result = await login({
+            email: emailField.value.value,
+            password: passwordField.value.value
+        })
+        console.info(result)
+        image.value.src = BASE_URL + 'avatar/' + result.avatar
         setTimeout(() => {
             router.push('/dashboard')
         }, 3000);
-    } else {
-        alertData.value = { status: 'fail', msg: hasil.msg }
+    } catch (error) {
         emailField.value.disabled = false;
         passwordField.value.disabled = false;
     }
 }
 </script>
-l

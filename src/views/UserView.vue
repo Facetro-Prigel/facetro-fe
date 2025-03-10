@@ -2,7 +2,7 @@
   <div class="card p-4">
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-user mr-2"></i>User Management</h1>
     <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters" 
-    :globalFilterFields="['name', 'identityNumber', 'usergroup', 'roleuser' ]" >
+    :globalFilterFields="['name', 'identity_number', 'user_group', 'roleuser' ]" >
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
@@ -26,7 +26,7 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <span class="text-black">{{ slotProps.data.identityNumber }}</span>
+          <span class="text-black">{{ slotProps.data.identity_number }}</span>
         </template>
       </Column>
       <Column field="avatar" header="Avatar">
@@ -35,8 +35,8 @@
         </template>
         <template #body="slotProps">
           <div class="flex max-w-[175px] min-w-[100px]">
-            <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="true" :bbox="slotProps.data.bbox"
-              :image="BASE_URL + slotProps.data.avatar" />
+            <ImageViewer :type="`Foto ${slotProps.data.name}`" :is-success="true" :bbox="[55,55,210]"
+              :image="BASE_URL +'avatar/'+ slotProps.data.avatar" />
               <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
@@ -58,7 +58,7 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <Chip v-for="item in slotProps.data.usergroup" :key="index" class="p-1 m-1">
+          <Chip v-for="item in slotProps.data.user_group" :key="index" class="p-1 m-1">
               <span
                 class="bg-primary-500 text-white rounded-full flex p-1 items-center justify-center m-2 text-[10px]"><i class="pi pi-users"></i></span>
               <span class="mr-2 text-[10px]">{{ item.group.name }}</span>
@@ -70,7 +70,7 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-          <Chip v-for="item in slotProps.data.roleuser" :key="index" class="p-1 m-1">
+          <Chip v-for="item in slotProps.data.role_user" :key="index" class="p-1 m-1">
               <span
                 class="bg-green-500 text-white rounded-full flex p-1 items-center justify-center m-2 text-[10px]"><i class="pi pi-briefcase"></i></span>
               <span class="mr-2 text-[10px]">{{ item.role.name }}</span>
@@ -129,11 +129,12 @@ import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 import ProgressSpinner from 'primevue/progressspinner';
 import { socket } from "@/socket";
-
 import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
-const users = ref([])
+const users = ref([{
+  uuid:'29121', 
+}])
 const isConfirmDialogVisible = ref(false)
 const confirmingUserId = ref(null)
 const isAddUserDialogVisible = ref(false)
@@ -193,12 +194,6 @@ const getPemission = async () => {
 const handleDeleteUser = async (id) => {
   try {
     const res = await deleteUser(id)
-    if(res.status != 'fail'){
-      toast.add({ severity: 'success', summary: res.msg, life: 3000 });
-    }else{
-      toast.add({ severity: 'error', summary: res.data.error, life: 3000 });
-    }
-    getUsers()
     isConfirmDialogVisible.value = false
   } catch (error) {
     console.error('Error deleting user:', error)
@@ -223,7 +218,6 @@ const updater = () =>{
   getGroup();
   getRole();
   getPemission();
-  toast.add({ severity: 'info', summary: 'List Pengguna diperbarui!', life: 3000 });
 }
 
 onMounted(() => {

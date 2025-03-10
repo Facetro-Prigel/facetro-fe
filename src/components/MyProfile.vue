@@ -15,7 +15,6 @@
         </div>
       </div>
     </div>
-    <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
 
     <div class="flex mt-5">
       <div class="w-1/2 pr-4">
@@ -27,7 +26,7 @@
         </div>
         <div class="mb-4">
           <label for="identityNumber" class="block text-sm font-medium text-gray-700">Identity Number<span class="text-red-400">*</span></label>
-          <input v-model="user.identityNumber" type="text" id="identityNumber" placeholder="Enter identity number"
+          <input v-model="user.identity_number" type="text" id="identityNumber" placeholder="Enter identity number"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.identityNumber }}</div>
         </div>
@@ -64,9 +63,9 @@
       <div class="w-1/2">
         <div class="mb-4">
           <label for="phoneNumber" class="block text-sm font-medium text-gray-700">No HP</label>
-          <input v-model="user.phoneNumber" type="text" id="phoneNumber" placeholder="Enter phone number"
+          <input v-model="user.phone_number" type="text" id="phoneNumber" placeholder="Enter phone number"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.phoneNumber }}</div>
+          <div class="text-red-600 text-sm">{{ error.phone_number }}</div>
         </div>
         <div class="mb-4">
           <label for="program_study" class="block text-sm font-medium text-gray-700">Program Study</label>
@@ -108,7 +107,6 @@ import { ref, onMounted } from 'vue'
 import upload_image_icon from '@/assets/upload_image.png'
 import { getUserProfile, fileUpload, updateUser, unnesImage } from '@/services/MyProfile.services';
 import VueCookies from 'vue-cookies';
-import Alert from './Alert.vue';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
@@ -135,26 +133,25 @@ const props = defineProps({
 const error = ref({
   email: "",
   name: "",
-  identityNumber: "",
+  identity_number: "",
   batch: "",
   birthday: "",
   program_study: "",
-  phoneNumber: ""
+  phone_number: ""
 })
 
-const alertData = ref({ status: '', msg: '' })
 const uplodedImage = ref(upload_image_icon)
 const imageName = ref('SVG, PNG, JPG or GIF')
 
 const user = ref({
   name: '',
-  identityNumber: '',
+  identity_number: '',
   email: '',
   birthday: '',
   batch: '',
   program_study: '',
-  phoneNumber: '',
-  usergroup: [],
+  phone_number: '',
+  user_group: [],
   role: [],
   permission: []
 })
@@ -167,95 +164,59 @@ const imagePath = ref()
 
 const fetchUserProfile = async () => {
   const token = VueCookies.get('token');
-
-  if (!token) {
-    alertData.value = { status: 'fail', msg: 'Session expired. Please login again.' };
-    return;
-  }
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
-
-try {
+  try {
     const response = await getUserProfile(token);
-    if (response && response.data) {
-      user.value = response.data;
-
-      const birthdayData = response.data.birtday;
-      if (birthdayData) {
-        const date = new Date(birthdayData);
-        user.value.birthday = date.toISOString().split('T')[0]; 
-      }
-
-      groupMembers.value = response.data.usergroup.map(group => ({
+    console.log(response)
+    if (response) {
+      user.value = response;
+      groupMembers.value = response.user_group.map(group => ({
         name: group.group.name,
         photo: group.group.photo || no_image_icon
       }));
 
-      userRole.value = response.data.roleuser.map(roleuser => ({
+      userRole.value = response.role_user.map(roleuser => ({
         name: roleuser.role.name
       }));
-
-      if (user_data.avatar) {
-        userImage.value = `${BASE_URL}${user_data.avatar}`;
-      } else {
-        const imageResponse = await unnesImage(response.data.identityNumber);
-        userImage.value = imageResponse.data;
+      const userDetails=response.user_details 
+      if(userDetails){
+        if (userDetails.birthday) {
+          const date = new Date(userDetails.birthday);
+          user.value.birthday = date.toISOString().split('T')[0]; 
+        }
+        user.value.phone_number = userDetails.phone_number ?? ''; 
+        user.value.program_study = userDetails.program_study ??'';
+        user.value.batch = userDetails.batch ?? '';
       }
-    } else {
-      alertData.value = { status: 'fail', msg: 'Failed to load user data!' };
-
-    }
+      if (response.avatar) {
+        userImage.value = `${BASE_URL}avatar/${response.avatar}`;
+      } else {
+        const imageResponse = await unnesImage(response.identity_number);
+        userImage.value = imageResponse;
+      }
+    } 
   } catch (error) {
-    alertData.value = { status: 'fail', msg: 'Error fetching user data!' };
+    console.log(error)
   }
 };
 
 const unnesImageHender = async () => {
   const imageResponse = await unnesImageService(user.value.identityNumber)
-    alertData.value = { status: imageResponse.status, msg: imageResponse.msg }
-    unnesImage.value = imageResponse.status != 'fail' ? imageResponse.data : ''
-   
+  unnesImage.value = imageResponse.status != 'fail' ? imageResponse.data : ''
 }
 
 const handleUpdateUser = async () => {
-  const token = VueCookies.get('token'); 
-
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
-
-  if (!token) {
-    alertData.value = { status: 'fail', msg: 'Session expired. Please login again.' };
-    return;
+  const userData = { ...user.value };
+  if (imagePath.value){
+    userData.avatar = imagePath.value;
   }
-
-  try {
-    const userData = { ...user.value };
-    if (imagePath.value){
-      userData.avatar = imagePath.value;
-    }
-    const data = await updateUser(userData, token);
-
-    if (data.status == 'success') {
-      alertData.value = { status: 'success', msg: 'Berhasil Update Data!' }; 
-    } else {
-      alertData.value = { status: 'fail', msg: data.msg || 'Gagal Update Data' }; 
-    }
-
-    if (data.validateError) {
-      error.value = data.validateError;
-    }
-
-    location.reload();
-  } catch (error) {
-    alertData.value = { status: 'fail', msg: 'Error updating user!' }; 
+  const data = await updateUser(userData);
+  if (data.validateError) {
+    error.value = data.validateError;
   }
-
 };
 
-
-
 const handleImageFileUpload = async (uplodedImage) => {
-  alertData.value = { status: 'process', msg: 'Menggungah foto!' }
   const imageResponse = await fileUpload(uplodedImage)
-  alertData.value = { status: imageResponse.status, msg: imageResponse.msg }
   if (imageResponse.status != 'fail') {
     user.value.file_uuid = imageResponse.file_uuid
   }
@@ -286,7 +247,6 @@ const handleFileUpload = async (event) => {
         uplodedImage.value = user.value.avatar
       }
 
-      alertData.value = { status: 'process', msg: 'Mengkompress Gambar!' }
       const compressedFile = await imageCompression(file, options);
       // Konversi ke Base64
       const reader = new FileReader(); reader.onload = (e) => {
@@ -295,7 +255,6 @@ const handleFileUpload = async (event) => {
       };
       reader.readAsDataURL(compressedFile);
       reader.onloadend = async (e) => {
-        alertData.value = { status: 'success', msg: 'Berhasil mengkompres!' }
         uplodedImage.value = user.value.avatar
         await handleImageFileUpload(uplodedImage.value)
       }

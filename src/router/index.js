@@ -24,6 +24,7 @@ import Room from '../views/Room.vue'
 import ServiceView from '../views/ServicesView.vue'
 import UserView from '../views/UserView.vue'
 import MyProfile from '../components/MyProfile.vue'
+import TestView from '@/views/TestView.vue'
 
 const routes = [
   {
@@ -95,6 +96,11 @@ const routes = [
         component: RoleView
       }
     ]
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: TestView
   },
   {
     path: '/',

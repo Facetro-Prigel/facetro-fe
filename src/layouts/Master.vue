@@ -1,5 +1,5 @@
 <template>
-  <Toast />
+
   <div class="w-full h-full flex">
     <Sidebar :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
     <div class="w-full h-full">
@@ -14,7 +14,6 @@
 <script setup>
 import HeaderTop from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
-import Toast from 'primevue/toast';
 import { ref } from 'vue'
 const openSidebar = ref(true)
 const toggleSidebar = () =>{
