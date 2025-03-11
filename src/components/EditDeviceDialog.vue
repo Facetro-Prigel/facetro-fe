@@ -88,7 +88,6 @@ watch(() => props.visible, async (newVal) => {
     resetForm()
   }
   const response = await fetchDevice(props.uuid)
-  console.log(response)
   if (!response.title) {
     device.value = response
   }

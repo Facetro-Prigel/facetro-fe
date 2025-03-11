@@ -1,8 +1,8 @@
   <template>
     <div class="card p-4">
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
-      <DataTable :value="attendanceCards" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading"
-        tableStyle="min-width: 50rem" v-model:filters="filters"
+      <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords" :rowsPerPageOptions="[5, 10, 20, 50]"  :loading="loading"
+        tableStyle="min-width: 50rem" v-model:filters="filters" @page="onPageChange"
         :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -25,8 +25,8 @@
           </template>
           <template #body="slotProps">
             <div class="flex max-w-[175px] min-w-[100px]">
-              <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.isMatch"
-                :bbox="slotProps.data.bbox" :image="BASE_URL + slotProps.data.image" />
+              <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
+                :bbox="slotProps.data.bbox" :image="BASE_URL +'photos/'+ slotProps.data.image" />
               <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
@@ -43,15 +43,16 @@
             <span class="text-black">{{ slotProps.data.name }}</span>
           </template>
         </Column>
-        <Column field="nim" header="Identity Number" sortable>
+
+        <Column field="identity_number" header="Identity Number" sortable>
           <template #header="slotProps">
             <span class="text-black">{{ slotProps.header }}</span>
           </template>
           <template #body="slotProps">
-            {{ slotProps.data.nim }}
+            {{ slotProps.data.identity_number }}
           </template>
         </Column>
-        <Column field="device" header="Presence In" sortable>
+        <Column field="device" header="Presence/Open Door In" sortable>
           <template #header="slotProps">
             <span class="text-black">{{ slotProps.header }}</span>
           </template>
@@ -59,14 +60,20 @@
             {{ slotProps.data.device }}
           </template>
         </Column>
-
+        <Column field="type" header="Presence/Door" sortable>
+          <template #header="slotProps">
+            <span class="text-black">{{ slotProps.header }}</span>
+          </template>
+          <template #body="slotProps">
+            {{ slotProps.data.type }}
+          </template>
+        </Column>
         <Column field="inTime" header="Waktu" sortable>
           <template #header="slotProps">
             <span class="text-black">{{ slotProps.header }}</span>
           </template>
           <template #body="slotProps">
-
-            {{ convertToLocale(new Date(slotProps.data.inTime)) }}
+            {{ convertToLocale(new Date(slotProps.data.in_time)) }}
           </template>
         </Column>
 
@@ -96,12 +103,30 @@ import ProgressSpinner from 'primevue/progressspinner';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const attendanceCards = ref([])
 const loading = ref(true)
-const getLogs = async () => {
-  return await fetchAttendanceLogs()
-}
+const totalRecords = ref()
 const filters = ref(
-  { 'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } }
+  {  page: 1, rows: 5,'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } } 
 )
+const fetchData = async () => {
+      loading.value = true;
+      try {
+        const response = await fetchAttendanceLogs({
+            page: filters.value.page,
+            limit: filters.value.rows
+        });
+        attendanceCards.value = response.data;
+        totalRecords.value = response.total_records;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        loading.value = false;
+      }
+};
+const onPageChange = (event) => {
+      filters.value.page = event.page+1; // PrimeVue uses zero-based indexing
+      filters.value.limit = event.rows;
+      fetchData();
+};
 const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -109,13 +134,12 @@ const convertToLocale = (time) => {
     dateStyle: 'medium'
   })
 }
-console.log(getLogs())
 onMounted(async () => {
   loading.value = true
-  attendanceCards.value = await fetchAttendanceLogs()
+  await fetchData()
   loading.value = false
   socket.on("logger update", async (...args) => {
-    attendanceCards.value = await fetchAttendanceLogs()
+    await fetchData()
   });
 })
 </script>

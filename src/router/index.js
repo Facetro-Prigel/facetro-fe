@@ -24,7 +24,6 @@ import Room from '../views/Room.vue'
 import ServiceView from '../views/ServicesView.vue'
 import UserView from '../views/UserView.vue'
 import MyProfile from '../components/MyProfile.vue'
-import TestView from '@/views/TestView.vue'
 
 const routes = [
   {
@@ -98,11 +97,6 @@ const routes = [
     ]
   },
   {
-    path: '/test',
-    name: 'test',
-    component: TestView
-  },
-  {
     path: '/',
     name: 'home',
     component: HomeView
@@ -166,6 +160,9 @@ const router = createRouter({
 const authCheck = () => {
   return VueCookies.get('token') ? true : false
 }
+const authDeviceCheck = () => {
+  return VueCookies.get('device_token') ? true : false
+}
 router.beforeEach(async (to, from, next) => {
   if (to.meta.auth) {
     if (authCheck()) {
@@ -179,6 +176,13 @@ router.beforeEach(async (to, from, next) => {
       return next()
     } else {
       return next({ name: 'dashboard' })
+    }
+  }
+  if (to.name == 'device_register') {
+    if (!authCheck()) {
+      return next()
+    } else {
+      return next({ name: 'presence' })
     }
   }
   return next()

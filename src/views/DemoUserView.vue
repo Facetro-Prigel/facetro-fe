@@ -91,7 +91,6 @@ const handleAddUser = async () => {
     alertData.value = { status: 'fail', msg: 'Error adding user!' }
   }
 }
-console.log(user.value)
 </script>
 
 <style lang="scss" scoped></style>

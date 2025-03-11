@@ -94,7 +94,7 @@ const sendImage = (identity) => {
     axios
       .post(BASE_URL + 'log', data, config_u)
       .then((response) => {
-        let tmpData = response.data.result
+        let tmpData = response.data.data[0]
         let startTime = new Date(tmpData.startTime)
         let endTime = new Date(tmpData.startTime)
         modal.value.infoData = {
@@ -113,10 +113,10 @@ const sendImage = (identity) => {
             modal.value.infoData.Durasi = countDiff(timeDifferenceInMillis)
           }
         } catch (e) {}
-        modal.value.data.serverPhoto = BASE_URL + tmpData.serverData.image
+        modal.value.data.serverPhoto = BASE_URL + 'photos/'+tmpData.serverData.image
         modal.value.data.serverBbox = tmpData.serverData.bbox
         modal.value.data.clientBbox = tmpData.clientData.bbox
-        modal.value.data.clientPhoto = BASE_URL + tmpData.clientData.image
+        modal.value.data.clientPhoto = BASE_URL + 'photos/'+tmpData.clientData.image
         modal.value.serverStatus = {
           code: tmpData.isMatch ? 'success' : 'fail',
           msg: tmpData.isMatch ? 'Wajah Anda Cocok' : 'Wajah Tidak Cocok'
@@ -128,7 +128,7 @@ const sendImage = (identity) => {
         is_finish = true
         let errorMessage = ''
         if (error.response) {
-          errorMessage = error.response.status + ': ' + error.response.data.msg
+          errorMessage = error.response.status + ': ' + error.response.data.detail
           if (error.response.data.reson) {
             show403(error.response.data.msg)
           }
@@ -211,12 +211,6 @@ watch(
             class="bg-blue-700 transition duration-300 text-white py-2 mt-2 px-3 rounded-lg disabled:bg-gray-500 hover:bg-blue-900 hover:drop-shadow-lg"
           >
             <i class="pi pi-save mr-2"></i>Simpan
-          </button>
-          <button
-            @click="goToDoorlock"
-            class="bg-green-700 transition duration-300 text-white py-2 mt-2 px-4 rounded-lg hover:bg-green-900 hover:drop-shadow-lg"
-          >
-            <i class="pi pi-lock mr-2"></i>Doorlock
           </button>
         </div>
       </div>

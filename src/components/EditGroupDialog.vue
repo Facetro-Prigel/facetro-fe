@@ -103,7 +103,6 @@ const error = ref({
   name: "",
   locations: "",
 })
-console.table(props.permisions)
 const alertSection = ref();
 const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'group-added'])

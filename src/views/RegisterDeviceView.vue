@@ -20,53 +20,27 @@ import { effect, ref } from 'vue';
 import Toast from 'primevue/toast';
 import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import loadingImg from '@/assets/loading.gif'
 import ImgVeri from '@/assets/verivication_symbol.png'
 import { useToast } from 'primevue/usetoast';
-
-const toast = useToast();
-
-
-const BASE_URL = import.meta.env.VITE_BACKEND_API
+import apiClient from "@/services/Base.services";
 const sendBtn = ref();
 const data = ref({token:""});
 const router = useRouter();
 const image = ref();
-const dialogStatus = ref(true) 
-let config_u = {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }
-    
 const validateToken = () =>{
     sendBtn.value.disabled = false
     image.value.src=loadingImg
-    axios.post(BASE_URL+'device/register', {token:data.value.token}, config_u).then((response) => {
+    apiClient.post('device/register', {token:data.value.token}).then((response) => {
         image.value.src=ImgVeri
         sendBtn.value.disabled = true
-        let tmpData = response.data
+        let tmpData = response
         VueCookies.set('device_token', tmpData.token,"31d")  
         VueCookies.set('device_name', tmpData.name,"31d")  
-        toast.add({ severity: 'Success', summary: "Token Berhasil diterima", life: 3000 });
         router.push({name:"presence"})
     }).catch((error)=>{
         image.value.src = ImgVeri
         sendBtn.value.disabled = true
-        let errorMessage = [];
-        if (error.response) {
-            errorMessage[0] = error.response.status
-            errorMessage[1] = error.response.data.msg
-        } else if (error.request) {
-            errorMessage[0] = error.request.status + ': ' + error.request.statusText
-            errorMessage[1] = error.message
-            console.error(error.request)
-        } else {
-            errorMessage[0] = error.message
-            errorMessage[1] = error.message
-        }
-        toast.add({ severity: 'error', summary: errorMessage[0], detail: errorMessage[1], life: 3000 });
     })
 }
 effect(()=>{

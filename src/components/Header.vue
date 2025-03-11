@@ -14,7 +14,7 @@
                 <div class="flex space-x-3 items-center justify-center px-3">
                 <div class="flex flex-col justify-center">
                     <div class="font-bold text-white">{{ user.name }}</div>
-                    <p class="text-sm text-white text-right">{{ user.user_roles[0] }}</p>
+                    <p class="text-sm text-white text-right">{{ user.user_roles.join(', ') }}</p>
                 </div>
                 <Avatar  
                     :image="BASE_URL +'avatar/'+ user.avatar"
@@ -74,8 +74,7 @@ export default {
         },
         logout() {
             VueCookies.remove('token');
-            VueCookies.remove('user');
-
+            VueCookies.remove('user_data');
             this.$router.push({ name: 'login' });
         }
     }

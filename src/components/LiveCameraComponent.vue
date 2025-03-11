@@ -27,7 +27,6 @@ const peer = ref(null);
 onMounted(() => {
   const hash = location.hash;
   const id = hash.split('#')[1];
-  console.log(id);
 
   peer.value = new Peer(id, {
     host: '/',

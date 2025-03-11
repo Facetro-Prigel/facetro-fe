@@ -80,7 +80,7 @@ export default {
           });
         })
         .catch((err) => {
-          console.log('Failed to get local stream', err);
+          console.error('Failed to get local stream', err);
         });
     });
   },

@@ -66,8 +66,6 @@ watch(() => props.visible, (newVal) => {
 const handleAddDevice = async () => {
   try {
     let response = await createDevice(device.value)
-    console.info(response)
-  
     if (response.validateError){
       error.value = data.validateError
     }else{

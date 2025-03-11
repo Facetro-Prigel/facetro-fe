@@ -187,7 +187,6 @@ const fetchUserProfile = async () => {
   const token = VueCookies.get('token');
   try {
     const response = await getUserProfile(token);
-    console.log(response)
     if (response) {
       user.value = response;
       groupMembers.value = response.user_group.map(group => ({

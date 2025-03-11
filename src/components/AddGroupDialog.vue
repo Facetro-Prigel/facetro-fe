@@ -86,7 +86,6 @@ const error = ref({
   name: "",
   locations: "",
 })
-console.table(props.permisions)
 const emit = defineEmits(['update:visible', 'group-added'])
 const group = ref({
   name: "",

@@ -56,7 +56,6 @@ export const fetchUser = async (uuid) => {
 export const fetchUsers = async () => {
   try {
     const res = await apiClient.get(API_URL);
-    console.log(res)
     return res;
   } catch (error) {
     return error.message;

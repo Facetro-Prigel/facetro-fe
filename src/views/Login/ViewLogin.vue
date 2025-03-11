@@ -69,7 +69,6 @@ const tombolLogin = async () => {
             email: emailField.value.value,
             password: passwordField.value.value
         })
-        console.info(result)
         image.value.src = BASE_URL + 'avatar/' + result.avatar
         setTimeout(() => {
             router.push('/dashboard')
