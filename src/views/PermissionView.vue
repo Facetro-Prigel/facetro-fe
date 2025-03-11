@@ -81,7 +81,10 @@ const selectedPermission = ref(null)
 const isConfirmDialogVisible = ref(false)
 const confirmingPermissionId = ref()
 const getPermissions = async () => {
-  datas.value = await fetchPermissions()
+  const res = await fetchPermissions();
+  if(!res.title){
+    datas.value = res
+  }
 }
 const handleDeletePermission = async (id) => {
   try {

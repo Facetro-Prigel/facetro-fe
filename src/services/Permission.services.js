@@ -1,5 +1,4 @@
 import apiClient from './Base.services';
-import VueCookies from 'vue-cookies';
 
 const API_URL = 'permission/';
 

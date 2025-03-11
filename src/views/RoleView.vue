@@ -83,19 +83,16 @@ const isConfirmDialogVisible = ref(false)
 const confirmingRoleId = ref()
 const getRoles = async () => {
   let res = await fetchRoles()
-  if(res.status == 'success'){
-    datas.value = res.data
+  if(!res.title){
+    datas.value = res
   }
 }
 const handleDeleteRole = async (id) => {
   try {
     const res = await deleteRole(id)
-    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
-    getRoles()
     isConfirmDialogVisible.value = false
   } catch (error) {
     console.error('Error deleting Role:', error)
-    toast.add({ severity: 'error', summary: 'Error deleting Role (check logs!)', life: 3000 });
   }
 }
 
@@ -126,7 +123,6 @@ const getPemission = async () => {
 const getUpdate = () =>{
   getRoles()
   getPemission()
-  toast.add({ severity: 'info', summary: 'List peran diperbarui!', life: 3000 });
 }
 onMounted(() => {
   getUpdate()

@@ -13,9 +13,9 @@
         </div>
         <div class="mb-4">
           <label for="guard_name" class="block text-sm font-medium text-gray-700">Guard Name </label>
-          <input v-model="role.guardName" type="text" id="guard_name" placeholder="Enter Guadrd Name"
+          <input v-model="role.guard_name" type="text" id="guard_name" placeholder="Enter Guadrd Name"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.guardName }}</div>
+          <div class="text-red-600 text-sm">{{ error.guard_name }}</div>
         </div>
         <div class="mb-4">
           <label for="Descriotion" class="block text-sm font-medium text-gray-700">Description</label>
@@ -25,13 +25,13 @@
         </div>
         <div class="mb-4">
             <label for="group" class="block text-sm font-medium text-gray-700">Permission</label>
-            <MultiSelect v-model="role.permisions" :options="permisions.value" optionValue="uuid"
+            <MultiSelect v-model="role.permission_role" :options="permisions.value" optionValue="uuid"
               optionLabel="label" filter placeholder="Select "
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full">
               <template #footer>
                 <div class="py-2 px-4">
-                  <b>{{ role.permisions ? role.permisions.length : 0 }}</b> Permission{{ (role.permisions ?
-                    role.permisions.length : 0) > 1 ? 's' : '' }} selected.
+                  <b>{{ role.permission_role ? role.permission_role.length : 0 }}</b> Permission{{ (role.permission_role ?
+                    role.permission_role.length : 0) > 1 ? 's' : '' }} selected.
                 </div>
               </template>
             </MultiSelect>
@@ -68,15 +68,15 @@ const props = defineProps({
 })
 const error = ref({
   name: "",
-  guardName: "",
+  guard_name: "",
   description: ""
 })
-console.table(props.permisions)
 const emit = defineEmits(['update:visible', 'role-added'])
 const role = ref({
   name: "",
-  guardName: "",
-  description: ""
+  guard_name: "",
+  description: "",
+  permission_role: []
 })
 
 watch(() => props.visible, (newVal) => {
@@ -86,28 +86,26 @@ watch(() => props.visible, (newVal) => {
 })
 const handleAddRole = async () => {
   try {
-    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan peran!', life: 3000 });
     let response = await createRole(role.value)
-    console.info(response )
-    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
-    if (response.validateError)
+    console.info(response)
+    if (response.validateError){
       error.value = data.validateError
-    if (response.status == 'success') {
-        emit('role-added')
-        emit('update:visible', false)
+    }else{
+      emit('role-added')
+      emit('update:visible', false)
     }
     return 0
   } catch (error) {
     console.error('Error adding role:', error)
-    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan peran!' , life: 3000 });
   }
 }
 
 const resetForm = () => {
   role.value = {
     name: "",
-    guardName: "",
+    guard_name: "",
     description: "",
+    permission_role:[]
   }
 }
 </script>
