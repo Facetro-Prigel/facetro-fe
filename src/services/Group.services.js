@@ -1,101 +1,65 @@
-import axios from 'axios';
-import VueCookies from 'vue-cookies';
-const BASE_URL = import.meta.env.VITE_BACKEND_API
-
-const API_URL = BASE_URL + 'group/';
+import apiClient from "./Base.services";
+const API_URL = 'group/';
 
 export const fetchGroups = async () => {
   try {
-    const res = await axios.get(API_URL, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.data.status = 'success'
-    return res.data.data;
+    const res = await apiClient.get(API_URL);
+    return res;
   } catch (error) {
-    return error.message;
+    return error;
   }
 };
 export const fetchGroup = async (uuid) => {
   try {
-    const res = await axios.get(API_URL+uuid, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    if(res.data.data.device){
-      res.data.data.device = res.data.data.device.uuid
+    const res = await apiClient.get(API_URL+uuid);
+    if(res.presence_group){
+      res.presence_device = res.presence_group.map((i)=>{
+        return i.device.uuid
+      })
+      delete res.presence_group
     }
-    if(res.data.data.users){
-      res.data.data.notifyTo = res.data.data.users.uuid
-      delete res.data.data.users
+    if(res.door_group){
+      res.door_device = res.door_group.map((i)=>{
+        return i.device.uuid
+      })
+      delete res.presence_group
     }
-    if(res.data.data.locations){
-      res.data.data.location = res.data.data.locations
-      delete res.data.data.locations
-    }
-    if(res.data.data.usergroup){
-      res.data.data.member = res.data.data.usergroup.map((i)=>{
+    res.users = res.users.uuid
+    if(res.user_group){
+      res.member = res.user_group.map((i)=>{
         return i.user
       })
-      delete res.data.usergroup
+      delete res.user_group
     }
-    res.data.status = 'success'
-    return res.data;
+    return res;
   } catch (error) {
-    return error.message;
+    return error;
   }
 };
 export const createGroup = async (group) => {
   try {
-    console.log('Sending data to server:', group);
-    const res = await axios.post(API_URL, group, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+
+    const res = await apiClient.post(API_URL, group);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
 export const updateGroup = async (id, group) => {
   try {
-    const res = await axios.put(`${API_URL}${id}`, group, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.put(`${API_URL}${id}`, group);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
 export const deleteGroup = async (id) => {
   try {
-    const res = await axios.delete(`${API_URL}${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status="success" 
-    return res.data;
+    const res = await apiClient.delete(`${API_URL}${id}`);
+    return res;
   } catch (error) {
-    error.response.data.status="error"
-    return error.response.data;
+    return error;
   }
 };

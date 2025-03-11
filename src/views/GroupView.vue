@@ -2,7 +2,7 @@
   <div class="card p-4">
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-users mr-2"></i>Group Management</h1>
     <DataTable :value="group" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
-      v-model:filters="filters" :globalFilterFields="['name', 'location', 'device.name', 'users.name']">
+      v-model:filters="filters" :globalFilterFields="['name', 'locations', 'device.name', 'users.name']">
       <!-- Header template with search and add button -->
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -28,17 +28,34 @@
           <span>{{ slotProps.data.locations }}</span>
         </template>
       </Column>
-      <Column field="device.name" header="Presence Location" sortable>
+      <Column field="door_group.name" header="Open Door Location" sortable>
         <template #body="slotProps">
-          <span>{{ slotProps.data.device.name }}</span>
+          <div class="flex flex-col">
+            <Chip v-for="item in slotProps.data.door_group" :key="index" class="py-0 pl-0 pr-4 m-1">
+              <span
+                class="bg-primary-500 text-white rounded-full p-2 flex items-center justify-center m-2"><i class="pi pi-microchip"></i></span>
+              <span class="mr-2 text-sm">{{ item.device.name }}</span>
+          </Chip>
+          </div>
+        </template>
+      </Column>
+      <Column field="presence_group.name" header="Presence Location " sortable>
+        <template #body="slotProps">
+          <div class="flex flex-col">
+            <Chip v-for="item in slotProps.data.presence_group" :key="index" class="py-0 pl-0 pr-4 m-1">
+                <span
+                  class="bg-primary-500 text-white rounded-full p-2 flex items-center justify-center m-2"><i class="pi pi-microchip"></i></span>
+                <span class="mr-2 text-sm">{{ item.device.name }}</span>
+            </Chip>
+          </div>
         </template>
       </Column>
       <Column field="users.name" header="Notify to" sortable>
         <template #body="slotProps">
-          <div class="flex">
+          <div class="flex items-center">
             <div class="max-w-[75px]">
-              <ImageViewer :image="BASE_URL + slotProps.data.users.avatar" :bbox="slotProps.data.users.bbox"
-                :isSuccess="true" </ImageViewer>
+              <ImageViewer :image="BASE_URL +'avatar/'+ slotProps.data.users.avatar" :bbox="[55,55,210]"
+                :isSuccess="true"></ImageViewer>
             </div>
             <span>{{ slotProps.data.users.name }}</span>
           </div>
@@ -96,7 +113,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_API
 const filters = ref({
   global: { value: null },
   name: { value: null },
-  'location': { value: null },
+  'locations': { value: null },
   'device.name': { value: null }, 
   'users.name': { value: null }
 });
@@ -139,8 +156,6 @@ const getGroup = async () => {
 const handleDeleteGroup = async (id) => {
   try {
     let res = await deleteGroup(id)
-    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
-    getGroup()
     isConfirmDialogVisible.value = false
   } catch (error) {
     console.error('Error deleting group:', error)
@@ -164,7 +179,6 @@ const all= ()=>{
   getGroup()
   getUsers()
   getDevice()
-  toast.add({ severity: 'info', summary: 'List grup diperbarui!', life: 3000 });
 }
 // Lifecycle hook
 onMounted(() => {
