@@ -142,7 +142,6 @@ const getDevice = async () => {
   try {
     const response = await fetchDevices()
     device.value = response
-    toast.add({ severity: 'info', summary: 'List perangkat diperbarui!', life: 3000 });
   } catch (error) {
     console.error('Error fetching device:', error)
   }
@@ -151,8 +150,6 @@ const getDevice = async () => {
 const handleDeleteDevice = async (id) => {
   try {
     const res = await deleteDevice(id)
-    toast.add({ severity: res.status, summary: res.msg, life: 3000 });
-    getDevice()
     isConfirmDialogVisible.value = false
   } catch (error) {
     console.error('Error deleting device:', error)

@@ -14,9 +14,9 @@
         <div class="mb-4">
           <label for="Location" class="block text-sm font-medium text-gray-700">Location<span
               class="text-red-400">*</span></label>
-          <input v-model="device.location" type="text" id="Location" placeholder="Enter Location"
+          <input v-model="device.locations" type="text" id="Location" placeholder="Enter Location"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.location }}</div>
+          <div class="text-red-600 text-sm">{{ error.locations }}</div>
         </div>
         <div class="mb-4">
           <label for="Token" class="block text-sm font-medium text-gray-700">Token</label>
@@ -25,12 +25,22 @@
           <div class="text-red-600 text-sm">{{ error.token }}</div>
         </div>
         <div class="mb-4">
-          <h3 class="block text-sm font-medium text-gray-700">Groups that are present on this device</h3>
+          <h3 class="block text-sm font-medium text-gray-700">Groups that are pressence on this device</h3>
           <div class="flex flex-wrap">
-            <Chip v-for="item in device.groups" :key="index" class="py-0 pl-0 pr-4 m-1">
+            <Chip v-for="item in device.presence_group" :key="index" class="py-0 pl-0 pr-4 m-1">
               <span
                 class="bg-primary-500 text-white rounded-full p-2 flex items-center justify-center m-2"><i class="pi pi-users"></i></span>
-              <span class="mr-2 text-sm">{{ item.name }}</span>
+              <span class="mr-2 text-sm">{{ item.group.name }}</span>
+            </Chip>
+          </div>
+        </div>
+        <div class="mb-4">
+          <h3 class="block text-sm font-medium text-gray-700">Groups that are open doorlock on this device</h3>
+          <div class="flex flex-wrap">
+            <Chip v-for="item in device.door_group" :key="index" class="py-0 pl-0 pr-4 m-1">
+              <span
+                class="bg-primary-500 text-white rounded-full p-2 flex items-center justify-center m-2"><i class="pi pi-users"></i></span>
+              <span class="mr-2 text-sm">{{ item.group.name }}</span>
             </Chip>
           </div>
         </div>
@@ -64,13 +74,13 @@ const props = defineProps({
 })
 const error = ref({
   name: "",
-  location: "",
+  locations: "",
   token: ""
 })
 const emit = defineEmits(['update:visible', 'permission-added'])
 const device = ref({
   name: "",
-  location: "",
+  locations: "",
 })
 
 watch(() => props.visible, async (newVal) => {
@@ -78,42 +88,38 @@ watch(() => props.visible, async (newVal) => {
     resetForm()
   }
   const response = await fetchDevice(props.uuid)
-  console.info(response)
-  if (response.status == 'success') {
+  console.log(response)
+  if (!response.title) {
     device.value = response
-  } else {
-    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
   }
 })
 const handleEditDevice = async () => {
   try {
-    toast.add({ severity: 'warn', summary: 'Mencoba menyuting perangkat!', life: 3000 });
-    if(device.value.groups.length){
-      alert('sas')
-      delete device.value.groups
+    if(device.value.presence_group.length){
+      delete device.value.presence_group
+    }
+    if(device.value.door_group.length){
+      delete device.value.door_group
     }
     let response = await updateDevice(props.uuid, device.value)
-    console.info(response)
-    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
-    if (response.validateError)
+    if (response.validateError){
       error.value = data.validateError
-    if (response.status == 'success') {
+    }else{
       setTimeout(() => {
         emit('device-added')
         emit('update:visible', false)
-      }, 2000);
+      }, 1000);
     }
     return 0
   } catch (error) {
     console.error('Error updateting device:', error)
-    toast.add({ severity: 'error', summary: 'Error ketika menyuting perangkat!', life: 3000 });
   }
 }
 
 const resetForm = () => {
   device.value = {
     name: "",
-    location: "",
+    locations: "",
     token: null
   }
 }

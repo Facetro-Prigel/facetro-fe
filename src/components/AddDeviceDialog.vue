@@ -14,9 +14,9 @@
         <div class="mb-4">
           <label for="Location" class="block text-sm font-medium text-gray-700">Location<span
               class="text-red-400">*</span></label>
-          <input v-model="device.location" type="text" id="Location" placeholder="Enter Location"
+          <input v-model="device.locations" type="text" id="Location" placeholder="Enter Location"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.location }}</div>
+          <div class="text-red-600 text-sm">{{ error.locations }}</div>
         </div>
         <div class="mb-4">
           <label for="Token" class="block text-sm font-medium text-gray-700">Token</label>
@@ -41,7 +41,6 @@
 import { ref, watch } from 'vue'
 import { createDevice } from '@/services/Device.services'
 import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -50,13 +49,13 @@ const props = defineProps({
 })
 const error = ref({
   name: "",
-  location: "",
+  locations: "",
   token: ""
 })
 const emit = defineEmits(['update:visible', 'device-added'])
 const device = ref({
   name: "",
-  location: "",
+  locations: "",
 })
 
 watch(() => props.visible, (newVal) => {
@@ -66,29 +65,28 @@ watch(() => props.visible, (newVal) => {
 })
 const handleAddDevice = async () => {
   try {
-    toast.add({ severity: 'warn', summary: 'Mencoba menambahkan perangkat!', life: 3000 });
     let response = await createDevice(device.value)
     console.info(response)
-    toast.add({ severity: response.status, summary: response.msg, life: 3000 });
-    if (response.validateError)
+  
+    if (response.validateError){
       error.value = data.validateError
-    if (response.status == 'success') {
+    }else{
       setTimeout(() => {
         emit('device-added')
         emit('update:visible', false)
       }, 2000);
+    
     }
     return 0
   } catch (error) {
     console.error('Error adding device:', error)
-    toast.add({ severity: 'error', summary: 'Error ketika nemambahkan perangkat!', life: 3000 });
   }
 }
 
 const resetForm = () => {
   device.value = {
     name: "",
-    location: "",
+    locations: "",
     token: null
   }
 }

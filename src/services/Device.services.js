@@ -1,90 +1,46 @@
-import axios from 'axios';
-import VueCookies from 'vue-cookies';
-const BASE_URL = import.meta.env.VITE_BACKEND_API
-const API_URL = BASE_URL + 'device/';
+import apiClient from "./Base.services";
+const API_URL = 'device/';
 export const fetchDevices = async () => {
   try {
-    const res = await axios.get(API_URL, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.data.status = 'success'
-    return res.data.data;
+    const res = await apiClient.get(API_URL);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
-export const fetchDevice = async (id) => {
+export const fetchDevice = async (uuid) => {
   try {
-    const res = await axios.get(API_URL+id, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.data.status = 'success'
-    res.data.data.location = res.data.data.locations
-    delete res.data.data.locations
-    return res.data.data;
+    const res = await apiClient.get(API_URL+uuid);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
 export const createDevice = async (device) => {
   try {
-    const res = await axios.post(API_URL, device, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.post(API_URL, device);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
-export const updateDevice = async (id, device) => {
+export const updateDevice = async (uuid, device) => {
   try {
-    const res = await axios.put(`${API_URL}${id}`, device, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.put(`${API_URL}${uuid}`, device);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
 
 export const deleteDevice = async (id) => {
   try {
-    const res = await axios.delete(`${API_URL}${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    });
-    res.data.status = 'success'
-    return res.data;
+    const res = await apiClient.delete(`${API_URL}${id}`);
+    return res;
   } catch (error) {
-    error.response.status = 'error'
-    error.response.msg= error.response.data.error
-    return error.response;
+    return error;
   }
 };
