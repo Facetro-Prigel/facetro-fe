@@ -91,15 +91,15 @@
         <div class="w-1/2">
           <div class="mb-4">
             <label for="phoneNumber" class="block text-sm font-medium text-gray-700">No HP</label>
-            <input v-model="user.phoneNumber" type="text" id="phoneNumber" placeholder="Enter phone number"
+            <input v-model="user.phone_number" type="text" id="phoneNumber" placeholder="Enter phone number"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-            <div class="text-red-600 text-sm">{{ error.phoneNumber }}</div>
+            <div class="text-red-600 text-sm">{{ error.phone_number }}</div>
           </div>
           <div class="mb-4">
             <label for="telegramId" class="block text-sm font-medium text-gray-700">Telegram ID</label>
-            <input v-model="user.telegramId" type="number" id="telegramId" placeholder="Enter Telegram Id"
+            <input v-model="user.telegram_id" type="number" id="telegramId" placeholder="Enter Telegram Id"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-            <div class="text-red-600 text-sm">{{ error.telegramId }}</div>
+            <div class="text-red-600 text-sm">{{ error.telegram_id }}</div>
           </div>
 
           <div class="mb-4">
