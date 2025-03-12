@@ -51,14 +51,7 @@ export default {
                 {
                     label: 'Change Password',
                     icon: 'pi pi-refresh',
-                    command: () => {
-                        this.$toast.add({
-                            severity: 'success',
-                            summary: 'Updated',
-                            detail: 'Data Updated',
-                            life: 3000
-                        });
-                    }
+                    command: this.change_password
                 },
                 {
                     label: 'Logout',
@@ -71,6 +64,9 @@ export default {
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);
+        },
+        change_password(){
+            this.$router.push({name:'MyProfile'})
         },
         logout() {
             VueCookies.remove('token');

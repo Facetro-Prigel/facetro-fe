@@ -1,5 +1,3 @@
-import axios from 'axios';
-import VueCookies from 'vue-cookies';
 import apiClient from './Base.services'; 
 
 const API_URL = 'myprofile/';

@@ -88,6 +88,11 @@
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.program_study }}</div>
         </div>
+                <div class="flex justify-end mt-4">
+          <button @click="handleUpdateUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
+            Update
+          </button>
+        </div>
       </div>
       <div class="w-1/2">
 
@@ -113,30 +118,31 @@
           </div>
         </div>
 
-        <div class="flex justify-end mt-4">
-          <button @click="handleUpdateUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
-            Update
-          </button>
-        </div>
+
         <div class="bg-slate-200 p-3 rounded-md mt-2">
           <h2 class="text-lg font-bold">Change Password <span class="text-red-400">*</span></h2>
-
           <div class="mb-4">
             <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
-            <input v-model="changePassword.old_password" type="password" id="program_study"
+            <input ref="current_password" v-model="changePassword.old_password" type="password" id="program_study"
               placeholder="Enter current password"
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-3/4" />
+              <button class="pi pi-eye p-2" @mousedown="current_password.type = 'text'"
+              @mouseup="current_password.type = 'password'"></button>
           </div>
           <div class="mb-4">
             <label for="program_study" class="block text-sm font-medium text-gray-700">New Password</label>
-            <input v-model="changePassword.new_password" type="password" id="program_study"
+            <input ref="new_password" v-model="changePassword.new_password" type="password" id="program_study"
               placeholder="Enter new password"
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-3/4" />
+              <button class="pi pi-eye p-2" @mousedown="new_password.type = 'text'"
+              @mouseup="new_password.type = 'password'"></button>
           </div>
           <p class="mb-4">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan diarahkan kembali ke halaman login untuk masuk lagi.</p>
-          <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
-            <i class="pi pi-key"></i> Change 
-          </button>
+          <div class="w-full flex justify-end">
+            <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
+              <i class="pi pi-key"></i> Change 
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -146,13 +152,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import upload_image_icon from '@/assets/upload_image.png'
+import { useRouter } from 'vue-router';
 import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService, changePassword as changePasswordService } from '@/services/MyProfile.services';
 import VueCookies from 'vue-cookies';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 import loadingImg from '@/assets/loading.gif'
 const BASE_URL = import.meta.env.VITE_BACKEND_API
-
+const router = useRouter();
 const props = defineProps({
   uuid: {
     type: String,
@@ -183,7 +190,8 @@ const error = ref({
 })
 
 const imageName = ref('SVG, PNG, JPG or GIF')
-
+const current_password =ref()
+const new_password = ref()
 const user = ref({
   name: '',
   identity_number: '',
@@ -214,6 +222,8 @@ const handleChangePassword = async () => {
       "old_password": "",
       "new_password": ""
     }
+    VueCookies.remove('token')
+    router.push({name:"login"})
   }
 }
 const fetchUserProfile = async () => {
