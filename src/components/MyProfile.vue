@@ -118,23 +118,24 @@
             Update
           </button>
         </div>
-        <div class="bg-slate-200 p-3 rounded-md">
+        <div class="bg-slate-200 p-3 rounded-md mt-2">
           <h2 class="text-lg font-bold">Change Password <span class="text-red-400">*</span></h2>
 
           <div class="mb-4">
             <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
             <input v-model="changePassword.old_password" type="password" id="program_study"
-              placeholder="Enter Program Study"
+              placeholder="Enter current password"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           </div>
           <div class="mb-4">
             <label for="program_study" class="block text-sm font-medium text-gray-700">New Password</label>
             <input v-model="changePassword.new_password" type="password" id="program_study"
-              placeholder="Enter Program Study"
+              placeholder="Enter new password"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           </div>
+          <p class="mb-4">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan diarahkan kembali ke halaman login untuk masuk lagi.</p>
           <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
-            Change
+            <i class="pi pi-key"></i> Change 
           </button>
         </div>
       </div>
