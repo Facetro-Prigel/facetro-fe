@@ -124,7 +124,7 @@
 
 
         <div class="bg-slate-200 p-3 rounded-md mt-2">
-          <h2 class="text-lg font-bold">Change Password <span class="text-red-400">*</span></h2>
+          <h2 class="text-lg font-bold">Change Password</h2>
           <div class="mb-4">
             <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
             <input ref="current_password" v-model="changePassword.old_password" type="password" id="program_study"
@@ -288,6 +288,11 @@ const handleUpdateUser = async () => {
   const data = await updateUser(userData);
   if (data.validateError) {
     error.value = data.validateError;
+  }
+  birthdayImageC.value = loadingImg
+  birthdayImageC.value = await birthdayImage()
+  if(data.title == "Success"){
+    location.reload()
   }
 };
 
