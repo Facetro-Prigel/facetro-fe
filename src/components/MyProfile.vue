@@ -30,7 +30,7 @@
             <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
               alt="Uploaded Image">
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -76,8 +76,6 @@
             placeholder="Enter Batch" class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.batch }}</div>
         </div>
-      </div>
-      <div class="w-1/2">
         <div class="mb-4">
           <label for="phoneNumber" class="block text-sm font-medium text-gray-700">No HP</label>
           <input v-model="user.phone_number" type="text" id="phoneNumber" placeholder="Enter phone number"
@@ -90,6 +88,10 @@
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.program_study }}</div>
         </div>
+      </div>
+      <div class="w-1/2">
+
+
         <div class="mt-5">
           <h2 class="block text-sm font-medium text-gray-700">Group</h2>
           <div class="flex flex-wrap gap-4">
@@ -116,6 +118,25 @@
             Update
           </button>
         </div>
+        <div class="bg-slate-200 p-3 rounded-md">
+          <h2 class="text-lg font-bold">Change Password <span class="text-red-400">*</span></h2>
+
+          <div class="mb-4">
+            <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
+            <input v-model="changePassword.old_password" type="password" id="program_study"
+              placeholder="Enter Program Study"
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
+          </div>
+          <div class="mb-4">
+            <label for="program_study" class="block text-sm font-medium text-gray-700">New Password</label>
+            <input v-model="changePassword.new_password" type="password" id="program_study"
+              placeholder="Enter Program Study"
+              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
+          </div>
+          <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
+            Change
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -124,7 +145,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import upload_image_icon from '@/assets/upload_image.png'
-import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService } from '@/services/MyProfile.services';
+import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService, changePassword as changePasswordService } from '@/services/MyProfile.services';
 import VueCookies from 'vue-cookies';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
@@ -174,7 +195,10 @@ const user = ref({
   role: [],
   permission: []
 })
-
+const changePassword = ref({
+  "old_password": "",
+  "new_password": ""
+})
 const groupMembers = ref([])
 const unnesImage = ref(loadingImg);
 const avatar = ref(loadingImg)
@@ -182,7 +206,15 @@ const userRole = ref([])
 const birthday = ref()
 const userImage = ref()
 const imagePath = ref()
-
+const handleChangePassword = async () => {
+  const res = await changePasswordService(changePassword.value)
+  if (res.title == 'Success') {
+    changePassword.value = {
+      "old_password": "",
+      "new_password": ""
+    }
+  }
+}
 const fetchUserProfile = async () => {
   const token = VueCookies.get('token');
   try {

@@ -43,6 +43,15 @@ export const unnesImage = async () => {
     }
 };
 
+export const changePassword = async (data) => {
+  try {
+    const res= await apiClient.post(`${API_URL}change_password`, data)
+    return res;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+};
+
 
 export const fileUpload = async (data) => {
   try {
