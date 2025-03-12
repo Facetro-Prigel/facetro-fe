@@ -4,6 +4,7 @@ const API_URL = 'role/';
 export const fetchRoles = async () => {
   try {
     const res = await apiClient.get(API_URL)
+    console.log(res)
     return res;
   } catch (error) {
     console.error('Error fetching roles:', error);
@@ -14,6 +15,7 @@ export const fetchRole = async (uuid) => {
   try {
     const res = await apiClient.get(API_URL+uuid);
     delete res.uuid 
+    res.permission_role = res.permission_role.map(per =>{return per.permission.uuid})
     return res;
   } catch (error) {
     console.error('Error fetching role:', error);

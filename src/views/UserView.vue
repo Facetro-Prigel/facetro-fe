@@ -170,7 +170,7 @@ const getGroup = async () => {
 const getRole = async () => {
   try {
     const response = await fetchRoles()
-    roleOptions.value = response.data.map(item => ({
+    roleOptions.value = response.map(item => ({
       uuid: item.uuid,
       label: item.name
     }));

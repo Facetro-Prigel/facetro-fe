@@ -267,6 +267,8 @@ watch(() => props.visible, async (newVal) => {
   }
   const response = await fetchUser(props.uuid)
   user.value = response
+  console.log('server', response)
+  console.log('selected', props.roleOptions)
   uplodedImage.value = user.value.avatar ? BASE_URL + 'photos/' + user.value.avatar : no_image_icon
   birthdayImageC.value = loadingImg
   birthdayImageC.value = await birthdayImage(props.uuid)

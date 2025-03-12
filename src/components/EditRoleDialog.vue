@@ -90,8 +90,10 @@ watch(() => props.visible, async (newVal) => {
     resetForm()
   }
   const response = await fetchRole(props.uuid)
+  console.log('From server',props.permisions)
   if(!response.title){
-      role.value =response
+      role.value = response
+      console.log('Seletced', role.value.permission_role)
   }
 })
 const handleEditRole = async () => {
