@@ -287,9 +287,10 @@ const handleAddUser = async () => {
     }
     return 0
   }
-  if (unnesImage.value) {
+  if (unnesImage.value && !user.value.file_uuid) {
       toast.add({ severity: 'warn', summary: 'Tunggu gambar terunggah terlebih dahulu!', life: 3000 });
       uplodedImage.value = unnesImage.value
+      user.value.avatar = unnesImage.value
       await handleImageFileUpload(unnesImage.value)
       await handleAddUser()
     }
