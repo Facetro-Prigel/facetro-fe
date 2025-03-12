@@ -30,7 +30,11 @@
             <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
               alt="Uploaded Image">
           </div>
-
+            <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
+              <div>Birthday / Co-card</div>
+              <img class="w-full rounded-lg" :src="birthdayImageC ? birthdayImageC : no_image_icon"
+                alt="Uploaded Image">
+            </div>
         </div>
       </div>
     </div>
@@ -153,11 +157,12 @@
 import { ref, onMounted } from 'vue'
 import upload_image_icon from '@/assets/upload_image.png'
 import { useRouter } from 'vue-router';
-import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService, changePassword as changePasswordService } from '@/services/MyProfile.services';
+import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService, changePassword as changePasswordService, birthdayImage } from '@/services/MyProfile.services';
 import VueCookies from 'vue-cookies';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 import loadingImg from '@/assets/loading.gif'
+const birthdayImageC = ref({ data: loadingImg })
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const router = useRouter();
 const props = defineProps({
@@ -240,6 +245,9 @@ const fetchUserProfile = async () => {
       userRole.value = response.role_user.map(roleuser => ({
         name: roleuser.role.name
       }));
+
+
+
       const userDetails = response.user_details
       if (userDetails) {
         if (userDetails.birthday) {
@@ -257,6 +265,8 @@ const fetchUserProfile = async () => {
         const imageResponse = await unnesImageService();
         userImage.value = imageResponse;
       }
+      birthdayImageC.value = loadingImg
+      birthdayImageC.value = await birthdayImage()
       unnesImageHender()
     }
   } catch (error) {
