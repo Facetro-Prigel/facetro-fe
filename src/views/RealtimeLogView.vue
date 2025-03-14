@@ -17,7 +17,7 @@
                 <Card style="width: 25rem; overflow: hidden">
                     <template #header>
                         <ImageViewer type="Gambar Presensi" :is-success="true"
-                        :bbox="data.bbox ?? [0, 0, 0]" :image="BASE_URL + data.photo" />
+                        :bbox="data.bbox ?? [0, 0, 0]" :image="BASE_URL +'photos/'+ data.photo" />
                     </template>
                     <template #title>{{ data.name }}</template>
                     <template #subtitle>
