@@ -39,8 +39,8 @@
                         <a href="#" class="text-sm font-medium text-primary-600 hover:underline text-primary-400">Lupa
                             Password?</a>
                     </div>
-                    <button @click="tombolLogin"
-                        class="bg-secondary-300 py-1 px-2 text-primary rounded-md drop-shadow-md hover:bg-scondary-500 hover:text-white transition-colors duration-300">
+                    <button @click="tombolLogin" ref="loginBtn"
+                        class="bg-secondary-300 py-1 px-2 text-primary rounded-md drop-shadow-md hover:bg-secondary-500 disabled:bg-gray-600 transition-colors duration-300">
                         <i class="pi pi-send mr-2"></i>Masuk
                     </button>
                 </div>
@@ -54,28 +54,35 @@ import { login } from '@/services/Auth.services.js'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies';
+import { useToast } from 'primevue/usetoast';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const emailField = ref()
 const passwordField = ref()
 const image = ref()
+const loginBtn = ref()
+const toast = useToast()
 const router = useRouter()
 VueCookies.remove('token');
 VueCookies.remove('user');
 const tombolLogin = async () => {
     emailField.value.disabled = true;
     passwordField.value.disabled = true;
+    loginBtn.value.disabled = true
     try {
         const result = await login({
             email: emailField.value.value,
             password: passwordField.value.value
         })
-        image.value.src = BASE_URL + 'avatar/' + result.avatar
-        setTimeout(() => {
-            router.push('/dashboard')
-        }, 3000);
+        if(result.uuid){
+            image.value.src = BASE_URL + 'avatar/' + result.avatar
+            setTimeout(() => {
+                router.push('/dashboard')
+            }, 1000);
+        }
     } catch (error) {
         emailField.value.disabled = false;
         passwordField.value.disabled = false;
+        loginBtn.value.disabled = false;
     }
 }
 </script>

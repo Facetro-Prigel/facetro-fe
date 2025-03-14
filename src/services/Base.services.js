@@ -15,10 +15,20 @@ const apiClient = axios.create({
 
 // Interceptor untuk menambahkan Bearer Token ke setiap request
 apiClient.interceptors.request.use((config) => {
-    const authStore = VueCookies.get('token')
+    const authStore = VueCookies.get('token');
     if (authStore) {
         config.headers.Authorization = `Bearer ${authStore}`;
     }
+
+    // Kirim toast loading sebelum request dikirim
+    const loadingToast = {
+        severity: 'warn', // Gunakan warn untuk loading
+        summary: 'Loading',
+        detail: 'Sedang memproses permintaan...',
+        life: 0, // Durasi toast tidak terbatas (hingga dihapus secara manual)
+    };
+    eventBus.emit('api-loading', loadingToast);
+
     return config;
 });
 
@@ -26,6 +36,7 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
     (response) => {
         const data = response.data;
+        eventBus.emit('api-loading-clear');
         const toastData = {
             severity: 'success',
             summary: data.title,
@@ -46,6 +57,7 @@ apiClient.interceptors.response.use(
         return Promise.reject(response.data);
     },
     (error) => {
+        eventBus.emit('api-loading-clear');
         if (error.response) {
             const { status, data } = error.response;
             const toastData = {
