@@ -23,7 +23,8 @@ export const birthdayImage = async (uuid) => {
 
 export const updateUser = async (userData) => {
   try {
-    await apiClient.put(API_URL, userData);
+    const res = await apiClient.put(API_URL, userData);
+    return res
   } catch (error) {
     console.error(error)
     return error

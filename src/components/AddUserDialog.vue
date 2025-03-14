@@ -14,7 +14,8 @@
             </div>
             <div class="w-1/3 pl-2 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
               <div>Avatar</div>
-              <img class="w-full rounded-lg" :src="avatar ? avatar : no_image_icon" :alt="`Avatar of ${user.name}`" :title="`Avatar of ${user.name}`">
+              <img class="w-full rounded-lg" :src="avatar ? avatar : no_image_icon" :alt="`Avatar of ${user.name}`"
+                :title="`Avatar of ${user.name}`">
             </div>
             <div class="w-1/3 pl-2 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
               <div>Uploaded Image</div>
@@ -31,7 +32,7 @@
           </div>
         </div>
       </div>
-      <div class="flex">
+      <div class="flex" ref="form">
         <div class="w-1/2 pr-4">
           <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700">Name<span
@@ -154,10 +155,12 @@
 
           </div>
           <div class="flex justify-end mt-4">
-            <button @click="handleAddUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
+            <button @click="handleAddUser"
+              class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-500">
               Add
             </button>
-            <button @click="$emit('update:visible', false)" class="bg-gray-300 text-black px-4 py-2 rounded">
+            <button @click="$emit('update:visible', false)"
+              class="bg-gray-300 text-black px-4 py-2 rounded disabled:bg-gray-500">
               Cancel
             </button>
           </div>
@@ -171,7 +174,7 @@
 import { ref, watch, onMounted } from 'vue'
 import MultiSelect from 'primevue/multiselect'
 import upload_image_icon from '@/assets/upload_image.png'
-import { fileUpload, createUser,  unnesImage as unnesImageService } from '@/services/User.services';
+import { fileUpload, createUser, unnesImage as unnesImageService } from '@/services/User.services';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 import Password from 'primevue/password';
@@ -179,6 +182,7 @@ import loadingImg from '@/assets/loading.gif'
 import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
+const form = ref()
 const props = defineProps({
   uuid: {
     type: String,
@@ -276,9 +280,16 @@ const handleAddUser = async () => {
     ...user.value
   }
   if (user.value.avatar) {
+    const inputs = form.value.querySelectorAll('input, button, select, textarea');
+    inputs.forEach((input) => {
+      input.disabled = true;
+    });
     let data = await createUser(userData)
     if (data.validateError) {
       error.value = data.validateError
+      inputs.forEach((input) => {
+        input.disabled = false;
+      });
     }
     if (data.title == 'Success') {
       delete user.value.avatar
@@ -288,12 +299,12 @@ const handleAddUser = async () => {
     return 0
   }
   if (unnesImage.value && !user.value.file_uuid) {
-      toast.add({ severity: 'warn', summary: 'Tunggu gambar terunggah terlebih dahulu!', life: 3000 });
-      uplodedImage.value = unnesImage.value
-      user.value.avatar = unnesImage.value
-      await handleImageFileUpload(unnesImage.value)
-      await handleAddUser()
-    }
+    toast.add({ severity: 'warn', summary: 'Tunggu gambar terunggah terlebih dahulu!', life: 3000 });
+    uplodedImage.value = unnesImage.value
+    user.value.avatar = unnesImage.value
+    await handleImageFileUpload(unnesImage.value)
+    await handleAddUser()
+  }
   if (!user.value.file_uuid) {
     toast.add({ severity: 'error', summary: 'Anda harus menggungah wajah!', life: 3000 });
   }

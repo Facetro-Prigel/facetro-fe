@@ -24,19 +24,18 @@
           <div class="text-red-600 text-sm">{{ error.description }}</div>
         </div>
         <div class="mb-4">
-            <label for="group" class="block text-sm font-medium text-gray-700">Permission</label>
-            <MultiSelect v-model="role.permission_role" :options="permisions.value" optionValue="uuid"
-              optionLabel="label" filter placeholder="Select "
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full">
-              <template #footer>
-                <div class="py-2 px-4">
-                  <b>{{ role.permission_role ? role.permission_role.length : 0 }}</b> Permission{{ (role.permission_role ?
-                    role.permission_role.length : 0) > 1 ? 's' : '' }} selected.
-                </div>
-              </template>
-            </MultiSelect>
+          <label for="group" class="block text-sm font-medium text-gray-700">Permission</label>
+          <MultiSelect v-model="role.permission_role" :options="permisions.value" optionValue="uuid" optionLabel="label"
+            filter placeholder="Select " class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full">
+            <template #footer>
+              <div class="py-2 px-4">
+                <b>{{ role.permission_role ? role.permission_role.length : 0 }}</b> Permission{{ (role.permission_role ?
+                  role.permission_role.length : 0) > 1 ? 's' : '' }} selected.
+              </div>
+            </template>
+          </MultiSelect>
 
-          </div>
+        </div>
       </div>
       <div class="flex justify-end mt-4">
         <button @click="handleAddRole" ref="addButton" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
@@ -88,9 +87,9 @@ const handleAddRole = async () => {
   try {
     let response = await createRole(role.value)
     console.info(response)
-    if (response.validateError){
+    if (response.validateError) {
       error.value = data.validateError
-    }else{
+    } else {
       emit('role-added')
       emit('update:visible', false)
     }
@@ -105,7 +104,7 @@ const resetForm = () => {
     name: "",
     guard_name: "",
     description: "",
-    permission_role:[]
+    permission_role: []
   }
 }
 </script>

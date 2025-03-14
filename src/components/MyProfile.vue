@@ -30,16 +30,15 @@
             <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
               alt="Uploaded Image">
           </div>
-            <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
-              <div>Birthday / Co-card</div>
-              <img class="w-full rounded-lg" :src="birthdayImageC ? birthdayImageC : no_image_icon"
-                alt="Uploaded Image">
-            </div>
+          <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
+            <div>Birthday / Co-card</div>
+            <img class="w-full rounded-lg" :src="birthdayImageC ? birthdayImageC : no_image_icon" alt="Uploaded Image">
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="flex mt-5">
+    <div class="flex mt-5" ref="form">
       <div class="w-1/2 pr-4">
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-gray-700">Name<span
@@ -53,7 +52,7 @@
               class="text-red-400">*</span></label>
           <input v-model="user.identity_number" type="text" id="identityNumber" placeholder="Enter identity number"
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
-          <div class="text-red-600 text-sm">{{ error.identityNumber }}</div>
+          <div class="text-red-600 text-sm">{{ error.identity_number }}</div>
         </div>
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700">Email<span
@@ -92,15 +91,13 @@
             class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-full" />
           <div class="text-red-600 text-sm">{{ error.program_study }}</div>
         </div>
-                <div class="flex justify-end mt-4">
-          <button @click="handleUpdateUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
+        <div class="flex justify-end mt-4">
+          <button @click="handleUpdateUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
             Update
           </button>
         </div>
       </div>
       <div class="w-1/2">
-
-
         <div class="mt-5">
           <h2 class="block text-sm font-medium text-gray-700">Group</h2>
           <div class="flex flex-wrap gap-4">
@@ -130,7 +127,7 @@
             <input ref="current_password" v-model="changePassword.old_password" type="password" id="program_study"
               placeholder="Enter current password"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-3/4" />
-              <button class="pi pi-eye p-2" @mousedown="current_password.type = 'text'"
+            <button class="pi pi-eye p-2" @mousedown="current_password.type = 'text'"
               @mouseup="current_password.type = 'password'"></button>
           </div>
           <div class="mb-4">
@@ -138,13 +135,14 @@
             <input ref="new_password" v-model="changePassword.new_password" type="password" id="program_study"
               placeholder="Enter new password"
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 w-3/4" />
-              <button class="pi pi-eye p-2" @mousedown="new_password.type = 'text'"
+            <button class="pi pi-eye p-2" @mousedown="new_password.type = 'text'"
               @mouseup="new_password.type = 'password'"></button>
           </div>
-          <p class="mb-4">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan diarahkan kembali ke halaman login untuk masuk lagi.</p>
+          <p class="mb-4">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan diarahkan kembali ke
+            halaman login untuk masuk lagi.</p>
           <div class="w-full flex justify-end">
-            <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
-              <i class="pi pi-key"></i> Change 
+            <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
+              <i class="pi pi-key"></i> Change
             </button>
           </div>
         </div>
@@ -195,7 +193,7 @@ const error = ref({
 })
 
 const imageName = ref('SVG, PNG, JPG or GIF')
-const current_password =ref()
+const current_password = ref()
 const new_password = ref()
 const user = ref({
   name: '',
@@ -217,7 +215,7 @@ const groupMembers = ref([])
 const unnesImage = ref(loadingImg);
 const avatar = ref(loadingImg)
 const userRole = ref([])
-const birthday = ref()
+const form = ref()
 const userImage = ref()
 const imagePath = ref()
 const handleChangePassword = async () => {
@@ -228,7 +226,7 @@ const handleChangePassword = async () => {
       "new_password": ""
     }
     VueCookies.remove('token')
-    router.push({name:"login"})
+    router.push({ name: "login" })
   }
 }
 const fetchUserProfile = async () => {
@@ -285,15 +283,23 @@ const handleUpdateUser = async () => {
   if (imagePath.value) {
     userData.avatar = imagePath.value;
   }
-  const data = await updateUser(userData);
-  if (data.validateError) {
-    error.value = data.validateError;
+  if (form.value) {
+    const inputs = form.value.querySelectorAll('input, button, select, textarea');
+    inputs.forEach((input) => {
+      input.disabled = true;
+    });
+    const data = await updateUser(userData);
+
+    if (data.validateError) {
+      error.value = data.validateError;
+    }
+    if (data.title == "Success") {
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
+    }
   }
-  birthdayImageC.value = loadingImg
-  birthdayImageC.value = await birthdayImage()
-  if(data.title == "Success"){
-    location.reload()
-  }
+
 };
 
 const handleImageFileUpload = async (uplodedImage) => {
