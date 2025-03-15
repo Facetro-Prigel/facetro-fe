@@ -114,6 +114,7 @@
           <div class="flex flex-wrap gap-4">
             <div v-for="(role, index) in userRole" :key="index"
               class="flex items-center justify-center bg-primary-500 text-white rounded-lg p-3 w-auto min-w-[100px]">
+              <i class="pi pi-briefcase text-white text-2xl mr-2"></i>
               <span class="font-semibold">{{ role.name }}</span>
             </div>
           </div>
@@ -153,7 +154,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import upload_image_icon from '@/assets/upload_image.png'
 import { useRouter } from 'vue-router';
 import { getUserProfile, fileUpload, updateUser, unnesImage as unnesImageService, changePassword as changePasswordService, birthdayImage } from '@/services/MyProfile.services';
 import VueCookies from 'vue-cookies';
@@ -330,7 +330,7 @@ const handleFileUpload = async (event) => {
         user.value.avatar = e.target.result;
       };
       readerReal.readAsDataURL(file);
-      readerReal.onloadend = (e) => {
+      readerReal.onloadend = () => {
         userImage.value = user.value.avatar
       }
       const compressedFile = await imageCompression(file, options);
@@ -339,7 +339,7 @@ const handleFileUpload = async (event) => {
         user.value.avatar = e.target.result;
       };
       reader.readAsDataURL(compressedFile);
-      reader.onloadend = async (e) => {
+      reader.onloadend = async () => {
         userImage.value = user.value.avatar
         await handleImageFileUpload(userImage.value)
       }

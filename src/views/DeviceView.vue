@@ -125,8 +125,6 @@ import PriveteCopy from '@/components/PriveteCopy.vue'
 import AddDeviceDialog from '@/components/AddDeviceDialog.vue'
 import EditDeviceDialog from '@/components/EditDeviceDialog.vue'
 import { socket } from "@/socket";
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const device = ref([])
 const isConfirmDialogVisible = ref(false)
 const isAddDeviceDialogVisible = ref(false)
@@ -150,7 +148,9 @@ const getDevice = async () => {
 const handleDeleteDevice = async (id) => {
   try {
     const res = await deleteDevice(id)
-    isConfirmDialogVisible.value = false
+    if(res.titile = "Success"){
+      isConfirmDialogVisible.value = false
+    }
   } catch (error) {
     console.error('Error deleting device:', error)
   }
@@ -171,7 +171,7 @@ const openEditDeviceDialog = (id) => {
 
 onMounted(async () => {
   await getDevice()
-  socket.on("update CUD", (...args) => {
+  socket.on("update CUD", () => {
     getDevice()
   });
 })

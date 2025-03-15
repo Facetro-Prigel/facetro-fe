@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref } from 'vue'
 import Camera from '@/components/LiveCameraComponent.vue';
 import Alert from '@/components/Alert.vue';
 import { createUser, fileUpload } from '@/services/User.services';
@@ -67,7 +67,7 @@ const handleAddUser = async () => {
       let data = await createUser(user.value)
       alertData.value = { status: data.status, msg: data.msg }
       if (data.validateError) {
-        error.value = data.validateError
+        console.warn(data.validateError)
       }
       if (data.status == 'success') {
         user.value =  {

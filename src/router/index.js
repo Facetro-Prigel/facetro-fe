@@ -12,15 +12,15 @@ import RoleView from '@/views/RoleView.vue'
 import VueCookies from 'vue-cookies'
 import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from '../views/AboutView.vue'
-import Attendance from '../views/Attendance.vue'
+import Attendance from '../views/AttendanceView.vue'
 import Camera from '../views/CameraView.vue'
 import ContactView from '../views/ContactView.vue'
-import Dashboard from '../views/Dashboard.vue'
+import Dashboard from '../views/DashboardView.vue'
 import DeviceView from '../views/DeviceView.vue'
 import GroupView from '../views/GroupView.vue'
 import HomeView from '../views/HomeView.vue'
 import PermissionView from '../views/PermissionView.vue'
-import Room from '../views/Room.vue'
+import Room from '../views/RoomView.vue'
 import ServiceView from '../views/ServicesView.vue'
 import UserView from '../views/UserView.vue'
 import MyProfile from '../components/MyProfile.vue'
@@ -179,7 +179,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   if (to.name == 'device_register') {
-    if (!authCheck()) {
+    if (!authDeviceCheck()) {
       return next()
     } else {
       return next({ name: 'presence' })

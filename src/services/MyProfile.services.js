@@ -2,17 +2,16 @@ import apiClient from './Base.services';
 
 const API_URL = 'myprofile/';
 
-export const getUserProfile = async (token) => {
+export const getUserProfile = async () => {
   try {
     const res= await apiClient.get(API_URL)
-    // VueCookies.set("user_data", res);
     return res;
   } catch (error) {
     console.error('Error fetching user data:', error);
   }
 };
 
-export const birthdayImage = async (uuid) => {
+export const birthdayImage = async () => {
   try {
     const res = await apiClient.get(`${API_URL}birthday`)
     return res;

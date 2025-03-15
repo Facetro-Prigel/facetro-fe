@@ -65,8 +65,6 @@ import AddPermissionDialog from '@/components/AddPermissionDialog.vue';
 import EditPermissionDialog from '@/components/EditPermissionDialog.vue';
 import { fetchPermissions, deletePermission } from '@/services/Permission.services';
 import { socket } from "@/socket";
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 
 const filters = ref({
   global: { value: null },
@@ -89,8 +87,10 @@ const getPermissions = async () => {
 const handleDeletePermission = async (id) => {
   try {
     const res = await deletePermission(id)
-    getPermissions()
-    isConfirmDialogVisible.value = false
+    if(res.title == 'Success'){
+      getPermissions()
+      isConfirmDialogVisible.value = false
+    }
   } catch (error) {
     console.error('Error deleting Permission:', error)
   }
@@ -111,7 +111,7 @@ const openEditPermissionDialog = (user) => {
 }
 onMounted(async () => {
   await getPermissions()
-  socket.on("update CUD", (...args) => {
+  socket.on("update CUD", () => {
     getPermissions()
 
   });

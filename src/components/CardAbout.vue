@@ -14,7 +14,7 @@
 
 <script setup>
 import {defineProps} from 'vue'
-const props = defineProps(['name','role','imgcr'])
+defineProps(['name','role','imgcr'])
 </script>
 
 <style scoped>

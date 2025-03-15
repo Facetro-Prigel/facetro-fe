@@ -25,7 +25,7 @@
   import ImageViewer from '../components/ImageViewer.vue';
   import { ref, onMounted } from 'vue'
   const BASE_URL = import.meta.env.VITE_BACKEND_API
-  const props = defineProps({ 'cards': Array });
+  defineProps({ 'cards': Array });
   const isActive = ref(false)
   const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {

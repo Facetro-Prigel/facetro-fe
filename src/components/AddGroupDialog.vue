@@ -65,8 +65,6 @@ import MultiSelect from 'primevue/multiselect'
 import Avatar from 'primevue/avatar';
 import no_image_icon from '@/assets/no_images.png';
 import { createGroup } from '@/services/Group.services';
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   visible: {
@@ -101,7 +99,7 @@ const handleAddGroup = async () => {
   try {
     let response = await createGroup(group.value)
     if (response.validateError){
-      error.value = data.validateError
+      error.value = response.validateError
     }else{
       emit('group-added')
       emit('update:visible', false)

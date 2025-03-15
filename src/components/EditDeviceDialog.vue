@@ -58,10 +58,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { fetchDevice, updateDevice } from '@/services/Device.services'
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,

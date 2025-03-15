@@ -13,7 +13,7 @@
             <Time />
         </div>
         <Dialog :visible="modal" pt:root:class="!border-0 !bg-transparent !p-0" pt:mask:class="backdrop-blur-sm">
-            <template #container="{ closeCallback }">
+            <template>
                 <Card style="width: 25rem; overflow: hidden">
                     <template #header>
                         <ImageViewer type="Gambar Presensi" :is-success="true"

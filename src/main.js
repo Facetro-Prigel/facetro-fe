@@ -17,7 +17,6 @@ import Column from 'primevue/column';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import ToastService from 'primevue/toastservice';
-import { useStreamStore } from './stores/store'; // Import Pinia store dengan jalur yang benar
 
 const app = createApp(App);
 const pinia = createPinia();

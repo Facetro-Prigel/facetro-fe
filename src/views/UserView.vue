@@ -129,8 +129,6 @@ import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 import ProgressSpinner from 'primevue/progressspinner';
 import { socket } from "@/socket";
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const users = ref([{
   uuid:'29121', 
@@ -194,7 +192,9 @@ const getPemission = async () => {
 const handleDeleteUser = async (id) => {
   try {
     const res = await deleteUser(id)
-    isConfirmDialogVisible.value = false
+    if(res.title == 'Success'){
+      isConfirmDialogVisible.value = false
+    }
   } catch (error) {
     console.error('Error deleting user:', error)
   }
@@ -222,7 +222,7 @@ const updater = () =>{
 
 onMounted(() => {
   updater()
-  socket.on("update CUD", (...args) => {
+  socket.on("update CUD", () => {
     updater()
   });
 })

@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast';
 import { onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';

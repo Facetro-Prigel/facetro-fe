@@ -22,7 +22,6 @@ import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
 import loadingImg from '@/assets/loading.gif'
 import ImgVeri from '@/assets/verivication_symbol.png'
-import { useToast } from 'primevue/usetoast';
 import apiClient from "@/services/Base.services";
 const sendBtn = ref();
 const data = ref({token:""});
@@ -41,6 +40,7 @@ const validateToken = () =>{
     }).catch((error)=>{
         image.value.src = ImgVeri
         sendBtn.value.disabled = true
+        console.error(error)
     })
 }
 effect(()=>{

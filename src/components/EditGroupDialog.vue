@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
-      <h2 class="text-lg font-semibold mb-4" ref="alertSection">Edit Group</h2>
+      <h2 class="text-lg font-semibold mb-4">Edit Group</h2>
       <div class="py-2">
         <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
       </div>
@@ -72,14 +72,11 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import Alert from './Alert.vue';
 import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect'
 import Avatar from 'primevue/avatar';
 import no_image_icon from '@/assets/no_images.png';
 import { updateGroup, fetchGroup } from '@/services/Group.services';
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const props = defineProps({
   uuid: {
@@ -103,8 +100,6 @@ const error = ref({
   name: "",
   locations: "",
 })
-const alertSection = ref();
-const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'group-added'])
 const group = ref({
   name: "",

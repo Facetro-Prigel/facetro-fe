@@ -4,7 +4,6 @@ import Camera from '@/components/LiveCameraComponent.vue'
 import Modal from '@/components/Modal.vue'
 import Time from '@/components/Time.vue'
 import TitleComponent from '@/components/TitleComponent.vue'
-import { goToDoorlock } from '@/services/Doorlock.services'
 import { useForbiddenStore } from '@/stores/forbidden.js'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
@@ -112,7 +111,9 @@ const sendImage = (identity) => {
             var timeDifferenceInMillis = endTime.getTime() - startTime.getTime()
             modal.value.infoData.Durasi = countDiff(timeDifferenceInMillis)
           }
-        } catch (e) {}
+        } catch (e) {
+          console.error(e)
+        }
         modal.value.data.serverPhoto = BASE_URL + 'photos/'+tmpData.serverData.image
         modal.value.data.serverBbox = tmpData.serverData.bbox
         modal.value.data.clientBbox = tmpData.clientData.bbox

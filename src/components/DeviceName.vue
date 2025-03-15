@@ -30,7 +30,7 @@ onMounted(
                 let end = new Date().getTime()
                 wifiConection.value.let = end-stat+"ms"
                 console.info("Connections Good")
-            }).catch((e) => {
+            }).catch(() => {
                 wifiConection.value.let = "Lost"
                 wifiConection.value.status = false
                 console.info("Poor Connections")

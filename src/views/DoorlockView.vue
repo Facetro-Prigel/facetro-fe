@@ -113,7 +113,9 @@ const sendImage = (identity) => {
             var timeDifferenceInMillis = endTime.getTime() - startTime.getTime()
             modal.value.infoData.Durasi = countDiff(timeDifferenceInMillis)
           }
-        } catch (e) {}
+        } catch (e) {
+          console.error(e)
+        }
         modal.value.data.serverPhoto = BASE_URL + tmpData.serverData.image
         modal.value.data.serverBbox = tmpData.serverData.bbox
         modal.value.data.clientBbox = tmpData.clientData.bbox

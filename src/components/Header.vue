@@ -36,7 +36,6 @@
 
 <script>
 import VueCookies from 'vue-cookies'
-import Button from 'primevue/button';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 export default {
     props: {

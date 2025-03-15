@@ -54,13 +54,11 @@ import { login } from '@/services/Auth.services.js'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies';
-import { useToast } from 'primevue/usetoast';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const emailField = ref()
 const passwordField = ref()
 const image = ref()
 const loginBtn = ref()
-const toast = useToast()
 const router = useRouter()
 VueCookies.remove('token');
 VueCookies.remove('user');

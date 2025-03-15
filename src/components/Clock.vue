@@ -107,7 +107,7 @@ export default {
     this.updateTime();
     this.timerID = setInterval(this.updateTime, 1000);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timerID);
   },
   methods: {

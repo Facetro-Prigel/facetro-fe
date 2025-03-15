@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { computed, watch, ref, onMounted} from 'vue'
+import { computed, ref } from 'vue'
 import no_record_vid from '@/assets/videos/no_record.mp4'
 const props = defineProps(
     {

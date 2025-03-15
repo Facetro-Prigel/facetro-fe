@@ -53,8 +53,6 @@
 import { ref, watch } from 'vue'
 import MultiSelect from 'primevue/multiselect'
 import { createRole } from '@/services/Role.services'
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -86,9 +84,8 @@ watch(() => props.visible, (newVal) => {
 const handleAddRole = async () => {
   try {
     let response = await createRole(role.value)
-    console.info(response)
     if (response.validateError) {
-      error.value = data.validateError
+      error.value = response.validateError
     } else {
       emit('role-added')
       emit('update:visible', false)

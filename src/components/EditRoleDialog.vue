@@ -54,8 +54,6 @@
 import { ref, watch } from 'vue'
 import MultiSelect from 'primevue/multiselect'
 import { fetchRole, updateRole } from '@/services/Role.services'
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const props = defineProps({
   uuid:{
     type: String,
@@ -76,7 +74,6 @@ const error = ref({
   description: "",
 })
 const alertSection = ref();
-const alertData = ref({ status: '', msg: '' })
 const emit = defineEmits(['update:visible', 'role-added'])
 const role = ref({
   name: "",

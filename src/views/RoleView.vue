@@ -66,8 +66,6 @@ import EditRoleDialog from '@/components/EditRoleDialog.vue';
 import { fetchRoles, deleteRole } from '@/services/Role.services';
 import { fetchPermissions } from '@/services/Permission.services';
 import { socket } from "@/socket";
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const filters = ref({
   global: { value: null },
   name: { value: null },
@@ -90,7 +88,9 @@ const getRoles = async () => {
 const handleDeleteRole = async (id) => {
   try {
     const res = await deleteRole(id)
-    isConfirmDialogVisible.value = false
+    if(res.title == 'Success'){
+      isConfirmDialogVisible.value = false
+    }
   } catch (error) {
     console.error('Error deleting Role:', error)
   }
@@ -126,7 +126,7 @@ const getUpdate = () =>{
 }
 onMounted(() => {
   getUpdate()
-  socket.on("update CUD", (...args) => {
+  socket.on("update CUD", () => {
     getUpdate()
   });
 })

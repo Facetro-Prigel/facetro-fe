@@ -40,7 +40,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { createDevice } from '@/services/Device.services'
-import { useToast } from 'primevue/usetoast';
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -67,7 +66,7 @@ const handleAddDevice = async () => {
   try {
     let response = await createDevice(device.value)
     if (response.validateError){
-      error.value = data.validateError
+      error.value = response.validateError
     }else{
       setTimeout(() => {
         emit('device-added')

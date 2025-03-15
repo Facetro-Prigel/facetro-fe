@@ -106,8 +106,6 @@ import AddGroupDialog from '@/components/AddGroupDialog.vue'
 import EditGroupDialog from '@/components/EditGroupDialog.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import { socket } from "@/socket";
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 // State variables
 const filters = ref({
@@ -156,7 +154,9 @@ const getGroup = async () => {
 const handleDeleteGroup = async (id) => {
   try {
     let res = await deleteGroup(id)
-    isConfirmDialogVisible.value = false
+    if(res.title == 'Success'){
+      isConfirmDialogVisible.value = false
+    }
   } catch (error) {
     console.error('Error deleting group:', error)
   }
@@ -183,7 +183,7 @@ const all= ()=>{
 // Lifecycle hook
 onMounted(() => {
   all()
-  socket.on("update CUD", (...args) => {
+  socket.on("update CUD", () => {
     all()
   });
 })

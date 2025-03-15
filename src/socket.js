@@ -12,7 +12,7 @@ const URL = BASE_URL.slice(0, -1);
 
 export const socket = io(URL);
 
-socket.on("connect", (s) => {
+socket.on("connect", () => {
   state.connected = true;
   console.info("connection")
 });

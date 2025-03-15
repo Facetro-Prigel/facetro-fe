@@ -375,7 +375,7 @@ const handleFileUpload = async (event) => {
         user.value.avatar = e.target.result;
       };
       readerReal.readAsDataURL(file);
-      readerReal.onloadend = (e) => {
+      readerReal.onloadend = () => {
         uplodedImage.value = user.value.avatar
       }
       const compressedFile = await imageCompression(file, options);
@@ -384,7 +384,7 @@ const handleFileUpload = async (event) => {
         user.value.avatar = e.target.result;
       };
       reader.readAsDataURL(compressedFile);
-      reader.onloadend = async (e) => {
+      reader.onloadend = async () => {
         uplodedImage.value = user.value.avatar
         await handleImageFileUpload(uplodedImage.value)
       }

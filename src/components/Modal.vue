@@ -59,7 +59,6 @@ const serverStatus = ref({});
 
 const modalStatus = ref(false)
 var infoData = ref({});
-var now = new Date();
 var closeModalObj;
 const closeModal = () => {
     modalStatus.value = !modalStatus.value;

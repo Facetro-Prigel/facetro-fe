@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { fetchPermission, updatePermission } from '@/services/Permission.services.js';
 import { useToast } from 'primevue/usetoast';
 const toast = useToast();
