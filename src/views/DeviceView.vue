@@ -60,7 +60,7 @@
         </template>
         <template #body="slotProps">
           <div class="flex justify-start items-center max-w-[100px]">
-            <PriveteCopy :value="slotProps.data.token"/>
+            <PriveteCopy :value="slotProps.data.token" showInQr="true"/>
           </div>
         </template>
       </Column>
