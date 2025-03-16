@@ -69,6 +69,7 @@ const error = ref({
   description: ""
 })
 const emit = defineEmits(['update:visible', 'role-added'])
+
 const role = ref({
   name: "",
   guard_name: "",

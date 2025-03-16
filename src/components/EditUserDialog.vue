@@ -291,16 +291,16 @@ const unnesImageHender = async () => {
 const handleUpdateUser = async () => {
   const userData = { ...user.value }
   if (user.value.avatar) {
-    const inputs = form.value.querySelectorAll('input, button, select, textarea');
-    inputs.forEach((input) => {
-      input.disabled = true;
-    });
+    // const inputs = form.value.querySelectorAll('input, button, select, textarea');
+    // inputs.forEach((input) => {
+    //   input.disabled = true;
+    // });
     let data = await updateUser(props.uuid, userData)
     if (data.validateError) {
       error.value = data.validateError
-      inputs.forEach((input) => {
-        input.disabled = false;
-      });
+      // inputs.forEach((input) => {
+      //   input.disabled = false;
+      // });
     }
     if (data.title == 'Success') {
       delete user.value.avatar

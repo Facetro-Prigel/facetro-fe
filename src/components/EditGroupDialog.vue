@@ -3,7 +3,6 @@
     <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4">Edit Group</h2>
       <div class="py-2">
-        <Alert :status="alertData.status" :msg="alertData.msg"></Alert>
       </div>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
