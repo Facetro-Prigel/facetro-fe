@@ -2,8 +2,8 @@
     <div class="card p-4">
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
       <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
-        :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters"
-        @page="onPageChange" :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
+        :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters"
+        @page="onPageChange" @sort="onSortChange" :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div class="relative">
@@ -98,21 +98,42 @@
 import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
 import { fetchAttendanceLogs } from '@/services/Attendance.services';
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import ProgressSpinner from 'primevue/progressspinner';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const attendanceCards = ref([])
 const loading = ref(true)
 const totalRecords = ref()
 const filters = ref(
-  { page: 1, rows: 5, 'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } }
+  { 
+    page: 1, 
+    rows: 5, 
+    sort: 'created_at', 
+    order: 'desc', 
+    global: { value: null }, 
+    'name': { value: null }, 
+    'identityNumber': { value: null }, 
+    'inTime': { value: null }, 
+    'device': { value: null } 
+  }
 )
+watch(
+  () => filters.value.global.value,
+  (newValue) => {
+    if (!newValue) {
+      fetchData();
+    }
+  }
+);
 const fetchData = async () => {
   loading.value = true;
   try {
     const response = await fetchAttendanceLogs({
       page: filters.value.page,
-      limit: filters.value.rows
+      limit: filters.value.rows,
+      search: filters.value.global.value,
+      sort: filters.value.sort,
+      order: filters.value.order
     });
     attendanceCards.value = response.data;
     totalRecords.value = response.total_records;
@@ -125,6 +146,11 @@ const fetchData = async () => {
 const onPageChange = (event) => {
   filters.value.page = event.page + 1; // PrimeVue uses zero-based indexing
   filters.value.rows = event.rows;
+  fetchData();
+};
+const onSortChange = (event) => {
+  filters.value.sort = event.sortField; // Update sort field
+  filters.value.order = event.sortOrder === 1 ? 'asc' : 'desc'; // Update sort order
   fetchData();
 };
 const convertToLocale = (time) => {
