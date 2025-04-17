@@ -1,9 +1,9 @@
   <template>
     <div class="card p-4">
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
-      <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords" :rowsPerPageOptions="[5, 10, 20, 50]"  :loading="loading"
-        tableStyle="min-width: 50rem" v-model:filters="filters" @page="onPageChange"
-        :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
+      <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
+        :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters"
+        @page="onPageChange" :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div class="relative">
@@ -26,7 +26,7 @@
           <template #body="slotProps">
             <div class="flex max-w-[175px] min-w-[100px]">
               <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
-                :bbox="slotProps.data.bbox" :image="BASE_URL +'photos/'+ slotProps.data.image" />
+                :bbox="slotProps.data.bbox" :image="BASE_URL + 'photos/' + slotProps.data.image" />
               <!-- <img
                 :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
                 :alt="slotProps.data.name"
@@ -105,27 +105,27 @@ const attendanceCards = ref([])
 const loading = ref(true)
 const totalRecords = ref()
 const filters = ref(
-  {  page: 1, rows: 5,'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } } 
+  { page: 1, rows: 5, 'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } }
 )
 const fetchData = async () => {
-      loading.value = true;
-      try {
-        const response = await fetchAttendanceLogs({
-            page: filters.value.page,
-            limit: filters.value.rows
-        });
-        attendanceCards.value = response.data;
-        totalRecords.value = response.total_records;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        loading.value = false;
-      }
+  loading.value = true;
+  try {
+    const response = await fetchAttendanceLogs({
+      page: filters.value.page,
+      limit: filters.value.rows
+    });
+    attendanceCards.value = response.data;
+    totalRecords.value = response.total_records;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false;
+  }
 };
 const onPageChange = (event) => {
-      filters.value.page = event.page+1; // PrimeVue uses zero-based indexing
-      filters.value.limit = event.rows;
-      fetchData();
+  filters.value.page = event.page + 1; // PrimeVue uses zero-based indexing
+  filters.value.rows = event.rows;
+  fetchData();
 };
 const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {
