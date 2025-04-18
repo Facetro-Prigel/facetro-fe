@@ -1,4 +1,5 @@
 <template>
+  <TitleComponent title="UNNESTech" subtitle="Device Management" />
   <div class="card p-4">
     <DataTable
       :value="device"

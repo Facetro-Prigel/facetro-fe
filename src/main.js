@@ -17,7 +17,7 @@ import Column from 'primevue/column';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import ToastService from 'primevue/toastservice';
-
+import TitleComponent from '@/components/TitleComponent.vue';
 const app = createApp(App);
 const pinia = createPinia();
 
@@ -28,6 +28,7 @@ app.component('TabPanel', TabPanel);
 app.component('Avatar', Avatar);
 app.component('Chip', Chip);
 app.component('Menu', Menu);
+app.component('TitleComponent', TitleComponent);
 app.directive('tooltip', Tooltip);
 
 app.use(router);

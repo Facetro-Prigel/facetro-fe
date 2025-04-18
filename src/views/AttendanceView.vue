@@ -1,5 +1,6 @@
   <template>
     <div class="card p-4">
+      <TitleComponent title="UNNESTech" subtitle="Attendance" />
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
       <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
         :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters"

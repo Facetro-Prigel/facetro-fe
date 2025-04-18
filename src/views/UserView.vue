@@ -1,5 +1,6 @@
 <template>
   <div class="card p-4">
+    <TitleComponent title="UNNESTech" subtitle="User Management" />
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-user mr-2"></i>User Management</h1>
     <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters" 
     :globalFilterFields="['name', 'identity_number', 'user_group', 'roleuser' ]" >
@@ -82,10 +83,11 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-            <button @click="openEditUserDialog(slotProps.data.uuid)" class="text-blue-500 hover:text-blue-700 p-1">
+            <button @click="openPresenceDialog(slotProps.data.uuid)" class="text-orange-500 hover:text-orange-700 p-1" title="Show this user presence"><i class="pi pi-file"></i></button>
+            <button @click="openEditUserDialog(slotProps.data.uuid)" title="Edit this user" class="text-blue-500 hover:text-blue-700 p-1">
               <i class="pi pi-pencil"></i>
             </button>
-            <button @click="confirmDeleteUser(slotProps.data.uuid)" class="text-red-500 hover:text-red-700 p-1">
+            <button @click="confirmDeleteUser(slotProps.data.uuid)" title="Delete this user" class="text-red-500 hover:text-red-700 p-1">
               <i class="pi pi-trash"></i>
             </button>
         </template>
@@ -97,6 +99,7 @@
         <h2 class="text-lg font-semibold mb-4">Konfirmasi</h2>
         <p>Apakah Anda yakin ingin menghapus pengguna ini?</p>
         <div class="flex justify-end mt-4">
+          
           <button @click="handleDeleteUser(confirmingUserId)" class="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Ya
           </button>
@@ -109,10 +112,13 @@
 
     <AddUserDialog :visible="isAddUserDialogVisible" :groupOptions="groupOptions" :roleOptions="roleOptions"
       :permissionOptions="permissionOptions" @update:visible="isAddUserDialogVisible = $event" @user-added="getUsers" />
+    
+    <ShowPresenceDialog :uuid="selectedUser"  :visible="isPresenceDialogVisible"  />
 
     <EditUserDialog :uuid="selectedUser" :visible="isEditUserDialogVisible" :groupOptions="groupOptions"
       :roleOptions="roleOptions" :permissionOptions="permissionOptions"
       @update:visible="isEditUserDialogVisible = $event" @user-updated="getUsers" />
+      
   </div>
 </template>
 
@@ -122,6 +128,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import AddUserDialog from '../components/AddUserDialog.vue'
 import EditUserDialog from '../components/EditUserDialog.vue'
+import ShowPresenceDialog from '@/components/ShowPresenceDialog.vue'
 import { fetchUsers, deleteUser } from '@/services/User.services'
 import { fetchGroups } from '@/services/Group.services'
 import { fetchRoles } from '@/services/Role.services'
@@ -137,6 +144,7 @@ const isConfirmDialogVisible = ref(false)
 const confirmingUserId = ref(null)
 const isAddUserDialogVisible = ref(false)
 const isEditUserDialogVisible = ref(false)
+const isPresenceDialogVisible = ref(false)
 const selectedUser = ref(null)
 const groupOptions = []
 const loading = ref(true)
@@ -212,6 +220,10 @@ const openAddUserDialog = () => {
 const openEditUserDialog = (user) => {
   selectedUser.value = user
   isEditUserDialogVisible.value = true
+}
+const openPresenceDialog = (user) => {
+  selectedUser.value = user
+  isPresenceDialogVisible.value = true
 }
 const updater = () =>{
   getUsers();

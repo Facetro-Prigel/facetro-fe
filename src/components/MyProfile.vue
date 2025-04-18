@@ -1,5 +1,5 @@
 <template>
-  <TitleComponent title="UNNESTech" subtitle="Halaman Tidak Ditemukan" />
+  <TitleComponent title="UNNESTech" subtitle="My Profile" />
   <div class="flex flex-col p-2">
     <h1 class="text-lg font-bold text-center">Foto Sekarang <span class="text-red-400">*</span></h1>
     <div class="flex justify-center items-center">
@@ -161,7 +161,6 @@ import VueCookies from 'vue-cookies';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 import loadingImg from '@/assets/loading.gif';
-import TitleComponent from '@/components/TitleComponent.vue';
 const birthdayImageC = ref({ data: loadingImg })
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const router = useRouter();

@@ -1,5 +1,6 @@
 <template>
   <div class="card p-4">
+    <TitleComponent title="UNNESTech" subtitle="Group Management" />
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-users mr-2"></i>Group Management</h1>
     <DataTable :value="group" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
       v-model:filters="filters" :globalFilterFields="['name', 'locations', 'device.name', 'users.name']">

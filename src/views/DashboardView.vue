@@ -1,5 +1,6 @@
 <template>
   <div class="flex items-center justify-center h-screen">
+    <TitleComponent title="UNNESTech" subtitle="Dashboard" />
     <div class="flex items-center justify-center w-3/4 text-center">
       <div class="flex-col items-center justify-center w-1/4 bg-gray-300 p-3 rounded-2xl shadow-xl">
         <ImageViewer :type="`Foto Pengguna`" :is-success="true" :bbox="[55, 55, 210]"

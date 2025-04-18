@@ -1,5 +1,6 @@
 <template>
   <div class="card p-4">
+    <TitleComponent title="UNNESTech" subtitle="Role Management" />
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-briefcase"></i> Role Management</h1>
     <DataTable :value="datas" paginator  :rows="5" :rowsPerPageOptions="[5, 10, 20]" v-model:filters="filters"
       :globalFilterFields="['name', 'description']" tableStyle="min-width: 50rem">
