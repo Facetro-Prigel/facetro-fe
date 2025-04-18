@@ -91,3 +91,11 @@ export const deleteUser = async (id) => {
     return error
   }
 };
+export const userPresenceLog = async (id) =>{
+  try {
+    const res = await apiClient.get(API_URL+'presence/'+id,)
+    return res
+  } catch (error) {
+    return error
+  }
+}

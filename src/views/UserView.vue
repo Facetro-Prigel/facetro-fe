@@ -83,7 +83,7 @@
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
         <template #body="slotProps">
-            <button @click="openPresenceDialog(slotProps.data.uuid)" class="text-orange-500 hover:text-orange-700 p-1" title="Show this user presence"><i class="pi pi-file"></i></button>
+            <button @click="openPresenceDialog({uuid:slotProps.data.uuid, data:slotProps.data})" class="text-orange-500 hover:text-orange-700 p-1" title="Show this user presence"><i class="pi pi-file"></i></button>
             <button @click="openEditUserDialog(slotProps.data.uuid)" title="Edit this user" class="text-blue-500 hover:text-blue-700 p-1">
               <i class="pi pi-pencil"></i>
             </button>
@@ -113,7 +113,7 @@
     <AddUserDialog :visible="isAddUserDialogVisible" :groupOptions="groupOptions" :roleOptions="roleOptions"
       :permissionOptions="permissionOptions" @update:visible="isAddUserDialogVisible = $event" @user-added="getUsers" />
     
-    <ShowPresenceDialog :uuid="selectedUser"  :visible="isPresenceDialogVisible"  />
+    <ShowPresenceDialog :uuid="selectedUser" :data="selectedUserData" :visible="isPresenceDialogVisible"  @update:visible="isPresenceDialogVisible = $event"/>
 
     <EditUserDialog :uuid="selectedUser" :visible="isEditUserDialogVisible" :groupOptions="groupOptions"
       :roleOptions="roleOptions" :permissionOptions="permissionOptions"
@@ -136,6 +136,7 @@ import { fetchPermissions } from '@/services/Permission.services'
 import ImageViewer from '@/components/ImageViewer.vue'
 import ProgressSpinner from 'primevue/progressspinner';
 import { socket } from "@/socket";
+import { data } from 'autoprefixer'
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const users = ref([{
   uuid:'29121', 

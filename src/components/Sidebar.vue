@@ -64,6 +64,11 @@
                   class="pi pi-chart-bar" v-tooltip.right="'Attendance'"></span>
                 <span v-show="dataOpenSidebar">Attendance</span></router-link>
             </div>
+            <div class="py-4 rounded-md cursor-pointer text-white border-b border-gray-400 hover:text-white">
+              <router-link to="/attendance" class="items-center px-2 flex space-x-2" @click.native="showPreloader('/attendance')"><span
+                  class="pi pi-chart-line" v-tooltip.right="'Attendance'"></span>
+                <span v-show="dataOpenSidebar">Liga Presensi</span></router-link>
+            </div>
           </div>
         </div>
       </div>
