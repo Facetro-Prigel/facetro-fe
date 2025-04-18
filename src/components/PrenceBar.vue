@@ -2,8 +2,8 @@
     <div class="flex-col items-center justify-center">
         <!-- Menampilkan nilai dan target -->
         <div class="flex items-center justify-end font-semibold">
-            <span class="text-2xl">{{ isTime ? formatMinutesToHoursAndMinutes(value) : value  }}</span>
-            <span class="text-gray-400">/{{ isTime ? formatMinutesToHoursAndMinutes(target) : target }}</span>
+            <span class="max-2xl:text-lg text-2xl">{{ isTime ? formatMinutesToHoursAndMinutes(value) : value  }}</span>
+            <span class="max-2xl:text-sm text-xl text-gray-400">/{{ isTime ? formatMinutesToHoursAndMinutes(target) : target }}</span>
         </div>
 
         <!-- Progress bar utama -->
