@@ -59,3 +59,11 @@ export const fileUpload = async (data) => {
     return error
   }
 };
+export const dashboard = async () =>{
+  try {
+    const res = await apiClient.get(API_URL+'dashboard',)
+    return res
+  } catch (error) {
+    return error
+  }
+}

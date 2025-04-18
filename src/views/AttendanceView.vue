@@ -104,6 +104,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_API
 const attendanceCards = ref([])
 const loading = ref(true)
 const totalRecords = ref()
+let searchTimeout;
 const filters = ref(
   { 
     page: 1, 
@@ -120,9 +121,10 @@ const filters = ref(
 watch(
   () => filters.value.global.value,
   (newValue) => {
-    if (!newValue) {
-      fetchData();
-    }
+      clearTimeout(searchTimeout); // Hapus timeout sebelumnya
+      searchTimeout = setTimeout(() => {
+        fetchData(); // Panggil fetchData setelah delay
+      }, 500);
   }
 );
 const fetchData = async () => {
