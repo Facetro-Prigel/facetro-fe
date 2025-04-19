@@ -69,8 +69,7 @@
         <div class="bg-gray-200  rounded-2xl p-5 shadow-xl mt-3 flex flex-col justify-center items-center ">
           <h1 class="max-2xl:text-2xl text-3xl font-bold text-primary-500 mb-5">Log Presensi</h1>
           <DataTable :value="logs" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 50rem" v-model:filters="filters"
-            :globalFilterFields="['created_at', 'type']">
+            tableStyle="min-width: 50rem" v-model:filters="filters" :globalFilterFields="['created_at', 'type']">
             <template #header>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <div class="relative">
@@ -104,7 +103,7 @@
                 <span class="text-black">{{ convertToLocale(new Date(slotProps.data.created_at)) }}</span>
               </template>
             </Column>
-            
+
             <Column field="type" header="Type" sortable>
               <template #header="slotProps">
                 <span class="text-black">{{ slotProps.header }}</span>
@@ -126,11 +125,13 @@
 </template>
 
 <script setup>
+import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue';
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { userPresenceLog } from '@/services/User.services'
 import Chart from 'primevue/chart';
 import PrenceBar from '@/components/PrenceBar.vue';
+import Time from "./Time.vue";
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const logs = ref();
 const login_logout = ref({
@@ -140,7 +141,7 @@ const login_logout = ref({
   elapsed: null
 })
 const filters = ref(
-  {'global': { value: null},'created_at': { value: null}, 'type': { value: null}}
+  { 'global': { value: null }, 'created_at': { value: null }, 'type': { value: null } }
 )
 const dashboardData = ref({
   weekly_minutes: 0,
@@ -163,46 +164,57 @@ let dates;
 const chartData = ref();
 const chartOptions = ref();
 
-const startUpdatingTime = (kali = 0) => {
-  if (dashboardData.value.today_login && !dashboardData.value.today_logout) {
-    const currentTime = Date.now(); // Waktu saat ini dalam milidetik
-    const loginTime = new Date(dashboardData.value.today_login_2).getTime(); // Waktu login dalam milidetik
-    const elapsedMinutes = (currentTime - loginTime) / (1000 * 60); // Selisih dalam menit
+// Variabel untuk menyimpan ID interval
+let updateInterval = null;
 
-    // Tambahkan waktu yang telah berlalu ke semester_minutes, monthly_minutes, dan weekly_minutes
-    dashboardData.value.semester_minutes += elapsedMinutes;
-    dashboardData.value.monthly_minutes += elapsedMinutes;
-    dashboardData.value.weekly_minutes += elapsedMinutes;
+// Flag untuk melacak apakah pembaruan sedang berjalan
+const isUpdating = ref(false);
+let kali = 0;
+const startUpdatingTime = () => {
+  if (!isUpdating.value) {
+    isUpdating.value = true; // Set flag ke true
+    updateInterval = setInterval(() => {
+      const currentTime = Date.now(); // Waktu saat ini dalam milidetik
+      const loginTime = new Date(dashboardData.value.today_login_2).getTime(); // Waktu login dalam milidetik
+      const elapsedMinutes = (currentTime - loginTime) / (1000 * 60); // Selisih dalam menit
 
-    // Perbarui daily_minutes dengan menambahkan waktu yang telah berlalu
+      // Tambahkan waktu yang telah berlalu ke semester_minutes, monthly_minutes, dan weekly_minutes
+      dashboardData.value.semester_minutes += elapsedMinutes;
+      dashboardData.value.monthly_minutes += elapsedMinutes;
+      dashboardData.value.weekly_minutes += elapsedMinutes;
 
-    const s = calculateElapsedTimeOrRemaining(dashboardData.value.today_login, currentTime, 480);
-    login_logout.value.remaning = s[1];
-    login_logout.value.elapsed = s[0];
-    // Reset today_login ke waktu saat ini agar penghitungan dimulai dari waktu terakhir
-    dashboardData.value.today_login_2 = new Date(currentTime).toISOString();
-    console.log(dashboardData.value)
-    // Perbarui chartData dengan data baru
-    if (kali == 6 || kali == 0) {
-      const updatedDailyMinutes = dashboardData.value.daily_minutes.map((item) => {
-        if (item.date === getCurrentDate()) {
-          // Jika tanggal sesuai dengan hari ini, tambahkan waktu yang telah berlalu
-          return { ...item, minutes: item.minutes + elapsedMinutes };
+      // Perbarui sisa waktu dan waktu yang telah berlalu
+      const s = calculateElapsedTimeOrRemaining(dashboardData.value.today_login, currentTime, 480);
+      login_logout.value.remaning = s[1];
+      login_logout.value.elapsed = s[0];
+
+      // Reset today_login ke waktu saat ini agar penghitungan dimulai dari waktu terakhir
+      dashboardData.value.today_login_2 = new Date(currentTime).toISOString();
+
+      // Perbarui chartData dengan data baru
+      if (kali >= 30 || kali == 0) {
+        const updatedDailyMinutes = dashboardData.value.daily_minutes.map((item) => {
+          if (item.date === getCurrentDate()) {
+            return { ...item, minutes: item.minutes + (elapsedMinutes*Math.max(kali, 1)) };
+          }
+          return item;
+        });
+        dashboardData.value.daily_minutes = updatedDailyMinutes;
+        if(kali >= 30){
+          kali = 0;
         }
-        return item;
-      });
+        updateChartData(updatedDailyMinutes);
+      }
+      kali++;
+    }, 1000); // Interval 1 detik
+  }
+};
 
-      // Update daily_minutes di dashboardData
-      dashboardData.value.daily_minutes = updatedDailyMinutes;
-      updateChartData(updatedDailyMinutes);
-    }
-    if (kali < 12) {
-      setTimeout(() => {
-        startUpdatingTime(kali + 1)
-      }, 5000);
-    } else {
-      fetchUserDashboard()
-    }
+// Fungsi untuk menghentikan pembaruan waktu
+const stopUpdatingTime = () => {
+  if (isUpdating.value) {
+    clearInterval(updateInterval); // Hentikan interval
+    isUpdating.value = false; // Set flag ke false
   }
 };
 const formatMinutesToHoursAndMinutes = (minutes) => {
@@ -299,68 +311,87 @@ watch(() => props.visible, async (newVal) => {
       today_login: null,
       daily_minutes: [],
     }
-  }
-  chartOptions.value = setChartOptions();
-  const response = await userPresenceLog(props.uuid.uuid)
-  if (response) {
-    dashboardData.value = response;
-    dashboardData.value.today_login_2 = response.today_login;
-    // Fungsi untuk menentukan warna latar belakang
-    const getBackgroundColor = (minutes) => {
-      return minutes > 480 ? 'rgba(50, 205, 50,.75)' : 'rgba(199, 0, 57, .75)';
-    };
-    logs.value = response.log
-    // Ekstrak tanggal dan menit dari daily_minutes
-    dates = dashboardData.value.daily_minutes.map((item) => {
-      let s = item.date;
-      s = s.split('-');
-      return new Date(`${s[0]}-${s[1]}-${s[2]}T00:00:00.000+07:00`).toLocaleString('id-ID', {
-        timeZone: 'Asia/Jakarta',
-        dateStyle: 'full',
-      });
-    });
-    if (response.today_login) {
-      login_logout.value.login = new Date(response.today_login).toLocaleString('id-ID', {
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        timeStyle: 'long',
-        dateStyle: 'medium'
-      })
-    }
-    if (response.today_logout) {
-      login_logout.value.logout = new Date(response.today_logout).toLocaleString('id-ID', {
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        timeStyle: 'long',
-        dateStyle: 'medium'
-      });
-      login_logout.value.elapsed = calculateElapsedTimeOrRemaining(response.today_login, response.today_logout)
-    }
-    const minutes = dashboardData.value.daily_minutes.map((item) => item.minutes);
-
-    // Membuat array backgroundColor berdasarkan daily_minutes
-    const backgroundColors = minutes.map((minute) => getBackgroundColor(minute));
-
-    chartData.value = {
-      labels: dates,
-      datasets: [
-        {
-          type: 'line',
-          label: '',
-          data: minutes,
-          borderColor: 'orange',
-          backgroundColor: backgroundColors,
-          tension: 0.5,
-        },
-        {
-          type: 'bar',
-          label: 'Menit',
-          data: minutes,
-          backgroundColor: backgroundColors,
-        },
-      ],
-    };
-    startUpdatingTime();
+  } else {
+    chartOptions.value = setChartOptions();
+    fetchUserDashboard()
   }
 })
+
+const fetchUserDashboard = async () => {
+  try {
+    stopUpdatingTime(); // Hentikan pembaruan waktu sebelum memuat data baru
+    const response = await userPresenceLog(props.uuid.uuid);
+    if (response) {
+      dashboardData.value = response;
+      dashboardData.value.today_login_2 = response.today_login;
+
+      // Logika untuk menentukan warna latar belakang
+      const getBackgroundColor = (minutes) => {
+        return minutes > 480 ? 'rgba(50, 205, 50,.75)' : 'rgba(199, 0, 57, .75)';
+      };
+      logs.value = response.log
+      // Ekstrak tanggal dan menit dari daily_minutes
+      dates = dashboardData.value.daily_minutes.map((item) => {
+        let s = item.date;
+        s = s.split('-');
+        return new Date(`${s[0]}-${s[1]}-${s[2]}T00:00:00.000+07:00`).toLocaleString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          dateStyle: 'full',
+        });
+      });
+
+      if (response.today_login) {
+        login_logout.value.login = new Date(response.today_login).toLocaleString('id-ID', {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          timeStyle: 'long',
+          dateStyle: 'medium',
+        });
+      }
+
+      if (response.today_logout) {
+        login_logout.value.logout = new Date(response.today_logout).toLocaleString('id-ID', {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          timeStyle: 'long',
+          dateStyle: 'medium',
+        });
+        login_logout.value.elapsed = calculateElapsedTimeOrRemaining(
+          response.today_login,
+          response.today_logout
+        );
+      }
+
+      const minutes = dashboardData.value.daily_minutes.map((item) => item.minutes);
+      const backgroundColors = minutes.map((minute) => getBackgroundColor(minute));
+
+      chartData.value = {
+        labels: dates,
+        datasets: [
+          {
+            type: 'line',
+            label: '',
+            data: minutes,
+            borderColor: 'orange',
+            backgroundColor: backgroundColors,
+            tension: 0.5,
+          },
+          {
+            type: 'bar',
+            label: 'Menit',
+            data: minutes,
+            backgroundColor: backgroundColors,
+          },
+        ],
+      };
+
+      if (dashboardData.value.today_login && !dashboardData.value.today_logout) {
+        startUpdatingTime(); // Mulai pembaruan waktu jika kondisi terpenuhi
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+  }
+};
+
 const updateChartData = (updatedDailyMinutes) => {
   const minutes = updatedDailyMinutes.map((item) => item.minutes);
 
@@ -406,6 +437,13 @@ const convertToLocale = (time) => {
     dateStyle: 'medium'
   })
 }
+
+
+onMounted(async () => {
+  socket.on("logger update", async () => {
+    await fetchUserDashboard()
+  });
+})
 </script>
 
 <style scoped></style>

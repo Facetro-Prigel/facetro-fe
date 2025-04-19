@@ -69,13 +69,14 @@
 </template>
 
 <script setup>
+import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue';
 import Time from '@/components/Time.vue';
 import { getUserProfile, dashboard } from '@/services/MyProfile.services';
 import { ref, onMounted } from 'vue';
 import Chart from 'primevue/chart';
 import PrenceBar from '@/components/PrenceBar.vue';
-
+let kali = 0;
 const BASE_URL = import.meta.env.VITE_BACKEND_API;
 const chartData = ref();
 const chartOptions = ref();
@@ -106,6 +107,8 @@ const user = ref({
   permission: [],
 });
 
+let updateInterval = null;
+const isUpdating = ref(false);
 
 const fetchUserProfile = async () => {
   try {
@@ -120,6 +123,7 @@ const fetchUserProfile = async () => {
 
 const fetchUserDashboard = async () => {
   try {
+    stopUpdatingTime();
     const response = await dashboard();
     if (response) {
       dashboardData.value = response;
@@ -151,7 +155,7 @@ const fetchUserDashboard = async () => {
           timeStyle: 'long',
           dateStyle: 'medium'
         });
-        login_logout.value.elapsed = calculateElapsedTimeOrRemaining(response.today_login,response.today_logout)
+        login_logout.value.elapsed = calculateElapsedTimeOrRemaining(response.today_login, response.today_logout)
       }
       const minutes = dashboardData.value.daily_minutes.map((item) => item.minutes);
 
@@ -177,55 +181,60 @@ const fetchUserDashboard = async () => {
           },
         ],
       };
-
-      // Mulai interval jika today_login ada
-      startUpdatingTime();
+      if (dashboardData.value.today_login && !dashboardData.value.today_logout) {
+        startUpdatingTime();
+      }
     }
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
   }
 };
 
-const startUpdatingTime = (kali = 0) => {
-  if (dashboardData.value.today_login && !dashboardData.value.today_logout) {
-    const currentTime = Date.now(); // Waktu saat ini dalam milidetik
-    const loginTime = new Date(dashboardData.value.today_login_2).getTime(); // Waktu login dalam milidetik
-    const elapsedMinutes = (currentTime - loginTime) / (1000 * 60); // Selisih dalam menit
+const startUpdatingTime = () => {
+  if (!isUpdating.value) {
+    isUpdating.value = true; // Set flag ke true
+    updateInterval = setInterval(() => {
+      const currentTime = Date.now(); // Waktu saat ini dalam milidetik
+      const loginTime = new Date(dashboardData.value.today_login_2).getTime(); // Waktu login dalam milidetik
+      const elapsedMinutes = (currentTime - loginTime) / (1000 * 60); // Selisih dalam menit
 
-    // Tambahkan waktu yang telah berlalu ke semester_minutes, monthly_minutes, dan weekly_minutes
-    dashboardData.value.semester_minutes += elapsedMinutes;
-    dashboardData.value.monthly_minutes += elapsedMinutes;
-    dashboardData.value.weekly_minutes += elapsedMinutes;
+      // Tambahkan waktu yang telah berlalu ke semester_minutes, monthly_minutes, dan weekly_minutes
+      dashboardData.value.semester_minutes += elapsedMinutes;
+      dashboardData.value.monthly_minutes += elapsedMinutes;
+      dashboardData.value.weekly_minutes += elapsedMinutes;
 
-    // Perbarui daily_minutes dengan menambahkan waktu yang telah berlalu
+      // Perbarui sisa waktu dan waktu yang telah berlalu
+      const s = calculateElapsedTimeOrRemaining(dashboardData.value.today_login, currentTime, 480);
+      login_logout.value.remaning = s[1];
+      login_logout.value.elapsed = s[0];
 
-    const s = calculateElapsedTimeOrRemaining(dashboardData.value.today_login, currentTime, 480);
-    login_logout.value.remaning = s[1];
-    login_logout.value.elapsed = s[0];
-    // Reset today_login ke waktu saat ini agar penghitungan dimulai dari waktu terakhir
-    dashboardData.value.today_login_2 = new Date(currentTime).toISOString();
-    console.log(dashboardData.value)
-    // Perbarui chartData dengan data baru
-    if (kali == 6 || kali == 0) {
-      const updatedDailyMinutes = dashboardData.value.daily_minutes.map((item) => {
-        if (item.date === getCurrentDate()) {
-          // Jika tanggal sesuai dengan hari ini, tambahkan waktu yang telah berlalu
-          return { ...item, minutes: item.minutes + elapsedMinutes };
+      // Reset today_login ke waktu saat ini agar penghitungan dimulai dari waktu terakhir
+      dashboardData.value.today_login_2 = new Date(currentTime).toISOString();
+
+      // Perbarui chartData dengan data baru
+      if (kali >= 30 || kali == 0) {
+        const updatedDailyMinutes = dashboardData.value.daily_minutes.map((item) => {
+          if (item.date === getCurrentDate()) {
+            return { ...item, minutes: item.minutes + (elapsedMinutes*Math.max(kali, 1)) };
+          }
+          return item;
+        });
+        dashboardData.value.daily_minutes = updatedDailyMinutes;
+        if(kali >= 30){
+          kali = 0;
         }
-        return item;
-      });
+        updateChartData(updatedDailyMinutes);
+      }
+      kali++;
+    }, 1000); // Interval 1 detik
+  }
+};
 
-      // Update daily_minutes di dashboardData
-      dashboardData.value.daily_minutes = updatedDailyMinutes;
-      updateChartData(updatedDailyMinutes);
-    }
-    if (kali < 12) {
-      setTimeout(() => {
-        startUpdatingTime(kali + 1)
-      }, 5000);
-    } else {
-      fetchUserDashboard()
-    }
+// Fungsi untuk menghentikan pembaruan waktu
+const stopUpdatingTime = () => {
+  if (isUpdating.value) {
+    clearInterval(updateInterval); // Hentikan interval
+    isUpdating.value = false; // Set flag ke false
   }
 };
 
@@ -350,10 +359,14 @@ const calculateElapsedTimeOrRemaining = (startTime, endTime, targetTimeInMinutes
 };
 
 
-onMounted(() => {
-  fetchUserProfile();
-  fetchUserDashboard();
+onMounted(async () => {
+  await fetchUserProfile();
+  await fetchUserDashboard();
   chartOptions.value = setChartOptions();
+
+  socket.on("logger update", async () => {
+    await fetchUserDashboard()
+  });
 });
 </script>
 
