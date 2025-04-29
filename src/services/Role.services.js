@@ -36,7 +36,7 @@ export const createRole = async (value) => {
 export const updateRole = async (id, permission) => {
   try {
     const res = await apiClient.put(API_URL+id, permission);
-    return res.data;
+    return res;
   } catch (error) {
     return error;
   }

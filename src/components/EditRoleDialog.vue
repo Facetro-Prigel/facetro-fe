@@ -98,7 +98,8 @@ const handleEditRole = async () => {
     let response = await updateRole(props.uuid, role.value)
     if (response.validateError){
       error.value = response.validateError
-    }else{
+    }
+    if (response.title == 'Success') {
       emit('role-added')
       emit('update:visible', false)
     }
