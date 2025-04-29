@@ -5,7 +5,13 @@ export const login = async (data) => {
       const res= await apiClient.post('/user/login', data)
       await VueCookies.set('token', res.token, '14d')
       delete res.token;
-      await VueCookies.set('user_data', res, '14d');
+      try {
+        localStorage.removeItem('user_data');
+      } catch (error) {
+        console.error("Error while removing user_data")
+      }
+      let s = JSON.stringify(res)
+      localStorage.setItem('user_data', s);
       return res;
     } catch (error) {
       console.error(error)

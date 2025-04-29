@@ -3,8 +3,9 @@
       <TitleComponent title="UNNESTech" subtitle="Attendance" />
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
       <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
-        :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem" v-model:filters="filters"
-        @page="onPageChange" @sort="onSortChange" :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
+        :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem"
+        v-model:filters="filters" @page="onPageChange" @sort="onSortChange"
+        :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div class="relative">
@@ -12,6 +13,9 @@
               <input v-model="filters['global'].value" type="text" placeholder="Search..."
                 class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
             </div>
+            <button @click="downlaodAttendanceLogs()" class="flex bg-secondary-400 hover:bg-secondary-500 px-3 py-2 rounded-lg justify-center items-center drop-shadow-md">
+              <i class="pi pi-file-excel"></i><div class="ml-2">Download Excel</div>
+            </button>
           </div>
         </template>
         <template #loading>
@@ -98,7 +102,7 @@
 <script setup>
 import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
-import { fetchAttendanceLogs } from '@/services/Attendance.services';
+import { fetchAttendanceLogs, downlaodAttendanceLogs } from '@/services/Attendance.services';
 import { ref, onMounted, watch } from 'vue'
 import ProgressSpinner from 'primevue/progressspinner';
 const BASE_URL = import.meta.env.VITE_BACKEND_API
@@ -107,25 +111,25 @@ const loading = ref(true)
 const totalRecords = ref()
 let searchTimeout;
 const filters = ref(
-  { 
-    page: 1, 
-    rows: 5, 
-    sort: 'created_at', 
-    order: 'desc', 
-    global: { value: null }, 
-    'name': { value: null }, 
-    'identityNumber': { value: null }, 
-    'inTime': { value: null }, 
-    'device': { value: null } 
+  {
+    page: 1,
+    rows: 5,
+    sort: 'created_at',
+    order: 'desc',
+    global: { value: null },
+    'name': { value: null },
+    'identityNumber': { value: null },
+    'inTime': { value: null },
+    'device': { value: null }
   }
 )
 watch(
   () => filters.value.global.value,
   (newValue) => {
-      clearTimeout(searchTimeout); // Hapus timeout sebelumnya
-      searchTimeout = setTimeout(() => {
-        fetchData(); // Panggil fetchData setelah delay
-      }, 500);
+    clearTimeout(searchTimeout); // Hapus timeout sebelumnya
+    searchTimeout = setTimeout(() => {
+      fetchData(); // Panggil fetchData setelah delay
+    }, 500);
   }
 );
 const fetchData = async () => {
