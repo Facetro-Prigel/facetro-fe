@@ -132,7 +132,7 @@ const fetchUserDashboard = async () => {
       const getBackgroundColor = (minutes) => {
         return minutes > 480 ? 'rgba(50, 205, 50,.75)' : 'rgba(199, 0, 57, .75)';
       };
-
+      kali = 0;
       // Ekstrak tanggal dan menit dari daily_minutes
       dates = dashboardData.value.daily_minutes.map((item) => {
         let s = item.date;

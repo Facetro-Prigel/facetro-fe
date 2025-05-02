@@ -296,7 +296,7 @@ const setChartOptions = () => {
 };
 watch(() => props.visible, async (newVal) => {
   if (!newVal) {
-    props.uuid.uuid = null;
+    props.uuid.uuid = '';
     login_logout.value = {
       login: null,
       logout: null,
@@ -437,8 +437,6 @@ const convertToLocale = (time) => {
     dateStyle: 'medium'
   })
 }
-
-
 onMounted(async () => {
   socket.on("logger update", async () => {
     await fetchUserDashboard()

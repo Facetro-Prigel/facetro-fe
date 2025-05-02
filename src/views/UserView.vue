@@ -113,7 +113,7 @@
     <AddUserDialog :visible="isAddUserDialogVisible" :groupOptions="groupOptions" :roleOptions="roleOptions"
       :permissionOptions="permissionOptions" @update:visible="isAddUserDialogVisible = $event" @user-added="getUsers" />
     
-    <ShowPresenceDialog :uuid="selectedUser" :data="selectedUserData" :visible="isPresenceDialogVisible"  @update:visible="isPresenceDialogVisible = $event"/>
+    <ShowPresenceDialog :uuid="selectedUser" :visible="isPresenceDialogVisible"  @update:visible="isPresenceDialogVisible = $event"/>
 
     <EditUserDialog :uuid="selectedUser" :visible="isEditUserDialogVisible" :groupOptions="groupOptions"
       :roleOptions="roleOptions" :permissionOptions="permissionOptions"

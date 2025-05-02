@@ -327,7 +327,7 @@ const resetForm = () => {
     telegram_id: "",
     nfc_data: ""
   }
-
+  avatar.value = '';
   uplodedImage.value = ''
   unnesImage.value = loadingImg
   error.value = {
