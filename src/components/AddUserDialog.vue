@@ -1,23 +1,23 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-    <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
+    <div class="bg-white p-6 rounded shadow-md w-11/12 sm:w-1/2 max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4"><i class="pi pi-user-add mr-2"></i> Add User</h2>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5">
         <h1 class="text-lg font-bold text-center">Avatar <span class="text-red-400">*</span></h1>
         <div class="flex justify-center items-center">
-          <div class="w-5/6 flex p-2">
-            <div class="w-1/3 pr-2">
+          <div class="w-5/6 flex p-2 flex-wrap items-center justify-center">
+            <div class="w-1/2 sm:w-1/3 pr-2">
               UNNES Photo
               <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
                 alt="Uploaded Image">
             </div>
-            <div class="w-1/3 pl-2 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
+            <div class="w-1/2 sm:w-1/3 pl-2 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
               <div>Avatar</div>
               <img class="w-full rounded-lg" :src="avatar ? avatar : no_image_icon" :alt="`Avatar of ${user.name}`"
                 :title="`Avatar of ${user.name}`">
             </div>
-            <div class="w-1/3 pl-2 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
+            <div class="w-1/2 sm:w-1/3 sm:pl-2 mt-2 sm:mt-0 relative rounded-lg h-max-[300px] drop-shadow-lg overflow-hidden group">
               <div>Uploaded Image</div>
               <input type="file" id="dropzone-file" accept="image/*"
                 class="h-full w-full absolute opacity-0 hover:cursor-pointer z-30" @change="handleFileUpload" />
@@ -26,14 +26,14 @@
                 <i class="pi pi-upload text-white text-6xl"></i>
                 <p class="text-sm mt-2 text-white"><span class="font-bold">Click to upload</span> drag or drop</p>
               </div>
-              <img class="w-full rounded-lg" :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
+              <img class="w-full rounded-lg " :src="uplodedImage != '' ? uplodedImage : upload_image_icon"
                 alt="Uploaded Image">
             </div>
           </div>
         </div>
       </div>
-      <div class="flex" ref="form">
-        <div class="w-1/2 pr-4">
+      <div class="flex flex-col sm:flex-row" ref="form">
+        <div class="w-full sm:w-1/2 sm:pr-4">
           <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700">Name<span
                 class="text-red-400">*</span></label>
@@ -83,7 +83,7 @@
             <div class="text-red-600 text-sm">{{ error.program_study }}</div>
           </div>
         </div>
-        <div class="w-1/2">
+        <div class="w-full sm:w-1/2">
           <div class="mb-4">
             <label for="phoneNumber" class="block text-sm font-medium text-gray-700">No HP</label>
             <input v-model="user.phone_number" type="text" id="phoneNumber" placeholder="Enter phone number"
@@ -154,7 +154,7 @@
             </MultiSelect>
 
           </div>
-          <div class="flex justify-end mt-4">
+          <div class="flex justify-end mt-4 sm:text-lg text-sm">
             <button @click="handleAddUser"
               class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-500">
               Add

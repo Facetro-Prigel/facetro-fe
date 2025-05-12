@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-    <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
+    <div class="bg-white p-6 rounded shadow-md w-11/12 sm:w-1/2 max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4">Edit Group</h2>
       <div class="py-2">
       </div>
@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-end mt-4">
+      <div class="flex justify-end mt-2 sm:mt-4 sm:text-lg text-sm">
         <button @click="handleEditGroup" ref="addButton" class="bg-primary-500 text-white px-4 py-2 rounded mr-2">
           Update
         </button>

@@ -1,118 +1,118 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-    <div class="bg-white p-6 rounded shadow-md w-[50%] max-h-[90%] overflow-y-scroll">
+    <div class="bg-white p-3 sm:p-6 rounded shadow-md w-11/12 sm:w-1/2 max-h-[90%] overflow-y-scroll">
       <h2 class="text-lg font-semibold mb-4" ref="alertSection">{{ uuid.data.name }}'s Presence Logs</h2>
       <hr class="border-purple-500 mb-4" />
       <div class="flex flex-col mb-5 ">
-        <div class="flex bg-gray-200 shadow-lg rounded-xl p-6 w-full mt-3">
-          <div class="flex w-2/12">
+        <div class="flex flex-col items-center sm:flex-row bg-gray-200 shadow-lg rounded-xl p-2 sm:p-6 w-full mt-3">
+          <div class="flex w-3/4 sm:w-2/12">
             <ImageViewer :type="`Foto Pengguna`" :is-success="true" :bbox="[55, 55, 210]"
               :image="BASE_URL + 'avatar/' + uuid.data.avatar" />
           </div>
-          <div class="flex flex-col  justify-center w-4/12">
-            <p class="font-poppins  text-3xl font-bold text-gray-800">{{ uuid.data.name }}</p>
-            <p class="font-poppins font-semibold  text-gray-700 text-lg">{{ uuid.data.identity_number }}</p>
+          <div class="flex flex-col items-center justify-center w-full sm:w-4/12">
+            <p class="text-xl sm:text-3xl font-bold text-gray-800 text-center sm:text-left">{{ uuid.data.name }}</p>
+            <p class="font-semibold  text-gray-700 text-lg text-center sm:text-left">{{ uuid.data.identity_number }}</p>
           </div>
-          <div class="flex flex-col  justify-center w-6/12 border-l-black border-l-2 ml-2 pl-2">
+          <div
+            class="flex flex-col items-center sm:items-start justify-center w-full sm:w-6/12 sm:border-t-0 border-t-black border-t-2 mt-2 pt-2 sm:border-l-black sm:border-l-2 sm:ml-2 sm:pl-2 text-center sm:text-left">
             <div class="flex">
               <Time />
             </div>
-            <h2 class="text-2xl font-bold text-primary-500">Ringkasan Hari Ini</h2>
-            <div class="flex w-full felx-col" v-if="login_logout.login">
-              <div class="flex w-3/12">Masuk:</div>
-              <div class="flex w-9/12 font-bold">{{ login_logout.login }}</div>
-            </div>
-            <div class="flex w-full felx-col" v-if="!login_logout.login">
-              <div class="flex w-10/12 font-bold text-1xl text-white bg-red-600 px-2 py-1 rounded-md">
-                {{ uuid.data.name }} belum melakukan presensi hari ini!
+            <h2 class="text-xl sm:text-2xl font-bold text-primary-500 w-full ">Ringkasan Hari Ini</h2>
+            <div class="text-[13px] w-full sm:text-lg p-1 sm:p-0">
+              <div class="flex w-full felx-col" v-if="login_logout.login">
+                <div class="flex w-3/12">Masuk:</div>
+                <div class="flex w-9/12 font-bold">{{ login_logout.login }}</div>
               </div>
-            </div>
-            <div class="flex w-full felx-col" v-if="login_logout.remaning">
-              <div class="flex w-3/12">Sisa:</div>
-              <div class="flex w-9/12 font-bold">{{ login_logout.remaning }}</div>
-            </div>
-            <div class="flex w-full felx-col" v-if="login_logout.elapsed">
-              <div class="flex w-3/12">Ditempuh:</div>
-              <div class="flex w-9/12 font-bold">{{ login_logout.elapsed }}</div>
-            </div>
-            <div class="flex w-full felx-col" v-if="login_logout.logout">
-              <div class="flex w-3/12">Keluar:</div>
-              <div class="flex w-9/12 font-bold"> {{ login_logout.logout }}</div>
+              <div class="flex w-full felx-col" v-if="!login_logout.login">
+                <div class="flex w-full sm:w-10/12 font-bold  text-white bg-red-600 px-2 py-1 rounded-md">
+                  {{ uuid.data.name }} belum melakukan presensi hari ini!
+                </div>
+              </div>
+              <div class="flex w-full felx-col" v-if="login_logout.remaning">
+                <div class="flex w-3/12">Sisa:</div>
+                <div class="flex w-9/12 font-bold">{{ login_logout.remaning }}</div>
+              </div>
+              <div class="flex w-full felx-col" v-if="login_logout.elapsed">
+                <div class="flex w-3/12">Ditempuh:</div>
+                <div class="flex w-9/12 font-bold">{{ login_logout.elapsed }}</div>
+              </div>
+              <div class="flex w-full felx-col" v-if="login_logout.logout">
+                <div class="flex w-3/12">Keluar:</div>
+                <div class="flex w-9/12 font-bold"> {{ login_logout.logout }}</div>
+              </div>
             </div>
           </div>
         </div>
         <div class="bg-gray-300 rounded-2xl p-5 shadow-xl mt-3 flex max-xl:flex-col justify-center items-center">
           <div class="max-xl:w-full w-7/12">
-            <h1 class="max-2xl:text-2xl text-3xl font-bold text-primary-500">Ringkasan Presensi</h1>
-            <h2 class="max-2xl:text-lg text-xl">Grafik Harian dalam Seminggu</h2>
+            <h1 class="text-lg sm:text-4xl font-bold text-primary-500">Ringkasan Presensi</h1>
+            <h2 class="text-sm sm:text-3xl">Grafik Harian dalam Seminggu</h2>
             <Chart type="bar" :data="chartData" :options="chartOptions" />
           </div>
           <div class="max-xl:w-full w-5/12 flex flex-col justify-center items-center p-2">
             <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-              <h2 class="text-md">Waktu yang dihabiskan dalam seminggu:</h2>
+              <h2 class="text-sm sm:text-md">Waktu yang dihabiskan dalam seminggu:</h2>
               <PrenceBar :value="dashboardData.weekly_minutes ?? 0" :target="2400" :max="2823" :isTime="true">
               </PrenceBar>
             </div>
             <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-              <h2 class="text-md">Waktu yang dihabiskan dalam sebulan:</h2>
+              <h2 class="text-sm sm:text-md">Waktu yang dihabiskan dalam sebulan:</h2>
               <PrenceBar :value="dashboardData.monthly_minutes ?? 0" :target="9600" :max="11294" :isTime="true">
               </PrenceBar>
             </div>
             <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-              <h2 class="text-md">Waktu yang dihabiskan dalam semester:</h2>
+              <h2 class="text-sm sm:text-md">Waktu yang dihabiskan dalam semester:</h2>
               <PrenceBar :value="dashboardData.semester_minutes ?? 0" :target="33000" :max="38823" :isTime="true">
               </PrenceBar>
             </div>
           </div>
 
         </div>
-        <div class="bg-gray-200  rounded-2xl p-5 shadow-xl mt-3 flex flex-col justify-center items-center ">
-          <h1 class="max-2xl:text-2xl text-3xl font-bold text-primary-500 mb-5">Log Presensi</h1>
-          <DataTable :value="logs" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 50rem" v-model:filters="filters" :globalFilterFields="['created_at', 'type']">
-            <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                <div class="relative">
-                  <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                  <input v-model="filters['global'].value" type="text" placeholder="Search..."
-                    class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
-                </div>
-              </div>
-            </template>
-            <Column field="image_path" header="Image">
-              <template #header="slotProps">
-                <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                <div class="flex max-w-[175px] min-w-[100px]">
-                  <ImageViewer :type="`Foto ${uuid.data.name}`" :is-success="true" :bbox="slotProps.data.bbox"
-                    :image="BASE_URL + 'photos/' + slotProps.data.image_path" />
-                  <!-- <img
-                :src="slotProps.data.avatar ? BASE_URL + slotProps.data.avatar : no_image_icon"
-                :alt="slotProps.data.name"
-                class="w-full shadow-md rounded"
-              /> -->
+        <div class="bg-gray-200  rounded-2xl p-2 sm:p-5 shadow-xl mt-3 flex flex-col justify-center items-center ">
+          <h1 class="text-lg sm:text-4xl font-bold text-primary-500">Log Presensi</h1>
+          <div class="w-full">
+            <DataTable :value="logs" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+              tableStyle="min-width: 50rem" v-model:filters="filters" :globalFilterFields="['created_at', 'type']">
+              <template #header>
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                  <div class="relative">
+                    <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input v-model="filters['global'].value" type="text" placeholder="Search..."
+                      class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10 w-full " />
+                  </div>
                 </div>
               </template>
-            </Column>
-            <Column field="created_at" header="Timestamp" sortable>
-              <template #header="slotProps">
-                <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                <span class="text-black">{{ convertToLocale(new Date(slotProps.data.created_at)) }}</span>
-              </template>
-            </Column>
+              <Column field="image_path" header="Image">
+                <template #header="slotProps">
+                  <span class="text-black">{{ slotProps.header }}</span>
+                </template>
+                <template #body="slotProps">
+                  <div class="flex max-w-[175px] min-w-[100px]">
+                    <ImageViewer :type="`Foto ${uuid.data.name}`" :is-success="true" :bbox="slotProps.data.bbox"
+                      :image="BASE_URL + 'photos/' + slotProps.data.image_path" />
+                  </div>
+                </template>
+              </Column>
+              <Column field="created_at" header="Timestamp" sortable>
+                <template #header="slotProps">
+                  <span class="text-black">{{ slotProps.header }}</span>
+                </template>
+                <template #body="slotProps">
+                  <span class="text-black">{{ convertToLocale(new Date(slotProps.data.created_at)) }}</span>
+                </template>
+              </Column>
 
-            <Column field="type" header="Type" sortable>
-              <template #header="slotProps">
-                <span class="text-black">{{ slotProps.header }}</span>
-              </template>
-              <template #body="slotProps">
-                <span class="text-black">{{ slotProps.data.type }}</span>
-              </template>
-            </Column>
-          </DataTable>
+              <Column field="type" header="Type" sortable>
+                <template #header="slotProps">
+                  <span class="text-black">{{ slotProps.header }}</span>
+                </template>
+                <template #body="slotProps">
+                  <span class="text-black">{{ slotProps.data.type }}</span>
+                </template>
+              </Column>
+            </DataTable>
+          </div>
         </div>
       </div>
       <div class="flex justify-end mt-4">
@@ -195,12 +195,12 @@ const startUpdatingTime = () => {
       if (kali >= 30 || kali == 0) {
         const updatedDailyMinutes = dashboardData.value.daily_minutes.map((item) => {
           if (item.date === getCurrentDate()) {
-            return { ...item, minutes: item.minutes + (elapsedMinutes*Math.max(kali, 1)) };
+            return { ...item, minutes: item.minutes + (elapsedMinutes * Math.max(kali, 1)) };
           }
           return item;
         });
         dashboardData.value.daily_minutes = updatedDailyMinutes;
-        if(kali >= 30){
+        if (kali >= 30) {
           kali = 0;
         }
         updateChartData(updatedDailyMinutes);

@@ -7,7 +7,7 @@
           <ImageViewer :type="`Foto Pengguna`" :is-success="true" :bbox="[55, 55, 210]"
             :image="BASE_URL + 'avatar/' + user.avatar" />
         </div>
-        <div class="flex flex-col  justify-center sm:w-4/12">
+        <div class="flex flex-col justify-center sm:w-4/12">
           <h2 class="text-lg sm:text-2xl">Selamat Datang</h2>
           <p class="text-xl sm:text-3xl font-bold text-gray-800">{{ user.name }}</p>
           <p class="font-semibold text-sm text-white bg-black px-2 py-1 rounded-lg">{{ user.email }}</p>
@@ -24,7 +24,7 @@
               <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.login }}</div>
             </div>
             <div class="flex w-full felx-col" v-if="!login_logout.login">
-              <div class="flex w-10/12 font-bold text-1xl text-white bg-red-600 px-2 py-1 rounded-md">Anda belum melakukan
+              <div class="flex w-full sm:w-10/12 text-sm sm:text-lg font-bold text-1xl text-white bg-red-600 px-2 py-1 rounded-md">Anda belum melakukan
                 presensi hari ini!</div>
             </div>
             <div class="flex w-full felx-col" v-if="login_logout.remaning">

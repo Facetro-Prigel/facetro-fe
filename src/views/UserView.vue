@@ -11,8 +11,8 @@
             <input v-model="filters['global'].value" type="text" placeholder="Search..."
               class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
           </div>
-          <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 rounded-md">
-            <i class="pi pi-user-plus mr-2"></i> Add User
+          <button @click="openAddUserDialog" class="bg-primary-500 text-white px-4 py-2 text-md sm:text-lg rounded-md">
+            <i class="pi pi-user-plus mr-2 "></i> Add User
           </button>
         </div>
       </template>
