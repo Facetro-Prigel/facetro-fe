@@ -2,63 +2,65 @@
   <div class="flex items-center justify-center">
     <TitleComponent title="UNNESTech" subtitle="Dashboard" />
     <div class="flex-col items-center justify-center w-11/12">
-      <div class="flex bg-gray-200 shadow-lg rounded-xl p-6 w-full mt-3">
-        <div class="flex w-2/12">
+      <div class="flex flex-col items-center sm:flex-row bg-gray-200 shadow-lg rounded-xl p-6 w-full mt-3">
+        <div class="flex w-3/4 sm:w-2/12">
           <ImageViewer :type="`Foto Pengguna`" :is-success="true" :bbox="[55, 55, 210]"
             :image="BASE_URL + 'avatar/' + user.avatar" />
         </div>
-        <div class="flex flex-col  justify-center w-4/12">
-          <h2 class="text-2xl">Selamat Datang</h2>
-          <p class="font-poppins  text-3xl font-bold text-gray-800">{{ user.name }}</p>
-          <p class="font-poppins font-semibold text-white text-sm bg-black px-2 py-1 rounded-lg">{{ user.email }}</p>
-          <p class="font-poppins font-semibold  text-gray-700 text-lg">{{ user.identity_number }}</p>
+        <div class="flex flex-col  justify-center sm:w-4/12">
+          <h2 class="text-lg sm:text-2xl">Selamat Datang</h2>
+          <p class="text-xl sm:text-3xl font-bold text-gray-800">{{ user.name }}</p>
+          <p class="font-semibold text-sm text-white bg-black px-2 py-1 rounded-lg">{{ user.email }}</p>
+          <p class="font-semibold  text-gray-700 text-sm sm:text-lg">{{ user.identity_number }}</p>
         </div>
-        <div class="flex flex-col  justify-center w-6/12 border-l-black border-l-2 ml-2 pl-2">
+        <div class="flex flex-col w-full justify-center sm:w-6/12 border-t-black border-t-2 sm:border-l-black sm:border-l-2 sm:border-t-0 mt-2 pt-2 sm:mt-0  sm:ml-2 sm:pl-2">
           <div class="flex">
             <Time />
           </div>
-          <h2 class="text-2xl font-bold text-primary-500">Ringkasan Hari Ini</h2>
-          <div class="flex w-full felx-col" v-if="login_logout.login">
-            <div class="flex max-2xl:w-3/12 w-2/12">Masuk:</div>
-            <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.login }}</div>
-          </div>
-          <div class="flex w-full felx-col" v-if="!login_logout.login">
-            <div class="flex w-10/12 font-bold text-1xl text-white bg-red-600 px-2 py-1 rounded-md">Anda belum melakukan
-              presensi hari ini!</div>
-          </div>
-          <div class="flex w-full felx-col" v-if="login_logout.remaning">
-            <div class="flex max-2xl:w-3/12 w-2/12">Sisa:</div>
-            <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.remaning }}</div>
-          </div>
-          <div class="flex w-full felx-col" v-if="login_logout.elapsed">
-            <div class="flex max-2xl:w-3/12 w-2/12">Ditempuh:</div>
-            <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.elapsed }}</div>
-          </div>
-          <div class="flex w-full felx-col" v-if="login_logout.logout">
-            <div class="flex max-2xl:w-3/12 w-2/12">Keluar:</div>
-            <div class="flex max-2xl:w-9/12 w-10/12 font-bold"> {{ login_logout.logout }}</div>
+          <h2 class="text-lg sm:text-3xl font-bold text-primary-500">Ringkasan Hari Ini</h2>
+          <div class="text-sm sm:text-xl">
+            <div class="flex w-full felx-col" v-if="login_logout.login">
+              <div class="flex max-2xl:w-3/12 w-2/12">Masuk:</div>
+              <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.login }}</div>
+            </div>
+            <div class="flex w-full felx-col" v-if="!login_logout.login">
+              <div class="flex w-10/12 font-bold text-1xl text-white bg-red-600 px-2 py-1 rounded-md">Anda belum melakukan
+                presensi hari ini!</div>
+            </div>
+            <div class="flex w-full felx-col" v-if="login_logout.remaning">
+              <div class="flex max-2xl:w-3/12 w-2/12">Sisa:</div>
+              <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.remaning }}</div>
+            </div>
+            <div class="flex w-full felx-col" v-if="login_logout.elapsed">
+              <div class="flex max-2xl:w-3/12 w-2/12">Ditempuh:</div>
+              <div class="flex max-2xl:w-9/12 w-10/12 font-bold">{{ login_logout.elapsed }}</div>
+            </div>
+            <div class="flex w-full felx-col" v-if="login_logout.logout">
+              <div class="flex max-2xl:w-3/12 w-2/12">Keluar:</div>
+              <div class="flex max-2xl:w-9/12 w-10/12 font-bold"> {{ login_logout.logout }}</div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="bg-gray-300 rounded-2xl p-5 shadow-xl mt-3 flex max-xl:flex-col justify-center items-center">
-        <div class="max-xl:w-full w-7/12">
-          <h1 class="max-2xl:text-2xl text-3xl font-bold text-primary-500">Ringkasan Presensi</h1>
-          <h2 class="max-2xl:text-lg text-xl">Grafik Harian dalam Seminggu</h2>
+        <div class="w-full xl:w-7/12">
+          <h1 class="text-lg sm:text-4xl font-bold text-primary-500">Ringkasan Presensi</h1>
+          <h2 class="text-md sm:text-3xl">Grafik Harian dalam Seminggu</h2>
           <Chart type="bar" :data="chartData" :options="chartOptions" />
         </div>
         <div class="max-xl:w-full w-5/12 flex flex-col justify-center items-center p-2">
           <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-            <h2 class="max-2xl:text-lg text-xl">Waktu yang dihabiskan dalam seminggu:</h2>
+            <h2 class="text-sm sm:text-xl">Waktu yang dihabiskan dalam seminggu:</h2>
             <PrenceBar :value="dashboardData.weekly_minutes ?? 0" :target="2400" :max="2823" :isTime="true"></PrenceBar>
           </div>
           <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-            <h2 class="max-2xl:text-lg text-xl">Waktu yang dihabiskan dalam sebulan:</h2>
+            <h2 class="text-sm sm:text-xl">Waktu yang dihabiskan dalam sebulan:</h2>
             <PrenceBar :value="dashboardData.monthly_minutes ?? 0" :target="9600" :max="11294" :isTime="true">
             </PrenceBar>
           </div>
           <div class="bg-gray-200 p-2 rounded-xl my-2 w-full">
-            <h2 class="max-2xl:text-lg text-xl">Waktu yang dihabiskan dalam semester:</h2>
+            <h2 class="text-sm sm:text-xl">Waktu yang dihabiskan dalam semester:</h2>
             <PrenceBar :value="dashboardData.semester_minutes ?? 0" :target="33000" :max="38823" :isTime="true">
             </PrenceBar>
           </div>

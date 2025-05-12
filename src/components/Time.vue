@@ -1,9 +1,9 @@
 <template>
-    <div class="flex rounded-lg justify-center items-center bg-gray-700 text-black border-4 border-black bg-opacity-20 text-lg p-2">
-        <div class="px-2 py-2 border-gray-800/30 border-r-4 text-2xl font-bold">
+    <div class="flex rounded-lg justify-center items-center bg-gray-700 text-black border-4 border-black bg-opacity-20 text-lg p-1 sm:p-2 w-full sm:w-fit">
+        <div class="px-2 py-2 border-gray-800/30 border-r-4 textl-lg sm:text-2xl font-bold">
                 {{ clock }}
         </div>
-        <div class="flex flex-col justify-center text-md text-left">
+        <div class="flex flex-col justify-center text-sm sm:text-md text-left">
             <div class="px-4 font-bold">{{ day }},</div>
             <div class="px-4">{{ date }}</div>
         </div>

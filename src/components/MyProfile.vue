@@ -4,43 +4,50 @@
     <h1 class="text-lg font-bold text-center">Foto Sekarang <span class="text-red-400">*</span></h1>
     <div class="flex justify-center items-center">
       <div class="flex justify-center items-center p-2">
-        <div class="border-4 p-4 justify-center items-center flex rounded-xl  group">
+        <div class="border-4 p-4 justify-center items-center flex flex-col sm:flex-row rounded-xl sm:w-6/12 group">
           <!-- Menampilkan userImage dengan fallback ke no_image_icon jika tidak tersedia -->
-          <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
-            <div>Avatar</div>
-            <img class="w-full rounded-lg" :src="avatar ? avatar : no_image_icon" :alt="`Avatar of ${user.name}`"
-              :title="`Avatar of ${user.name}`">
-          </div>
-
-          <div class="w-1/6 px-1 overflow-hidden group">
-            <div>Foto Utama</div>
-            <div class="relative rounded-lg drop-shadow-lg overflow-hidden group">
-              <img class="w-full h-full object-cover rounded-xl" :src="userImage || no_image_icon" alt="UNNES Image" />
-              <input type="file" id="dropzone-file" accept="image/*"
-                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30" @change="handleFileUpload" />
-              <div
-                class="absolute inset-0 bg-gray-800/50 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10">
-                <i class="pi pi-upload text-white text-6xl"></i>
-                <p class="text-sm mt-2 text-white"><span class="font-bold">Click to upload</span> or drag and drop</p>
+          <div class="flex w-full sm:w-1/2 justify-center items-center">
+            <div class="w-1/2 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
+              <div>Avatar</div>
+              <img class="w-full rounded-lg" :src="avatar ? avatar : no_image_icon" :alt="`Avatar of ${user.name}`"
+                :title="`Avatar of ${user.name}`">
+            </div>
+            <div class="w-1/2  px-1 overflow-hidden group">
+              <div>Foto Utama</div>
+              <div class="relative rounded-lg drop-shadow-lg overflow-hidden group">
+                <img class="w-full h-full object-cover rounded-xl" :src="userImage || no_image_icon"
+                  alt="UNNES Image" />
+                <input type="file" id="dropzone-file" accept="image/*"
+                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30" @change="handleFileUpload" />
+                <div
+                  class="absolute inset-0 bg-gray-800/50 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10">
+                  <i class="pi pi-upload text-white text-6xl"></i>
+                  <p class="text-sm mt-2 text-white"><span class="font-bold">Click to upload</span> or drag and drop</p>
+                </div>
               </div>
             </div>
           </div>
+          <div class="flex w-full sm:w-1/2 mt-2 pt-2 border-t-black border-t-2 sm:border-0 sm:p-0 sm:m-0">
+            <div class="w-1/2 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
+              <div>Unnes Foto</div>
+              <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
+                alt="Uploaded Image">
+            </div>
+            <div class="w-1/2  px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
+              <div>Birthday / Co-card</div>
+              <img class="w-full rounded-lg" :src="birthdayImageC ? birthdayImageC : no_image_icon"
+                alt="Uploaded Image">
+            </div>
+          </div>
 
-          <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
-            <div>Unnes Foto</div>
-            <img class="w-full rounded-xl drop-shadow-lg" :src="unnesImage ? unnesImage : no_image_icon"
-              alt="Uploaded Image">
-          </div>
-          <div class="w-1/6 px-1 relative rounded-lg drop-shadow-lg overflow-hidden group">
-            <div>Birthday / Co-card</div>
-            <img class="w-full rounded-lg" :src="birthdayImageC ? birthdayImageC : no_image_icon" alt="Uploaded Image">
-          </div>
+
+
         </div>
       </div>
     </div>
 
-    <div class="flex mt-5" ref="form">
-      <div class="w-1/2 pr-4">
+    <div class="flex flex-col sm:flex-row mt-5" ref="form">
+      <div class="w-full sm:w-1/2 pr-4">
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-gray-700">Name<span
               class="text-red-400">*</span></label>
@@ -72,8 +79,6 @@
           <div class="text-red-600 text-sm">{{ error.birthday }}</div>
         </div>
 
-
-
         <div class="mb-4">
           <label for="batch" class="block text-sm font-medium text-gray-700">Batch</label>
           <input v-model="user.batch" type="number" id="batch" min="2016" :max="new Date().getFullYear()"
@@ -93,30 +98,31 @@
           <div class="text-red-600 text-sm">{{ error.program_study }}</div>
         </div>
         <div class="flex justify-end mt-4">
-          <button @click="handleUpdateUser" class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
+          <button @click="handleUpdateUser"
+            class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
             Update
           </button>
         </div>
       </div>
-      <div class="w-1/2">
+      <div class="w-full sm:w-1/2">
         <div class="mt-5">
-          <h2 class="block text-sm font-medium text-gray-700">Group</h2>
-          <div class="flex flex-wrap gap-4">
+          <h2 class="block text-sm sm:text-lg font-medium text-gray-700">Group</h2>
+          <div class="flex flex-wrap gap-2 sm:gap-4 text-sm sm:text-md ">
             <div v-for="(group, index) in groupMembers" :key="index"
-              class="flex items-center bg-primary-500 text-white rounded-lg p-3 w-auto min-w-[200px]">
+              class="flex items-center  bg-primary-500 text-white rounded-lg p-2 sm:p-3 w-auto min-w-[200px]">
               <i class="pi pi-users text-white text-2xl mr-2"></i>
-              <span class="font-semibold">{{ group.name }}</span>
+              <span class="font-semibold text-sm sm:text-lg">{{ group.name }}</span>
             </div>
           </div>
         </div>
 
         <div class="mt-5">
           <h2 class="block text-sm font-medium text-gray-700">Role</h2>
-          <div class="flex flex-wrap gap-4">
+          <div class="flex flex-wrap gap-2 sm:gap-4">
             <div v-for="(role, index) in userRole" :key="index"
               class="flex items-center justify-center bg-primary-500 text-white rounded-lg p-3 w-auto min-w-[100px]">
               <i class="pi pi-briefcase text-white text-2xl mr-2"></i>
-              <span class="font-semibold">{{ role.name }}</span>
+              <span class="font-semibold text-sm sm:text-lg">{{ role.name }}</span>
             </div>
           </div>
         </div>
@@ -140,10 +146,12 @@
             <button class="pi pi-eye p-2" @mousedown="new_password.type = 'text'"
               @mouseup="new_password.type = 'password'"></button>
           </div>
-          <p class="mb-4">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan diarahkan kembali ke
+          <p class="mb-4 text-sm sm:text-md">Setelah Anda mengubah kata sandi, Anda akan keluar dari halaman ini dan
+            diarahkan kembali ke
             halaman login untuk masuk lagi.</p>
           <div class="w-full flex justify-end">
-            <button @click="handleChangePassword" class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
+            <button @click="handleChangePassword"
+              class="bg-primary-500 text-white px-4 py-2 rounded mr-2 disabled:bg-gray-600">
               <i class="pi pi-key"></i> Change
             </button>
           </div>

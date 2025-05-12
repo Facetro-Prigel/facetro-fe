@@ -1,5 +1,5 @@
   <template>
-    <div class="card p-4">
+    <div class="flex flex-col p-4">
       <TitleComponent title="UNNESTech" subtitle="Attendance" />
       <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
       <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
@@ -73,7 +73,7 @@
             {{ slotProps.data.type }}
           </template>
         </Column>
-        <Column field="inTime" header="Waktu" sortable>
+        <Column field="inTime" header="Time" sortable>
           <template #header="slotProps">
             <span class="text-black">{{ slotProps.header }}</span>
           </template>

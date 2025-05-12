@@ -1,6 +1,6 @@
 <template>
     <div class="w-full bg-primary-500">
-        <div class="flex justify-between items-center h-[100px]">
+        <div class="flex justify-between items-center py-2 sm:py-5">
             <!-- <div class="p-3 cursor-pointer hover:bg-primary-400" @click="clickHambuger"> -->
                 <!-- <i class="pi pi-bars"></i> -->
             <!-- </div> -->
@@ -13,7 +13,7 @@
             >
                 <div class="flex space-x-3 items-center justify-center px-3">
                 <div class="flex flex-col justify-center">
-                    <div class="font-bold text-white">{{ user.name }}</div>
+                    <div class="font-bold text-white text-right">{{ user.name }}</div>
                     <p class="text-sm text-white text-right">{{ user.user_roles.join(', ') }}</p>
                 </div>
                 <Avatar  

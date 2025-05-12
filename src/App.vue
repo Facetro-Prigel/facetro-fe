@@ -27,8 +27,6 @@ onMounted(() => {
 </script>
 
 <template class="min-h-screen bg-primary">
-  <header>
-  </header>
   <Toast />
   <router-view :key="$route.fullPath" />
 </template>

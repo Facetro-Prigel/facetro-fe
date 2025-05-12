@@ -1,8 +1,9 @@
 <template>
-    <div class="flex flex-col items-center w-full text-center py-5 h-screen justify-center relative">
-        <div class="absolute h-screen w-screen bg-black z-10 overflow-hidden">
-            <video class="w-screen" autoplay playsinline loop disablepictureinpicture muted
-                poster="@/assets/loginAnimationPoster.png">
+    <div class="flex flex-col items-center w-full text-center py-5 h-screen justify-center relative overflow-hidden">
+        <!-- Video Background -->
+        <div class="absolute top-0 left-0 w-screen h-screen z-10 overflow-hidden">
+            <video class="w-screen h-screen object-cover fixed top-0 left-0 right-0 bottom-0" autoplay playsinline loop
+                disablepictureinpicture muted poster="@/assets/loginAnimationPoster.png">
                 <source src="@/assets/videos/videoBG.mp4" type="video/mp4">
             </video>
         </div>
@@ -71,7 +72,7 @@ const tombolLogin = async () => {
             email: emailField.value.value,
             password: passwordField.value.value
         })
-        if(result.uuid){
+        if (result.uuid) {
             image.value.src = BASE_URL + 'avatar/' + result.avatar
             setTimeout(() => {
                 router.push('/dashboard')
