@@ -127,6 +127,10 @@
           </div>
         </div>
 
+        <div class="bg-slate-300 rounded-md my-2 flex flex-col items-center justify-center p-2">
+          <h2 class="text-xl font-bold w-full text-left mb-2">Your QR:</h2>
+          <vue-qrcode :value="user.recovery_token ?? '(empty)'"></vue-qrcode>
+        </div>
 
         <div class="bg-slate-200 p-3 rounded-md mt-2">
           <h2 class="text-lg font-bold">Change Password</h2>
@@ -169,6 +173,7 @@ import VueCookies from 'vue-cookies';
 import imageCompression from 'browser-image-compression';
 import no_image_icon from '@/assets/no_images.png';
 import loadingImg from '@/assets/loading.gif';
+import VueQrcode from 'vue-qrcode';
 const birthdayImageC = ref({ data: loadingImg })
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const router = useRouter();
