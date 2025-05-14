@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full bg-primary-500">
+    <div class="w-full bg-primary-500 z-20 sm:relative">
         <div class="flex justify-between items-center py-2 sm:py-5">
             <!-- <div class="p-3 cursor-pointer hover:bg-primary-400" @click="clickHambuger"> -->
                 <!-- <i class="pi pi-bars"></i> -->
