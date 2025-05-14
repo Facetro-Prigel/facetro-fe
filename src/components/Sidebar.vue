@@ -2,7 +2,7 @@
   <div>
     <!-- Sidebar -->
     <div
-      class="sm:rounded-br-xl h-fit sm:h-full bg-gray-900 bg-opacity-100 z-20 backdrop-filter backdrop-blur-lg w-full p-2 sm:p-0"
+      class="sm:rounded-br-xl py-3  h-fit sm:h-full  bg-gray-900 bg-opacity-100 z-20 backdrop-filter backdrop-blur-lg w-full h-sp-2 sm:p-0"
       id="side-bar" :class="dataOpenSidebar == true ?  'sm:w-[250px]' : 'w-[64px]'">
       <div class="flex flex-row justify-between items-center sm:flex-col">
         <div class="bg-black-900 bg-opacity-100 backdrop-filter backdrop-blur-lg  sm:h-[120px] flex justify-start sm:justify-center items-center w-3/4 ">
