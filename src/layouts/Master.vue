@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <Sidebar :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
     <!-- Main Content -->
-    <div  class="relative flex-1 overflow-y-auto">
+    <div  class="relative flex-1 overflow-y-auto transition-all duration-300">
       <HeaderTop :dataOpenSidebar="openSidebar" :clickHambuger="toggleSidebar" />
       <!-- Router View -->
       <div  class="w-full transition-all duration-300 h-full ">
