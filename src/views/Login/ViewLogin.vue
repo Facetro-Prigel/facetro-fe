@@ -74,8 +74,10 @@ const tombolLogin = async () => {
         })
         if (result.uuid) {
             image.value.src = BASE_URL + 'avatar/' + result.avatar
+            VueCookies.remove('hasSelectedSystem')
+            VueCookies.remove('selectedSystem')
             setTimeout(() => {
-                router.push('/dashboard')
+                router.push('/manage-control')
             }, 1000);
         }
     } catch (error) {

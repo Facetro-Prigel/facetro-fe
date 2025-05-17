@@ -24,6 +24,7 @@ import Room from '../views/RoomView.vue'
 import ServiceView from '../views/ServicesView.vue'
 import UserView from '../views/UserView.vue'
 import MyProfile from '../components/MyProfile.vue'
+import ManageControl from '../views/ManageControl.vue'
 
 const routes = [
   {
@@ -42,7 +43,7 @@ const routes = [
       {
         path: '/myprofile',
         name: 'MyProfile',
-        component: MyProfile, // Add MyProfile route
+        component: MyProfile,
       },
       {
         path: '/room',
@@ -123,6 +124,14 @@ const routes = [
     component: ViewLogin
   },
   {
+    path: '/manage-control',
+    name: 'manage-control',
+    component: ManageControl,
+    meta: {
+      auth: true
+    }
+  },
+  {
     path: '/presence',
     name: 'presence',
     component: PresenceViewVue
@@ -158,15 +167,25 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
 const authCheck = () => {
   return VueCookies.get('token') ? true : false
 }
+
 const authDeviceCheck = () => {
   return VueCookies.get('device_token') ? true : false
 }
+
+const hasSelectedSystem = () => {
+  return VueCookies.get('hasSelectedSystem') === 'true'
+}
+
 router.beforeEach(async (to, from, next) => {
   if (to.meta.auth) {
     if (authCheck()) {
+      if (!hasSelectedSystem() && to.name !== 'manage-control') {
+        return next({ name: 'manage-control' })
+      }
       return next()
     } else {
       return next({ name: 'login' })
@@ -176,7 +195,7 @@ router.beforeEach(async (to, from, next) => {
     if (!authCheck()) {
       return next()
     } else {
-      return next({ name: 'dashboard' })
+      return next({ name: 'manage-control' })
     }
   }
   if (to.name == 'device_register') {
@@ -188,4 +207,5 @@ router.beforeEach(async (to, from, next) => {
   }
   return next()
 })
+
 export default router
