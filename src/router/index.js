@@ -100,8 +100,9 @@ const routes = [
   {
     path: '/',
     name: 'home',
+    redirect: { name: 'login' }
     // component: HomeView
-    component: ViewLogin
+    // component: ViewLogin
   },
   {
     path: '/services',

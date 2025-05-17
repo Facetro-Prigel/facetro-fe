@@ -16,11 +16,33 @@
 <script setup>
 import HeaderTop from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 // State untuk sidebar
-const openSidebar = ref(false);
+const openSidebar = ref(true);
 const toggleSidebar = () => {
   openSidebar.value = !openSidebar.value;
 };
+
+// Fungsi untuk deteksi mobile
+const checkMobile = () => {
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    openSidebar.value = false; // Tutup sidebar jika mobile
+  }else{
+    openSidebar.value = true;
+  }
+};
+
+// Jalankan saat komponen dipasang
+onMounted(() => {
+  checkMobile(); // Cek awal saat mount
+
+  // Tambahkan event listener untuk resize window
+  window.addEventListener('resize', checkMobile);
+});
+
+// Bersihkan event listener saat komponen di-unmount
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkMobile);
+});
 </script>
