@@ -1,9 +1,10 @@
 <template>
   <div class="card p-4">
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
-    <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords" :rowsPerPageOptions="[5, 10, 20, 50]"  :loading="loading"
-      tableStyle="min-width: 50rem" v-model:filters="filters" @page="onPageChange"
-      :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
+    <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
+        :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem"
+        v-model:filters="filters" @page="onPageChange" @sort="onSortChange"
+        :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
@@ -30,6 +31,17 @@
           <div class="flex max-w-[175px] min-w-[100px]">
             <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
               :bbox="slotProps.data.bbox" :image="BASE_URL +'photos/'+ slotProps.data.image" />
+          </div>
+        </template>
+      </Column>
+      <Column field="avatar" header="Avatar">
+        <template #header="slotProps">
+          <span class="text-black">{{ slotProps.header }}</span>
+        </template>
+        <template #body="slotProps">
+          <div class="flex max-w-[175px] min-w-[100px]">
+            <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
+              :bbox="[55,55,210]" :image="BASE_URL +'avatar/'+ slotProps.data.avatar" />
           </div>
         </template>
       </Column>
@@ -98,6 +110,11 @@
                   class="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full transition-all">
             <i class="pi pi-pencil"></i>
           </button>
+
+          <button @click="handleDelete(slotProps.data.uuid)" 
+                  class="p-2 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-full transition-all">
+            <i class="pi pi-trash"></i>
+          </button>
         </template>
       </Column>
     </DataTable>
@@ -156,6 +173,7 @@
       <div class="p-4">
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          
           <AutoComplete
             v-model="editData.name"
             :suggestions="suggestions"
@@ -166,6 +184,7 @@
             }"
             field="name"
             class="w-full"
+            filter
             forceSelection
             placeholder="Click to see all names or type to search"
             :dropdown="true"
@@ -207,7 +226,7 @@
 <script setup>
 import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
-import { fetchAttendanceLogs, downlaodAttendanceLogs, updateAttendance} from '@/services/Attendance.services';
+import { fetchAttendanceLogs, downlaodAttendanceLogs, updateAttendance, deleteAttendance} from '@/services/Attendance.services';
 import { fetchUsers } from '@/services/User.services';
 import { ref, onMounted, watch, computed } from 'vue'
 import ProgressSpinner from 'primevue/progressspinner';
@@ -279,27 +298,54 @@ const searchNames = async (event) => {
 
 let searchTimeout;
 const filters = ref(
-  {  page: 1, rows: 5,'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } } 
+  {
+    page: 1,
+    rows: 5,
+    sort: 'created_at',
+    order: 'desc',
+    global: { value: null },
+    'name': { value: null },
+    'identityNumber': { value: null },
+    'inTime': { value: null },
+    'device': { value: null }
+  }
 )
+watch(
+  () => filters.value.global.value,
+  (newValue) => {
+    clearTimeout(searchTimeout); // Hapus timeout sebelumnya
+    searchTimeout = setTimeout(() => {
+      fetchData(); // Panggil fetchData setelah delay
+    }, 500);
+  }
+);
 const fetchData = async () => {
-      loading.value = true;
-      try {
-        const response = await fetchAttendanceLogs({
-            page: filters.value.page,
-            limit: filters.value.rows
-        });
-        attendanceCards.value = response.data;
-        totalRecords.value = response.total_records;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        loading.value = false;
-      }
+  loading.value = true;
+  try {
+    const response = await fetchAttendanceLogs({
+      page: filters.value.page,
+      limit: filters.value.rows,
+      search: filters.value.global.value,
+      sort: filters.value.sort,
+      order: filters.value.order
+    });
+    attendanceCards.value = response.data;
+    totalRecords.value = response.total_records;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false;
+  }
 };
 const onPageChange = (event) => {
-      filters.value.page = event.page+1; // PrimeVue uses zero-based indexing
-      filters.value.limit = event.rows;
-      fetchData();
+  filters.value.page = event.page + 1; // PrimeVue uses zero-based indexing
+  filters.value.rows = event.rows;
+  fetchData();
+};
+const onSortChange = (event) => {
+  filters.value.sort = event.sortField; // Update sort field
+  filters.value.order = event.sortOrder === 1 ? 'asc' : 'desc'; // Update sort order
+  fetchData();
 };
 const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {
@@ -308,7 +354,6 @@ const convertToLocale = (time) => {
     dateStyle: 'medium'
   })
 }
-
 // Button disabled logic
 const isDownloadDisabled = computed(() => {
   const dateNotFilled = !exportStartDate.value || !exportEndDate.value
@@ -361,6 +406,16 @@ const handleEdit = (data) => {
   }
   showEditDialog.value = true
 }
+const handleDelete = async (uuid) =>{
+  try {
+    const response = await deleteAttendance(uuid);
+    if (response) {
+      await fetchData();
+    }
+  } catch (error) {
+    console.error('Error delete logs:', error);
+  }
+}
 
 const saveEdit = async () => {
   try {
@@ -369,14 +424,13 @@ const saveEdit = async () => {
       return;
     }
 
-    const response = await updateAttendance({
-      log_uuid: editData.value.originalUuid,
+    const response = await updateAttendance(editData.value.originalUuid,{
       user_uuid: editData.value.uuid,
     });
 
     if (response) {
       showEditDialog.value = false;
-      await fetchData(); // Refresh the data after successful update
+      await fetchData();
     }
   } catch (error) {
     console.error('Error saving changes:', error);
