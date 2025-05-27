@@ -1,10 +1,9 @@
 <template>
   <Navbar />
-  
   <!-- Hero Section -->
-  <div class="flex justify-center items-center h-screen pt-40 sm:pt-28">
-    <div class="w-full max-w-[1650px] h-[650px] bg-primary-400 border-2 border-white border-opacity-50 rounded-2xl flex flex-col sm:flex-row justify-center items-center">
-      <div class="flex flex-col sm:flex-row mx-10 sm:mx-20 space-y-6 sm:space-y-0 sm:space-x-10 items-center sm:items-start">
+  <div class="flex justify-center items-center h-screen w-full ">
+    
+      <div class="flex flex-col sm:flex-row mx-0 sm:mx-20 space-y-6 sm:space-y-0 sm:space-x-10 items-center sm:items-start">
         <div class="w-full sm:w-1/2 text-white px-6 sm:px-10 lg:px-20 mt-10 sm:mt-20">
           <h1 class="text-4xl sm:text-5xl font-semibold">FACETRO</h1>
           <br />
@@ -20,7 +19,7 @@
           <img src="/src/assets/Icon.png" alt="Icon" class="max-w-full h-auto" style="max-width: 400px;">
         </div>
       </div>
-    </div>
+
   </div>
   
   <!-- Deskripsi dan Gambar Pertama -->

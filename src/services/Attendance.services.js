@@ -31,14 +31,23 @@ export const downlaodAttendanceLogs = async (data) => {
   }
 };
 
-export const updateAttendance = async (data) => {
+export const updateAttendance = async (uuid, data) => {
   try {
-    const response = await apiClient.put(API_URL + "/", data);
-
+    const response = await apiClient.put(API_URL + "/"+uuid, data);
     return response;
   } catch (error) {
     console.error('Ada kesalahan saat mengupdate data kehadiran!', error);
     throw error;
+  }
+};
+
+export const deleteAttendance = async (id) => {
+  try {
+    const res = await apiClient.delete(`${API_URL}/${id}`)
+    return res
+  } catch (error) {
+    console.error(error)
+    return error
   }
 };
 
