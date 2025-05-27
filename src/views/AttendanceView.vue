@@ -1,15 +1,16 @@
 <template>
   <div class="card p-4">
     <h1 class="text-xl font-semibold mb-5"><i class="pi pi-chart-bar mr-2"></i>Attendance Logs</h1>
-    <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords" :rowsPerPageOptions="[5, 10, 20, 50]"  :loading="loading"
-      tableStyle="min-width: 50rem" v-model:filters="filters" @page="onPageChange"
-      :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
+    <DataTable :value="attendanceCards" :lazy="true" paginator :rows="filters.rows" :totalRecords="totalRecords"
+        :rowsPerPageOptions="[5, 10, 20, 50, 100]" :loading="loading" tableStyle="min-width: 50rem"
+        v-model:filters="filters" @page="onPageChange" @sort="onSortChange"
+        :globalFilterFields="['name', 'identityNumber', 'inTime', 'device', 'group']">
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div class="relative">
             <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             <input v-model="filters['global'].value" type="text" placeholder="Search..."
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
+              class="p-inputtext p-compon   ent border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="showExportDialog = true" class="flex bg-secondary-400 hover:bg-secondary-500 px-3 py-2 rounded-lg justify-center items-center drop-shadow-md">
             <i class="pi pi-file-excel"></i><div class="ml-2">Download Excel</div>
@@ -30,6 +31,17 @@
           <div class="flex max-w-[175px] min-w-[100px]">
             <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
               :bbox="slotProps.data.bbox" :image="BASE_URL +'photos/'+ slotProps.data.image" />
+          </div>
+        </template>
+      </Column>
+      <Column field="avatar" header="Avatar">
+        <template #header="slotProps">
+          <span class="text-black">{{ slotProps.header }}</span>
+        </template>
+        <template #body="slotProps">
+          <div class="flex max-w-[175px] min-w-[100px]">
+            <ImageViewer :type="`Foto ${slotProps.data.avatar}`" :is-success="slotProps.data.is_match"
+              :bbox="[55,55,210]" :image="BASE_URL +'avatar/'+ slotProps.data.avatar" />
           </div>
         </template>
       </Column>
@@ -98,20 +110,34 @@
                   class="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full transition-all">
             <i class="pi pi-pencil"></i>
           </button>
+
+          <button @click="handleDelete(slotProps.data.uuid)" 
+                  class="p-2 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-full transition-all">
+            <i class="pi pi-trash"></i>
+          </button>
         </template>
       </Column>
     </DataTable>
 
     <Dialog v-model:visible="showExportDialog" header="Export Attendance Logs" :modal="true" class="w-[30rem]">
       <div class="p-2">
-        <!-- Quick Report Checkbox -->
-        <div class="flex items-center mb-4">
-          <input type="checkbox" id="quickReport" v-model="isQuickReport" class="mr-2" />
-          <label for="quickReport" class="">Quick Report</label>
+        <!-- Report Type Selection -->
+        <div class="mb-4">
+          <p class="font-semibold mb-2">Select Report Type:</p>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center">
+              <input type="radio" id="quickReport" value="quick" v-model="reportType" class="mr-2" />
+              <label for="quickReport">Quick Report</label>
+            </div>
+            <div class="flex items-center">
+              <input type="radio" id="fullReport" value="full" v-model="reportType" class="mr-2" />
+              <label for="fullReport">Full Report</label>
+            </div>
+          </div>
         </div>
 
-        <!-- Field Checklist -->
-        <div v-if="isQuickReport" class="bg-gray-100 p-3 rounded border border-gray-300 mb-4">
+        <!-- Field Checklist (only shown for Quick Report) -->
+        <div v-if="reportType === 'quick'" class="bg-gray-100 p-3 rounded border border-gray-300 mb-4">
           <p class="font-semibold mb-2">Select fields to export:</p>
           <div class="grid grid-cols-2 gap-2">
             <div v-for="field in availableFields" :key="field.value" class="flex items-center">
@@ -156,6 +182,7 @@
       <div class="p-4">
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          
           <AutoComplete
             v-model="editData.name"
             :suggestions="suggestions"
@@ -166,6 +193,7 @@
             }"
             field="name"
             class="w-full"
+            filter
             forceSelection
             placeholder="Click to see all names or type to search"
             :dropdown="true"
@@ -207,7 +235,7 @@
 <script setup>
 import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
-import { fetchAttendanceLogs, downlaodAttendanceLogs, updateAttendance} from '@/services/Attendance.services';
+import { fetchAttendanceLogs, downlaodFullAttendanceLogs, downlaodQuickAttendanceLogs, updateAttendance, deleteAttendance} from '@/services/Attendance.services';
 import { fetchUsers } from '@/services/User.services';
 import { ref, onMounted, watch, computed } from 'vue'
 import ProgressSpinner from 'primevue/progressspinner';
@@ -226,7 +254,8 @@ const totalRecords = ref()
 const showExportDialog = ref(false);
 const exportStartDate = ref(null);
 const exportEndDate = ref(null);
-const isQuickReport = ref(false);
+const reportType = ref('quick'); // default to quick report
+const selectedFields = ref([]); // default
 
 const availableFields = [
   { label: 'Name', value: 'name' },
@@ -237,8 +266,6 @@ const availableFields = [
   { label: 'Device', value: 'device' },
   { label: 'Group', value: 'group' }
 ];
-
-const selectedFields = ref([]); // default
 
 const allUsers = ref([]);
 const suggestions = ref([]);
@@ -279,27 +306,54 @@ const searchNames = async (event) => {
 
 let searchTimeout;
 const filters = ref(
-  {  page: 1, rows: 5,'global': { value: null }, 'name': { value: null }, 'identityNumber': { value: null }, 'inTime': { value: null }, 'device': { value: null } } 
+  {
+    page: 1,
+    rows: 5,
+    sort: 'created_at',
+    order: 'desc',
+    global: { value: null },
+    'name': { value: null },
+    'identityNumber': { value: null },
+    'inTime': { value: null },
+    'device': { value: null }
+  }
 )
+watch(
+  () => filters.value.global.value,
+  (newValue) => {
+    clearTimeout(searchTimeout); // Hapus timeout sebelumnya
+    searchTimeout = setTimeout(() => {
+      fetchData(); // Panggil fetchData setelah delay
+    }, 500);
+  }
+);
 const fetchData = async () => {
-      loading.value = true;
-      try {
-        const response = await fetchAttendanceLogs({
-            page: filters.value.page,
-            limit: filters.value.rows
-        });
-        attendanceCards.value = response.data;
-        totalRecords.value = response.total_records;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        loading.value = false;
-      }
+  loading.value = true;
+  try {
+    const response = await fetchAttendanceLogs({
+      page: filters.value.page,
+      limit: filters.value.rows,
+      search: filters.value.global.value,
+      sort: filters.value.sort,
+      order: filters.value.order
+    });
+    attendanceCards.value = response.data;
+    totalRecords.value = response.total_records;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false;
+  }
 };
 const onPageChange = (event) => {
-      filters.value.page = event.page+1; // PrimeVue uses zero-based indexing
-      filters.value.limit = event.rows;
-      fetchData();
+  filters.value.page = event.page + 1; // PrimeVue uses zero-based indexing
+  filters.value.rows = event.rows;
+  fetchData();
+};
+const onSortChange = (event) => {
+  filters.value.sort = event.sortField; // Update sort field
+  filters.value.order = event.sortOrder === 1 ? 'asc' : 'desc'; // Update sort order
+  fetchData();
 };
 const convertToLocale = (time) => {
   return time.toLocaleString('id-ID', {
@@ -308,13 +362,13 @@ const convertToLocale = (time) => {
     dateStyle: 'medium'
   })
 }
-
 // Button disabled logic
 const isDownloadDisabled = computed(() => {
-  const dateNotFilled = !exportStartDate.value || !exportEndDate.value
-  const quickNotChecked = !isQuickReport.value
-  const fieldsNotSelected = selectedFields.value.length === 0
-  return dateNotFilled || quickNotChecked || fieldsNotSelected
+  // const dateNotFilled = !exportStartDate.value || !exportEndDate.value
+  // const quickNotChecked = !isQuickReport.value
+  // const fieldsNotSelected = selectedFields.value.length === 0
+  // return dateNotFilled || quickNotChecked || fieldsNotSelected
+  return false
 })
 
 
@@ -333,13 +387,19 @@ const handleDownloadExcel = () => {
   const startDate = formatDate(exportStartDate.value);
   const endDate = formatDate(exportEndDate.value);
 
-
-  downlaodAttendanceLogs({
-    start_date: startDate,
-    end_date: endDate,
-    quick: isQuickReport.value,
-    fields: isQuickReport.value ? selectedFields.value : []
-  })
+  if (reportType.value === 'quick') {
+    downlaodQuickAttendanceLogs({
+      start_date: startDate,
+      end_date: endDate,
+      quick: true,
+      columns: selectedFields.value
+    })
+  } else {
+    downlaodFullAttendanceLogs({
+      start_date: startDate,
+      end_date: endDate
+    })
+  }
 
   showExportDialog.value = false
 }
@@ -361,6 +421,16 @@ const handleEdit = (data) => {
   }
   showEditDialog.value = true
 }
+const handleDelete = async (uuid) =>{
+  try {
+    const response = await deleteAttendance(uuid);
+    if (response) {
+      await fetchData();
+    }
+  } catch (error) {
+    console.error('Error delete logs:', error);
+  }
+}
 
 const saveEdit = async () => {
   try {
@@ -369,14 +439,13 @@ const saveEdit = async () => {
       return;
     }
 
-    const response = await updateAttendance({
-      log_uuid: editData.value.originalUuid,
+    const response = await updateAttendance(editData.value.originalUuid,{
       user_uuid: editData.value.uuid,
     });
 
     if (response) {
       showEditDialog.value = false;
-      await fetchData(); // Refresh the data after successful update
+      await fetchData();
     }
   } catch (error) {
     console.error('Error saving changes:', error);
