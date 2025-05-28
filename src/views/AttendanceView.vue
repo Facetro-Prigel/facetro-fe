@@ -10,7 +10,7 @@
           <div class="relative">
             <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             <input v-model="filters['global'].value" type="text" placeholder="Search..."
-              class="p-inputtext p-component border border-gray-300 rounded-md p-2 pl-10" />
+              class="p-inputtext p-compon   ent border border-gray-300 rounded-md p-2 pl-10" />
           </div>
           <button @click="showExportDialog = true" class="flex bg-secondary-400 hover:bg-secondary-500 px-3 py-2 rounded-lg justify-center items-center drop-shadow-md">
             <i class="pi pi-file-excel"></i><div class="ml-2">Download Excel</div>
@@ -121,14 +121,23 @@
 
     <Dialog v-model:visible="showExportDialog" header="Export Attendance Logs" :modal="true" class="w-[30rem]">
       <div class="p-2">
-        <!-- Quick Report Checkbox -->
-        <div class="flex items-center mb-4">
-          <input type="checkbox" id="quickReport" v-model="isQuickReport" class="mr-2" />
-          <label for="quickReport" class="">Quick Report</label>
+        <!-- Report Type Selection -->
+        <div class="mb-4">
+          <p class="font-semibold mb-2">Select Report Type:</p>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center">
+              <input type="radio" id="quickReport" value="quick" v-model="reportType" class="mr-2" />
+              <label for="quickReport">Quick Report</label>
+            </div>
+            <div class="flex items-center">
+              <input type="radio" id="fullReport" value="full" v-model="reportType" class="mr-2" />
+              <label for="fullReport">Full Report</label>
+            </div>
+          </div>
         </div>
 
-        <!-- Field Checklist -->
-        <div v-if="isQuickReport" class="bg-gray-100 p-3 rounded border border-gray-300 mb-4">
+        <!-- Field Checklist (only shown for Quick Report) -->
+        <div v-if="reportType === 'quick'" class="bg-gray-100 p-3 rounded border border-gray-300 mb-4">
           <p class="font-semibold mb-2">Select fields to export:</p>
           <div class="grid grid-cols-2 gap-2">
             <div v-for="field in availableFields" :key="field.value" class="flex items-center">
@@ -226,7 +235,7 @@
 <script setup>
 import { socket } from "@/socket";
 import ImageViewer from '@/components/ImageViewer.vue'
-import { fetchAttendanceLogs, downlaodAttendanceLogs, updateAttendance, deleteAttendance} from '@/services/Attendance.services';
+import { fetchAttendanceLogs, downlaodFullAttendanceLogs, downlaodQuickAttendanceLogs, updateAttendance, deleteAttendance} from '@/services/Attendance.services';
 import { fetchUsers } from '@/services/User.services';
 import { ref, onMounted, watch, computed } from 'vue'
 import ProgressSpinner from 'primevue/progressspinner';
@@ -245,7 +254,8 @@ const totalRecords = ref()
 const showExportDialog = ref(false);
 const exportStartDate = ref(null);
 const exportEndDate = ref(null);
-const isQuickReport = ref(false);
+const reportType = ref('quick'); // default to quick report
+const selectedFields = ref([]); // default
 
 const availableFields = [
   { label: 'Name', value: 'name' },
@@ -256,8 +266,6 @@ const availableFields = [
   { label: 'Device', value: 'device' },
   { label: 'Group', value: 'group' }
 ];
-
-const selectedFields = ref([]); // default
 
 const allUsers = ref([]);
 const suggestions = ref([]);
@@ -356,10 +364,11 @@ const convertToLocale = (time) => {
 }
 // Button disabled logic
 const isDownloadDisabled = computed(() => {
-  const dateNotFilled = !exportStartDate.value || !exportEndDate.value
-  const quickNotChecked = !isQuickReport.value
-  const fieldsNotSelected = selectedFields.value.length === 0
-  return dateNotFilled || quickNotChecked || fieldsNotSelected
+  // const dateNotFilled = !exportStartDate.value || !exportEndDate.value
+  // const quickNotChecked = !isQuickReport.value
+  // const fieldsNotSelected = selectedFields.value.length === 0
+  // return dateNotFilled || quickNotChecked || fieldsNotSelected
+  return false
 })
 
 
@@ -378,13 +387,19 @@ const handleDownloadExcel = () => {
   const startDate = formatDate(exportStartDate.value);
   const endDate = formatDate(exportEndDate.value);
 
-
-  downlaodAttendanceLogs({
-    start_date: startDate,
-    end_date: endDate,
-    quick: isQuickReport.value,
-    fields: isQuickReport.value ? selectedFields.value : []
-  })
+  if (reportType.value === 'quick') {
+    downlaodQuickAttendanceLogs({
+      start_date: startDate,
+      end_date: endDate,
+      quick: true,
+      columns: selectedFields.value
+    })
+  } else {
+    downlaodFullAttendanceLogs({
+      start_date: startDate,
+      end_date: endDate
+    })
+  }
 
   showExportDialog.value = false
 }
