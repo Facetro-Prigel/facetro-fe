@@ -51,8 +51,9 @@
                             <span class="text-sm text-gray-500">atau</span>
                         </div>
                     </div>
-
-                    <div id="googleBtn"></div>
+                    <div class="flex justify-center w-full">
+                      <div id="googleBtn"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,3 +186,8 @@ onMounted(() => {
   document.head.appendChild(script)
 })
 </script>
+<style lang="css" scoped>
+#googleBtn{
+  display: flex;
+}
+</style>
