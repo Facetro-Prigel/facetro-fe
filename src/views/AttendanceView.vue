@@ -178,39 +178,99 @@
     </Dialog>
 
     <!-- Edit Dialog -->
-    <Dialog v-model:visible="showEditDialog" header="Edit Attendance Data" :modal="true" class="w-[30rem]">
+    <Dialog v-model:visible="showEditDialog" header="Edit Attendance Data" :modal="true" class="w-[50rem]">
       <div class="p-4">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
-          
-          <AutoComplete
-            v-model="editData.name"
-            :suggestions="suggestions"
-            @complete="searchNames"
-            @item-select="item => {
-              editData.uuid = item.value.uuid;
-              editData.identity_number = item.value.identity_number;
-            }"
-            field="name"
-            class="w-full"
-            filter
-            forceSelection
-            placeholder="Click to see all names or type to search"
-            :dropdown="true"
-            :showClear="true"
-          />
-        </div>
-        
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Identity Number</label>
-          <input 
-            v-model="editData.identity_number" 
-            type="text" 
-            class="w-full p-2 border border-gray-200 rounded-md bg-gray-50 cursor-not-allowed"
-            placeholder="Select a name first"
-            readonly
-            disabled
-          />
+        <div class="grid grid-cols-2 gap-8">
+          <!-- FROM Section -->
+          <div class="border-r pr-8">
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">From</h3>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <input 
+                v-model="editData.fromName" 
+                type="text" 
+                class="w-full p-2 border border-gray-200 rounded-md bg-gray-50 cursor-not-allowed"
+                readonly
+                disabled
+              />
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Identity Number</label>
+              <input 
+                v-model="editData.fromIdentityNumber" 
+                type="text" 
+                class="w-full p-2 border border-gray-200 rounded-md bg-gray-50 cursor-not-allowed"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Presence/Door Type</label>
+              <input 
+                v-model="editData.fromType" 
+                type="text" 
+                class="w-full p-2 border border-gray-200 rounded-md bg-gray-50 cursor-not-allowed"
+                readonly
+                disabled
+              />
+            </div>
+          </div>
+
+          <!-- TO Section -->
+          <div class="pl-8">
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">To</h3>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <div class="p-2 border border-gray-200 rounded-md">
+                <AutoComplete
+                  v-model="editData.toName"
+                  :suggestions="suggestions"
+                  @complete="searchNames"
+                  @item-select="item => {
+                    editData.toUuid = item.value.uuid;
+                    editData.toIdentityNumber = item.value.identity_number;
+                  }"
+                  field="name"
+                  class="w-full !border-0"
+                  :inputClass="'w-full border-0 p-0 focus:outline-none focus:ring-0'"
+                  :panelClass="'border border-gray-200 rounded-md'"
+                  filter
+                  forceSelection
+                  placeholder="Click to see all names or type to search"
+                  :dropdown="true"
+                  :showClear="true"
+                />
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Identity Number</label>
+              <input 
+                v-model="editData.toIdentityNumber" 
+                type="text" 
+                class="w-full p-2 border border-gray-200 rounded-md bg-gray-50 cursor-not-allowed"
+                placeholder="Select a name first"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Presence/Door Type</label>
+              <div class="p-2 border border-gray-200 rounded-md">
+                <Dropdown
+                  v-model="editData.toType"
+                  :options="presenceTypes"
+                  placeholder="Select Type"
+                  class="w-full !border-0"
+                  :panelClass="'border border-gray-200 rounded-md'"
+                  :inputClass="'w-full border-0 p-0 focus:outline-none focus:ring-0'"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="flex justify-end gap-2 mt-6">
@@ -223,6 +283,7 @@
           <button 
             @click="saveEdit" 
             class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            :disabled="!isFormValid"
           >
             Save Changes
           </button>
@@ -245,6 +306,7 @@ import AutoComplete from 'primevue/autocomplete';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Chip from 'primevue/chip';
+import Dropdown from 'primevue/dropdown';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_API
 const attendanceCards = ref([])
@@ -407,17 +469,37 @@ const handleDownloadExcel = () => {
 const showEditDialog = ref(false)
 const editData = ref({
   originalUuid: '',
-  uuid: '',
-  name: '',
-  identity_number: ''
+  fromUuid: '',
+  fromName: '',
+  fromIdentityNumber: '',
+  fromType: '',
+  toUuid: '',
+  toName: '',
+  toIdentityNumber: '',
+  toType: ''
+})
+
+const presenceTypes = ref([
+  'Login',
+  'Logout',
+  'Door'
+])
+
+const isFormValid = computed(() => {
+  return editData.value.toUuid && editData.value.toType;
 })
 
 const handleEdit = (data) => {
   editData.value = {
     originalUuid: data.uuid,
-    uuid: data.uuid,
-    name: data.name,
-    identity_number: data.identity_number
+    fromUuid: data.uuid,
+    fromName: data.name,
+    fromIdentityNumber: data.identity_number,
+    fromType: data.type,
+    toUuid: '',
+    toName: '',
+    toIdentityNumber: '',
+    toType: ''
   }
   showEditDialog.value = true
 }
@@ -434,13 +516,14 @@ const handleDelete = async (uuid) =>{
 
 const saveEdit = async () => {
   try {
-    if (!editData.value.originalUuid || !editData.value.uuid) {
+    if (!editData.value.originalUuid || !editData.value.toUuid) {
       console.error('Missing required UUIDs');
       return;
     }
 
-    const response = await updateAttendance(editData.value.originalUuid,{
-      user_uuid: editData.value.uuid,
+    const response = await updateAttendance(editData.value.originalUuid, {
+      user_uuid: editData.value.toUuid,
+      type: editData.value.toType
     });
 
     if (response) {
