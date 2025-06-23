@@ -100,7 +100,9 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    redirect: { name: 'login' }
+    // component: HomeView
+    // component: ViewLogin
   },
   {
     path: '/services',
@@ -125,10 +127,11 @@ const routes = [
   {
     path: '/manage-control',
     name: 'manage-control',
-    component: ManageControl,
-    meta: {
-      auth: true
-    }
+    redirect: { name: 'dashboard' } 
+    // component: ManageControl,
+    // meta: {
+    //   auth: true
+    // }
   },
   {
     path: '/presence',
@@ -182,9 +185,9 @@ const hasSelectedSystem = () => {
 router.beforeEach(async (to, from, next) => {
   if (to.meta.auth) {
     if (authCheck()) {
-      if (!hasSelectedSystem() && to.name !== 'manage-control') {
-        return next({ name: 'manage-control' })
-      }
+      // if (!hasSelectedSystem() && to.name !== 'manage-control') {
+      //   return next({ name: 'manage-control' })
+      // }
       return next()
     } else {
       return next({ name: 'login' })

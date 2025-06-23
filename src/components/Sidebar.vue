@@ -18,9 +18,9 @@
       </div>
 
       <!-- Menu items -->
-      <div
-        class="flex flex-col justify-between pt-3 sm:items-center  bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg">
-        <div class="text-left px-2 whitespace-nowrap" :class="dataOpenSidebar == true ?  '' : 'flex sm:flex-col'">
+        <div
+        class="flex flex-col justify-between pt-3 sm:items-center  bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg ">
+        <div class="text-left px-2 whitespace-nowrap" :class="dataOpenSidebar == true ?  '' : 'flex sm:flex-col overflow-y-scroll'">
           <div class="flex w-full py-2 sm:py-4 sm:m-0 mx-1 rounded-sm cursor-pointer text-white border-b border-gray-400 hover:text-white">
             <router-link to="/dashboard" class="px-2 flex space-x-2"><span class="pi pi-microsoft"
                 v-tooltip.right="'Dashboard'"></span>
