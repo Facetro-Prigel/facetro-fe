@@ -96,8 +96,6 @@ const handleGoogleCallback = async (response) => {
           localStorage.setItem('user_permission', JSON.stringify(result.user_permission));
         }
         
-        VueCookies.remove('hasSelectedSystem')
-        VueCookies.remove('selectedSystem')
         setTimeout(() => {
           router.push('/manage-control')
         }, 1000);
@@ -163,8 +161,6 @@ const tombolLogin = async () => {
     })
     if (result.uuid) {
       image.value.src = BASE_URL + 'avatar/' + result.avatar
-      VueCookies.remove('hasSelectedSystem')
-      VueCookies.remove('selectedSystem')
       setTimeout(() => {
         router.push('/manage-control')
       }, 1000);

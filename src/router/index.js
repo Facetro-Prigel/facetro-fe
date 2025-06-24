@@ -101,8 +101,6 @@ const routes = [
     path: '/',
     name: 'home',
     redirect: { name: 'login' }
-    // component: HomeView
-    // component: ViewLogin
   },
   {
     path: '/services',
@@ -127,11 +125,10 @@ const routes = [
   {
     path: '/manage-control',
     name: 'manage-control',
-    redirect: { name: 'dashboard' } 
-    // component: ManageControl,
-    // meta: {
-    //   auth: true
-    // }
+    component: ManageControl,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/presence',
@@ -178,16 +175,9 @@ const authDeviceCheck = () => {
   return VueCookies.get('device_token') ? true : false
 }
 
-const hasSelectedSystem = () => {
-  return VueCookies.get('hasSelectedSystem') === 'true'
-}
-
 router.beforeEach(async (to, from, next) => {
   if (to.meta.auth) {
     if (authCheck()) {
-      // if (!hasSelectedSystem() && to.name !== 'manage-control') {
-      //   return next({ name: 'manage-control' })
-      // }
       return next()
     } else {
       return next({ name: 'login' })

@@ -38,10 +38,10 @@
         </div>
       </div>
 
-      <!-- Pemilihan Sistem -->
+      <!-- Pemilihan Sistem dan Tentang Sistem -->
       <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-4xl mx-auto">
-        <div class="gap-4">
-          <!-- Kolom 1 -->
+        <div class="space-y-8">
+          <!-- Pemilihan Sistem -->
           <div class="rounded-lg flex flex-col items-center space-y-4">
             <h2 class="text-lg font-poppins font-bold text-gray-800">Silakan pilih sistem untuk melanjutkan</h2>
 
@@ -55,7 +55,7 @@
                   @click="pilihSistem('sipres')"
                 />
                 <p class="text-sm font-poppins font-semibold text-gray-700">SIPRES</p>
-                <p class="text-sm font-poppins text-gray-700">(Sisrem Informasi Presensi)</p>
+                <p class="text-sm font-poppins text-gray-700">(Sistem Informasi Presensi)</p>
               </div>
 
               <!-- SILOK -->
@@ -70,6 +70,27 @@
                 <p class="text-sm font-poppins text-gray-700">(Sistem Informasi DoorLock)</p>
               </div>
             </div>
+          </div>
+
+          <!-- Tentang Sistem -->
+          <div class="border-t pt-6">
+            <h2 class="text-lg font-poppins font-bold text-primary-500 mb-4">
+              <i class="pi pi-info-circle mr-2"></i>
+              Tentang Sistem
+            </h2>
+            <ul class="space-y-0 list-none pl-6">
+              <li class="flex items-start">
+                <span class="font-semibold mr-2">• SIPRES</span>
+                <span class="text-gray-600">- Sistem Informasi Presensi</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-semibold mr-2">• SILOK</span>
+                <span class="text-gray-600">- Sistem Informasi Doorlock</span>
+              </li>
+              <li class="text-gray-600 italic mt-2">
+                Pastikan Anda memilih sistem yang sesuai
+              </li>
+            </ul>
           </div>
         </div>
       </div>
