@@ -62,7 +62,7 @@
           {{ slotProps.data.identity_number }}
         </template>
       </Column>
-      <Column field="device" header="Presence/Open Door In" sortable>
+      <Column field="device" header="Presence" sortable>
         <template #header="slotProps">
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
@@ -70,7 +70,7 @@
           {{ slotProps.data.device }}
         </template>
       </Column>
-      <Column field="type" header="Presence/Door" sortable>
+      <Column field="type" header="Presence" sortable>
         <template #header="slotProps">
           <span class="text-black">{{ slotProps.header }}</span>
         </template>
@@ -207,7 +207,7 @@
             </div>
 
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Presence/Door Type</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Presence</label>
               <input 
                 v-model="editData.fromType" 
                 type="text" 
@@ -258,7 +258,7 @@
             </div>
 
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Presence/Door Type</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Presence</label>
               <div class="p-2 border border-gray-200 rounded-md">
                 <Dropdown
                   v-model="editData.toType"
@@ -324,7 +324,7 @@ const availableFields = [
   { label: 'Identity Number', value: 'identity_number' },
   { label: 'Photo', value: 'photo' },
   { label: 'Waktu', value: 'in_time' },
-  { label: 'Presence/Door', value: 'type' },
+  { label: 'Presence', value: 'type' },
   { label: 'Device', value: 'device' },
   { label: 'Group', value: 'group' }
 ];
@@ -482,7 +482,6 @@ const editData = ref({
 const presenceTypes = ref([
   'Login',
   'Logout',
-  'Door'
 ])
 
 const isFormValid = computed(() => {

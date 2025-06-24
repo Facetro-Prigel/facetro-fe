@@ -29,17 +29,6 @@
           <span>{{ slotProps.data.locations }}</span>
         </template>
       </Column>
-      <Column field="door_group.name" header="Open Door Location" sortable>
-        <template #body="slotProps">
-          <div class="flex flex-col">
-            <Chip v-for="item in slotProps.data.door_group" :key="index" class="py-0 pl-0 pr-4 m-1">
-              <span
-                class="bg-primary-500 text-white rounded-full p-2 flex items-center justify-center m-2"><i class="pi pi-microchip"></i></span>
-              <span class="mr-2 text-sm">{{ item.device.name }}</span>
-          </Chip>
-          </div>
-        </template>
-      </Column>
       <Column field="presence_group.name" header="Presence Location " sortable>
         <template #body="slotProps">
           <div class="flex flex-col">
